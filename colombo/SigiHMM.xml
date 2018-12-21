@@ -1,0 +1,28 @@
+<tool id="SigiHMM" name="SigiHMM" version="4.0.0" profile="16.04">
+    <requirements>
+        <requirement type="package" version="4.0">Colombo</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+SigiHMM --input="$input" --output="$output" #if $cut then --cut=
+    ]]></command>
+    <inputs>
+        <param type="data" name="input" argument="input" label="Input" optional="false" help="" />
+        <param type="data" name="cut" argument="cut" label="Donor candidates" optional="true" help="" />
+        <param type="float" name="sens" argument="sens" label="PUTAL Sensitivity" optional="false" min="0" max="1.0" value="0.7" help="" />
+        <param type="boolean" name="outlier" argument="outlier" label="Assess Outliers" optional="false" truevalue="Yes" falsevalue="No" checked="false" help="" />
+        <param type="boolean" name="phx" argument="phx" label="Assess PHX" optional="false" truevalue="Yes" falsevalue="No" checked="true" help="" />
+        <param type="select" name="join" argument="join" label="Merge Islands Of Distance" optional="false" help="" >
+            <option value="0">0</option>
+            <option value="1" selected="true">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data format="embl" name="output" metadata_source="input" />
+        <data format="gff" name="gff" />
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
