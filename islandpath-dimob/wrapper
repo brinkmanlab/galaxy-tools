@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+PREFIX=`mktemp -d`
+
+input_lnk="$PREFIX/$(basename $input).$input_type"
+ln -s "$input" $input_lnk
+
+output_lnk="$PREFIX/$(basename $output).txt"
+ln -s "$output" $output_lnk
+
+islandpath "$input_lnk" "$output_lnk"
+
+rm -r $PREFIX
