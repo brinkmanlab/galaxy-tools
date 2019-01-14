@@ -1,0 +1,31 @@
+<tool id="IslandPath-DIMOB" name="IslandPath-DIMOB" version="1.0.3" profile="16.04">
+    <requirements>
+        <requirement type="package" version="1.0.3">islandpath</requirement>
+    </requirements>
+    <command>
+    input="$input" output="$output" 
+    #if $input.is_of_type("embl")
+        input_type="embl"
+    #else
+        input_type="gbk"
+    #end if
+    /usr/bin/env bash $__tool_directory__/wrapper
+    </command>
+    <inputs>
+        <param type="data" format="genbank,embl" name="input" argument="input" label="Input" optional="false" help="" />
+    </inputs>
+    <outputs>
+        <data format="txt" name="output" />
+    </outputs>
+    <!-- TODO tests -->
+    <help>
+    <p>
+        <p><a href="http://www.pathogenomics.sfu.ca/islandpath/">IslandPath</a> was originally designed to aid to the identification of prokaryotic genomics islands (GIs), including pathogenicity islands, of potentially horizontally transferred genes by visualizing several common characteristics of GIs such as abnormal sequence composition or the presence of genes that functionally related to mobile elements (termed mobility genes). </p>
+        <p>Further studies (see <a href="http://www.ncbi.nlm.nih.gov/pubmed/16299586">Hsiao et al 2005</a>) used dinucleotide sequence compostion bias   and the presence of mobility genes   to develop a dataset of GIs (IslandPath DIMOB) for multiple organisms and revealed that these genomic regions contain higher proportions of novel genes. </p>
+        <p>A recent study (see Langille et al 2008 (submitted)), developed a new method called <a href="http://www.pathogenomics.sfu.ca/islandpick/">IslandPick</a> that used comparative genomics  to develop  stringent data sets of GIs and non-GIs. These positive and negative data sets that were not based on sequence composition bias allowed for an independent review of several previously published GI predictors. Although the overall accuracy of several of the tools were similar, IslandPath DIMOB was shown to have the highest accuracy. </p>
+    </p>
+    </help>
+    <citations>
+        <citation type="doi">10.1093/bioinformatics/bty095</citation>
+    </citations>
+</tool>
