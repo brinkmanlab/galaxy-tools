@@ -1,0 +1,149 @@
+<tool id="ParSNP" name="ParSNP" version="1.2" profile="16.04">
+    <requirements>
+        <requirement type="package" version="1.2">parsnp</requirement>
+    </requirements>
+    <version_command>parsnp -V</version_command>
+    <command detect_errors="exit_code"><![CDATA[
+    export GENOME_DIR=\$(mktemp -d -p `pwd`)
+    #for $genome in $genomes
+        && ln -s $genome GENOME_DIR/\$(basename $genome)
+    #end for
+    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR $curated $MUMi_only $extend_lcb $output_unaligned
+    #if $random_ref == "true"
+        -r !
+    #else if $reference
+        -r $reference
+    #end if
+    if $genbank_files
+        -g "
+        #for $gbk_file in $genbank_files
+            #if $gbk_file
+                $gbk_file,
+            #end if
+        #end for
+        "
+    #end if
+    #if $query_genome
+        -q $query_genome
+    #end if
+    #unless $max_distribution_default
+        -U $max_distribution
+    #end unless
+    #unless $max_distance_default
+        -i $max_distance
+    #end unless
+    #unless $anchor_default
+        -a $anchor
+    #end unless
+    -C $d_value
+    -z $lcb_size
+    #if $diag_diff_unit
+        -D $diag_diff_bp$diag_diff_unit
+    #else
+        -D $diag_diff
+    #end if
+    #unless $aligner == "muscle"
+        -n $aligner
+    #end unless
+    ]]></command>
+    <inputs>
+        <!-- Inputs -->
+        <param name="genomes" type="data" multiple="true" argument="-d" format="fasta" label="Genomes/Contigs/Scaffolds" />
+        <conditional>
+            <param type="select" label="Reference type">
+                <option value="fasta">Single fasta</option>
+                <option value="gbk">Multiple genbank files</option>
+            </param>
+            <when value="fasta">
+                <conditional label="Reference genome">
+                    <param name="random_ref" type="boolean" checked="false" label="Use random genome from above" />
+                    <when value="false">
+                        <param name="reference" type="data" format="fasta" optional="true"/>
+                    </when>
+                </conditional>
+            </when>
+            <when value="gbk">
+                <param name="genbank_files" type="data" format="genbank" argument="-g" multiple="true" optional="true" label="Reference genbank files" />
+            </when>
+        </conditional>
+        
+        <section label="Advanced options" expanded="false">
+            <param name="query_genome" type="data" format="fasta" optional="true" label="Specify additional (assembled) query genome to use" />
+            
+            <!-- Recombination filtration -->
+            <param name="filter_snp" type="boolean" checked="false"  truevalue="-x" falsevalue="" label="Enable filtering of SNPs located in PhiPack identified regions of recombination" />
+
+            <!-- MUM -->
+            <conditional label="Minimum ANCHOR length">
+                <param name="anchor_default" type="boolean" checked="true" />
+                <when value="false">
+                    <param name="anchor" type="integer" min="0" />
+                </when>
+            </conditional>
+            <param name="d_value" type="integer" min="0" value="100" argument="-C" label="Maximal cluster D value"/>
+            <param name="lcb_size" type="integer" min="0" value="25" argument="-z" label="Min LCB size" />
+
+            <!-- MUMi -->
+            <conditional>
+                <param name="curated" type="boolean" checked="false" truevalue="-c" falsevalue="" label="Curated genome directory, use all genomes in dir and ignore MUMi" />
+                <when value="">
+                    <conditional name="MUMi">
+                        <param name="MUMi_only" type="boolean" checked="false" truevalue="-M" falsevalue="" argument="-M" label="Only calculate MUMi and exit" />
+                        <when value="">
+                            <conditional label="Max MUMi distance value for MUMi distribution">
+                                <param name="max_distribution_default" type="boolean" checked="true" label="Default" />
+                                <when value="false">
+                                    <param name="max_distribution" type="float" />
+                                </when>
+                            </conditional>
+                            <conditional label="Max MUMi distance">
+                                <param name="max_distance_default" type="boolean" checked="true" label="Autocutoff based on distribution of MUMi values" />
+                                <when value="false">
+                                    <param name="max_distance" type="float" />
+                                </when>
+                            </conditional>
+                        </when>
+                    </conditional>
+                </when>
+            </conditional>
+            
+            <!--LCB -->
+            <conditional label="Maximal diagonal difference">
+                <param name="diag_diff_unit" type="select" label="Unit">
+                    <option value="" selected="true">%</option>
+                    <option value="bp">Base pairs</option>
+                </param>
+                <when value="">
+                    <param name="diag_diff" type="float" min="0" max="1" value="0.12" />
+                </when>
+                <when value="bp">
+                    <param name="diag_diff_bp" type="integer" min="0" value="100" />
+                </when>
+            </conditional>
+            <param name="extend_lcb" type="boolean" checked="false" truevalue="-e" falsevalue="" argument="-e" label="Greedily extend LCBs" />              
+            <param name="aligner" type="select" argument="-n" label="Alignment program">
+                <option selected="true">muscle</option>
+                <option>mafft</option>
+                <option>fsa</option>
+                <option>prank</option>
+            </param>
+            <param name="output_unaligned" type="boolean" checked="false" truevalue="-u" falsevalue="" argument="-u" label="Output unaligned regions" />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="newick" from_work_dir="parsnp.tree"/>
+        <data format="vcf" from_work_dir="parsnp.vcf" />
+        <data format="ggr" from_work_dir="parsnp.ggr" />
+        <data format="xfma" from_work_dir="parsnp.xmfa" />
+        <data format="txt" from_work_dir="parsnp.unaligned">
+            <filter>output_unaligned</filter>
+        </data>
+    </outputs>
+    <!-- TODO tests -->
+    <help><![CDATA[
+        https://harvest.readthedocs.io/en/latest/content/parsnp.html
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1101/007351</citation>
+    </citations>
+</tool>

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+PREFIX=`mktemp -d`
+EXTRAS=""
+
+input_lnk="$PREFIX/$(basename $input).embl"
+ln -s "$input" $input_lnk
+
+output_lnk="$PREFIX/$(basename $output).embl"
+ln -s "$output" $output_lnk
+
+if [ -n "$gff" ]; then
+    gff_lnk="$PREFIX/$(basename $gff).gff"
+    ln -s "$gff" $gff_lnk
+    EXTRAS="$EXTRAS gff=\"$gff_lnk\""
+fi
+
+if [ -n "$cut" ] && [ -f "$cut" ]; then
+    cut_lnk="$PREFIX/$(basename $cut).cut"
+    ln -s "$cut" $cut_lnk
+    EXTRAS="$EXTRAS cut=\"$cut_lnk\""
+fi
+
+eval "SigiHMM input="$input_lnk" output="$output_lnk" sens=$sens outlier=$outlier phx=$phx join=$join $EXTRAS"
+
+rm -r $PREFIX
