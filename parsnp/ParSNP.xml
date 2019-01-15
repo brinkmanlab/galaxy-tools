@@ -9,19 +9,22 @@
         && ln -s $genome GENOME_DIR/\$(basename $genome)
     #end for
     && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR $curated $MUMi_only $extend_lcb $output_unaligned
-    #if $random_ref == "true"
-        -r !
-    #else if $reference
-        -r $reference
-    #end if
-    if $genbank_files
-        -g "
-        #for $gbk_file in $genbank_files
-            #if $gbk_file
-                $gbk_file,
-            #end if
-        #end for
-        "
+    #if $ref_type == "fasta"
+        #if $random_ref
+            -r !
+        #else if $reference
+            -r $reference
+        #end if
+    #else
+        if $genbank_files
+            -g "
+            #for $gbk_file in $genbank_files
+                #if $gbk_file
+                    $gbk_file,
+                #end if
+            #end for
+            "
+        #end if
     #end if
     #if $query_genome
         -q $query_genome
@@ -49,16 +52,16 @@
     <inputs>
         <!-- Inputs -->
         <param name="genomes" type="data" multiple="true" argument="-d" format="fasta" label="Genomes/Contigs/Scaffolds" />
-        <conditional>
-            <param type="select" label="Reference type">
+        <conditional name="ref_or_gbk">
+            <param name="ref_type" type="select" label="Reference type">
                 <option value="fasta">Single fasta</option>
                 <option value="gbk">Multiple genbank files</option>
             </param>
             <when value="fasta">
-                <conditional label="Reference genome">
+                <conditional name="ref_genome" label="Reference genome">
                     <param name="random_ref" type="boolean" checked="false" label="Use random genome from above" />
                     <when value="false">
-                        <param name="reference" type="data" format="fasta" optional="true"/>
+                        <param name="reference" type="data" format="fasta" optional="true" label="Reference"/>
                     </when>
                 </conditional>
             </when>
@@ -67,39 +70,39 @@
             </when>
         </conditional>
         
-        <section label="Advanced options" expanded="false">
+        <section name="adv" title="Advanced options" expanded="false">
             <param name="query_genome" type="data" format="fasta" optional="true" label="Specify additional (assembled) query genome to use" />
             
             <!-- Recombination filtration -->
             <param name="filter_snp" type="boolean" checked="false"  truevalue="-x" falsevalue="" label="Enable filtering of SNPs located in PhiPack identified regions of recombination" />
 
             <!-- MUM -->
-            <conditional label="Minimum ANCHOR length">
+            <conditional name="min_anchor_len" label="Minimum ANCHOR length">
                 <param name="anchor_default" type="boolean" checked="true" />
                 <when value="false">
-                    <param name="anchor" type="integer" min="0" />
+                    <param name="anchor" type="float" min="0" value="1.1" />
                 </when>
             </conditional>
             <param name="d_value" type="integer" min="0" value="100" argument="-C" label="Maximal cluster D value"/>
             <param name="lcb_size" type="integer" min="0" value="25" argument="-z" label="Min LCB size" />
 
             <!-- MUMi -->
-            <conditional>
-                <param name="curated" type="boolean" checked="false" truevalue="-c" falsevalue="" label="Curated genome directory, use all genomes in dir and ignore MUMi" />
+            <conditional name="MUMi_or_curated">
+                <param name="curated" type="boolean" checked="false" truevalue="-c" falsevalue="" label="Curated genome directory, use all genomes and ignore MUMi" />
                 <when value="">
                     <conditional name="MUMi">
                         <param name="MUMi_only" type="boolean" checked="false" truevalue="-M" falsevalue="" argument="-M" label="Only calculate MUMi and exit" />
                         <when value="">
-                            <conditional label="Max MUMi distance value for MUMi distribution">
+                            <conditional name="max_mumi_distribution" label="Max MUMi distance value for MUMi distribution">
                                 <param name="max_distribution_default" type="boolean" checked="true" label="Default" />
                                 <when value="false">
-                                    <param name="max_distribution" type="float" />
+                                    <param name="max_distribution" type="float" value="1" />
                                 </when>
                             </conditional>
-                            <conditional label="Max MUMi distance">
+                            <conditional name="max_mumi_distance" label="Max MUMi distance">
                                 <param name="max_distance_default" type="boolean" checked="true" label="Autocutoff based on distribution of MUMi values" />
                                 <when value="false">
-                                    <param name="max_distance" type="float" />
+                                    <param name="max_distance" type="float" value="1" />
                                 </when>
                             </conditional>
                         </when>
@@ -108,7 +111,7 @@
             </conditional>
             
             <!--LCB -->
-            <conditional label="Maximal diagonal difference">
+            <conditional name="max_diag_diff" label="Maximal diagonal difference">
                 <param name="diag_diff_unit" type="select" label="Unit">
                     <option value="" selected="true">%</option>
                     <option value="bp">Base pairs</option>
@@ -131,11 +134,11 @@
         </section>
     </inputs>
     <outputs>
-        <data format="newick" from_work_dir="parsnp.tree"/>
-        <data format="vcf" from_work_dir="parsnp.vcf" />
-        <data format="ggr" from_work_dir="parsnp.ggr" />
-        <data format="xfma" from_work_dir="parsnp.xmfa" />
-        <data format="txt" from_work_dir="parsnp.unaligned">
+        <data name="tree" format="newick" from_work_dir="parsnp.tree" />
+        <data name="vcf" format="vcf" from_work_dir="parsnp.vcf" />
+        <data name="ggr" format="ggr" from_work_dir="parsnp.ggr" />
+        <data name="xfma" format="xfma" from_work_dir="parsnp.xmfa" />
+        <data name="unaligned" format="txt" from_work_dir="parsnp.unaligned">
             <filter>output_unaligned</filter>
         </data>
     </outputs>
