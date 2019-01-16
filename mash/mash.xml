@@ -1,4 +1,35 @@
 <tool id="mash" name="MASH" version="2.1" profile="16.04">
+    <macros>
+        <xml name="sketching_options">
+            <!-- sketching -->
+            <param name="kmer_size" type="integer" min="1" max="32" value="21" argument="-k" label="K-mer size" />
+            <param name="sketch_size" type="integer" min="1" value="1000" argument="-s" label="Sketch size" help="Each sketch will have at most this many non-redundant min-hashes." />
+            <param name="hash_seed" type="integer" min="0" max="4294967296" value="42" argument="-S" label="Seed to provide to the hash function" />
+            <param name="kmer_size_thresh" type="float" min="0" max="1" value="0.01" argument="-w" label="Probability threshold for warning about low k-mer size" />
+            <conditional name="input_option">
+                <param name="individual_seq" type="boolean" checked="false" truevalue="-i" falsevalue="" argument="-i" label="Sketch individual sequences" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
+                <when value="">
+                    <param name="input_read_set" type="boolean" checked="false" truevalue="-r" falsevalue="" argument="-r" label="Input is a read set" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
+                    <!-- sketching reads -->
+                    <param name="bloom_size" type="text" argument="-b" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
+                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
+                    </param>
+                    <param name="kmer_count" type="integer" min="0" value="1" argument="-m" label="Minimum copies of each k-mer required to pass noise filter for reads." />
+                    <param name="target_coverage" type="float" min="0" value="0" argument="-c" label="Target coverage" help="Sketching will conclude if this coverage is reached before the end of the input file (estimated by average k-mer multiplicity)." />
+                    <param name="genome_size" type="text" argument="-g" label="Genome size (raw bases or with K/M/G/T)" help="If specified, will be used for p-value calculation instead of an estimated size from k-mer content." >
+                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
+                    </param>
+                </when>
+            </conditional>
+            <!-- alphabet -->
+            <param name="preserve_strand" type="boolean" checked="false" truevalue="-n" falsevalue="" argument="-n" label="Preserve strand" help="By default, strand is ignored by using canonical DNA k-mers, which are alphabetical minima of forward-reverse pairs." />
+            <param name="use_aaa" type="boolean" checked="false" truevalue="-a" falsevalue="" argument="-a" label="Use amino acid alphabet (A-Z, except BJOUXZ)" help="Implied kmer size of 9 and preserve strand" />
+            <param name="alphabet" type="text" area="false" label="Alphabet to base hashes on" >
+                <validator type="regex"><![CDATA[^[A-Za-z]*$]]></validator>
+            </param>
+            <param name="preserve_case" type="boolean" checked="false" truevalue="-Z" falsevalue="" argument="-Z" label="Preserve case in k-mers and alphabet" help="Sequence letters whose case is not in the current alphabet will be skipped when sketching." />
+        </xml>
+    </macros>
     <requirements>
         <requirement type="package" version="2.1">mash</requirement>
     </requirements>
@@ -97,7 +128,7 @@
             </when>
             <when value="screen">
                 <param name="query" type="data" format="msh" label="Queries" help="Use the sketch command to combine multiple sketch queries." />
-                <param name="pools" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Pools" help="The pool sequences are assumed to be nucleotides, and will be 6-frame translated if the <queries> are amino acids." />
+                <param name="pools" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Pools" help="The pool sequences are assumed to be nucleotides, and will be 6-frame translated if the queries are amino acids." />
                 <param name="winner_takes_all" type="boolean" checked="false" truevalue="-w" falsevalue="" argument="-w" label="Winner-takes-all strategy for identity estimates" help="After counting hashes for each query, hashes that appear in multiple queries will be removed from all except the one with the best identity (ties broken by larger query), and other identities will be reduced. This removes output redundancy, providing a rough compositional outline." />
                 <param name="min_ident" type="float" min="-1" max="1" value="0" argument="-i" label="Minimum identity to report" help="Inclusive unless set to zero, in which case only identities greater than zero (i.e. with at least one shared hash) will be reported. Set to -1 to output everything." />
                 <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
@@ -144,35 +175,4 @@
     <citations>
         <citation type="doi">10.1186/s13059-016-0997-x</citation>
     </citations>
-    <macros>
-        <xml name="sketching_options">
-            <!-- sketching -->
-            <param name="kmer_size" type="integer" min="1" max="32" value="21" argument="-k" label="K-mer size" />
-            <param name="sketch_size" type="integer" min="1" value="1000" argument="-s" label="Sketch size" help="Each sketch will have at most this many non-redundant min-hashes." />
-            <param name="hash_seed" type="integer" min="0" max="4294967296" value="42" argument="-S" label="Seed to provide to the hash function" />
-            <param name="kmer_size_thresh" type="float" min="0" max="1" value="0.01" argument="-w" label="Probability threshold for warning about low k-mer size" />
-            <conditional name="input_option">
-                <param name="individual_seq" type="boolean" checked="false" truevalue="-i" falsevalue="" argument="-i" label="Sketch individual sequences" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
-                <when value="">
-                    <param name="input_read_set" type="boolean" checked="false" truevalue="-r" falsevalue="" argument="-r" label="Input is a read set" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
-                    <!-- sketching reads -->
-                    <param name="bloom_size" type="text" argument="-b" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
-                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
-                    </param>
-                    <param name="kmer_count" type="integer" min="0" value="1" argument="-m" label="Minimum copies of each k-mer required to pass noise filter for reads." />
-                    <param name="target_coverage" type="float" min="0" value="0" argument="-c" label="Target coverage" help="Sketching will conclude if this coverage is reached before the end of the input file (estimated by average k-mer multiplicity)." />
-                    <param name="genome_size" type="text" argument="-g" label="Genome size (raw bases or with K/M/G/T)" help="If specified, will be used for p-value calculation instead of an estimated size from k-mer content." >
-                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
-                    </param>
-                </when>
-            </conditional>
-            <!-- alphabet -->
-            <param name="preserve_strand" type="boolean" checked="false" truevalue="-n" falsevalue="" argument="-n" label="Preserve strand" help="By default, strand is ignored by using canonical DNA k-mers, which are alphabetical minima of forward-reverse pairs." />
-            <param name="use_aaa" type="boolean" checked="false" truevalue="-a" falsevalue="" argument="-a" label="Use amino acid alphabet (A-Z, except BJOUXZ)" help="Implied kmer size of 9 and preserve strand" />
-            <param name="alphabet" type="text" area="false" label="Alphabet to base hashes on" >
-                <validator type="regex"><![CDATA[^[A-Za-z]*$]]></validator>
-            </param>
-            <param name="preserve_case" type="boolean" checked="false" truevalue="-Z" falsevalue="" argument="-Z" label="Preserve case in k-mers and alphabet" help="Sequence letters whose case is not in the current alphabet will be skipped when sketching." />
-        </xml>
-    </macros>
 </tool>
