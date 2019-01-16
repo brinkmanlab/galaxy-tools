@@ -1,0 +1,178 @@
+<tool id="mash" name="MASH" version="2.1" profile="16.04">
+    <requirements>
+        <requirement type="package" version="2.1">mash</requirement>
+    </requirements>
+    <version_command>mash --version</version_command>
+    <command><![CDATA[
+        #def sketching
+            $table_output -v $max_p -d max_dist -k $kmer_size -s $sketch_size -S $hash_seed -w $kmer_size_thresh $individual_seq
+            #unless $individual_seq
+                $input_read_set
+                #if $bloom_size
+                    -b $bloom_size
+                #end if
+                -m $kmer_count -c $target_coverage
+                #if $genome_size
+                    -g $genome_size
+                #end if
+            #end unless
+        #end def
+        mash
+        #if $command in ["dist", "screen", "sketch", "triangle"]
+            -p \${GALAXY_SLOTS:-1}
+        #end if
+        #if $command == "bounds"
+            >> $bounds_output
+        #else if $command == "dist"
+            $sketching $reference
+            #for $query in $queries
+                $query
+            #end for
+            >> $dist_output
+        #else if $command == "info"
+            $info_mode $sketch >> $info_output
+        #else if $command == "paste"
+            "$out_prefix"
+            #for $sketch in $sketches
+                $sketch
+            #end for
+            >> $paste_output
+        #else if $command == "screen"
+            $winner_takes_all -i $min_ident -v $max_p $query
+            #for $pool in $pools
+                $pool
+            #end for
+            >> $screen_output
+        #else if $command == "sketch"
+            -o $sketch_output $sketching
+            #for $input in $inputs
+                $input
+            #end for
+        #else if $command == "triangle"
+            $comment_fields $sketching
+            #for $sequence in $sequences
+                $sequence
+            #end for
+            >> $triangle_output
+        #end if
+    ]]></command>
+    <inputs>
+        <conditional name="command_list">
+            <param name="command" type="select" label="Mode">
+                <option value="bounds">Bounds: Print a table of Mash error bounds</option>
+                <option value="dist">Dist: Estimate the distance of query sequences to references</option>
+                <option value="info">Info: Display information about sketch files</option>
+                <option value="paste">Paste: Create a single sketch file from multiple sketch files</option>
+                <option value="screen">Screen: Determine whether query sequences are within a larger pool of sequences</option>
+                <option value="sketch">Sketch: Create sketches (reduced representations for fast operations)</option>
+                <option value="triangle">Triangle: Estimate a lower-triangular distance matrix</option>
+            </param>
+            <when value="bounds">
+                <param name="kmer_size" type="integer" min="1" max="32" value="21" argument="-k" label="K-mer size" />
+                <param name="error_bound" type="float" min="0" max="1" value="0.99" argument="-p" label="Mash distance estimates will be within the given error bounds with this probability" />
+            </when>
+            <when value="dist">
+                <!-- input -->
+                <param name="reference" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" label="Reference" />
+                <param name="queries" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Queries" />
+                <!--param name="list_input" type="boolean" checked="false" truevalue="-l" falsevalue="" argument="-l" label="List input" help="Lines in each <query> specify paths to sequence files, one per line. The reference file is not affected." /-->
+                <!-- output -->
+                <param name="table_output" type="boolean" checked="false" truevalue="-t" falsevalue="" argument="-t" label="Table output" help="Table output (will not report p-values, but fields will be blank if they do not meet the p-value threshold)." />
+                <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
+                <param name="max_dist" type="float" min="0" max="1" value="1" argument="-d" label="Maximum distance to report" />
+                <expand macro="sketching_options" />
+            </when>
+            <when value="info">
+                <param name="info_mode" type="select" label="Mode">
+                    <option value="" selected="true">Default</option>
+                    <option value="-H">Only show header info, do not list each sketch</option>
+                    <option value="-t">Tabular output (rather than padded), with no header</option>
+                    <option value="-c">Show hash count histograms for each sketch</option>
+                    <option value="-d">Dump sketches in JSON format</option>
+                </param>
+            </when>
+            <when value="paste">
+                <param name="sketches" type="data" format="msh" multiple="true" label="Sketches to merge" />
+                <param name="out_prefix" type="text" area="false" label="Out prefix" />
+            </when>
+            <when value="screen">
+                <param name="query" type="data" format="msh" label="Queries" help="Use the sketch command to combine multiple sketch queries." />
+                <param name="pools" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Pools" help="The pool sequences are assumed to be nucleotides, and will be 6-frame translated if the <queries> are amino acids." />
+                <param name="winner_takes_all" type="boolean" checked="false" truevalue="-w" falsevalue="" argument="-w" label="Winner-takes-all strategy for identity estimates" help="After counting hashes for each query, hashes that appear in multiple queries will be removed from all except the one with the best identity (ties broken by larger query), and other identities will be reduced. This removes output redundancy, providing a rough compositional outline." />
+                <param name="min_ident" type="float" min="-1" max="1" value="0" argument="-i" label="Minimum identity to report" help="Inclusive unless set to zero, in which case only identities greater than zero (i.e. with at least one shared hash) will be reported. Set to -1 to output everything." />
+                <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
+            </when>
+            <when value="sketch">
+                <param name="inputs" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Inputs" />
+                <!-- TODO -I and -C -->
+                <expand macro="sketching_options" />
+            </when>
+            <when value="triangle">
+                <param name="sequences" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Input sequences" />
+                <param name="comment_fields" type="boolean" checked="false" truevalue="-C" falsevalue="" label="Use comment fields for sequence names instead of IDs" />
+                <expand macro="sketching_options" />
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="bounds_output" format="txt">
+            <filter>$command == "bounds"</filter>
+        </data>
+        <data name="dist_output" format="txt">
+            <filter>$command == "dist"</filter>
+        </data>
+        <data name="info_output" format="txt">
+            <filter>$command == "info"</filter>
+        </data>
+        <data name="paste_output" format="msh">
+            <filter>$command == "paste"</filter>
+        </data>
+        <data name="screen_output" format="txt">
+            <filter>$command == "screen"</filter>
+        </data>
+        <data name="sketch_output" format="msh">
+            <filter>$command == "sketch"</filter>
+        </data>
+        <data name="triangle_output" format="phylip"> <!-- TODO may require phylipnon -->
+            <filter>$command == "triangle"</filter>
+        </data>
+    </outputs>
+    <!-- TODO tests -->
+    <help><![CDATA[
+        https://mash.readthedocs.io/en/latest/
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1186/s13059-016-0997-x</citation>
+    </citations>
+    <macros>
+        <xml name="sketching_options">
+            <!-- sketching -->
+            <param name="kmer_size" type="integer" min="1" max="32" value="21" argument="-k" label="K-mer size" />
+            <param name="sketch_size" type="integer" min="1" value="1000" argument="-s" label="Sketch size" help="Each sketch will have at most this many non-redundant min-hashes." />
+            <param name="hash_seed" type="integer" min="0" max="4294967296" value="42" argument="-S" label="Seed to provide to the hash function" />
+            <param name="kmer_size_thresh" type="float" min="0" max="1" value="0.01" argument="-w" label="Probability threshold for warning about low k-mer size" />
+            <conditional name="input_option">
+                <param name="individual_seq" type="boolean" checked="false" truevalue="-i" falsevalue="" argument="-i" label="Sketch individual sequences" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
+                <when value="">
+                    <param name="input_read_set" type="boolean" checked="false" truevalue="-r" falsevalue="" argument="-r" label="Input is a read set" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
+                    <!-- sketching reads -->
+                    <param name="bloom_size" type="text" argument="-b" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
+                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
+                    </param>
+                    <param name="kmer_count" type="integer" min="0" value="1" argument="-m" label="Minimum copies of each k-mer required to pass noise filter for reads." />
+                    <param name="target_coverage" type="float" min="0" value="0" argument="-c" label="Target coverage" help="Sketching will conclude if this coverage is reached before the end of the input file (estimated by average k-mer multiplicity)." />
+                    <param name="genome_size" type="text" argument="-g" label="Genome size (raw bases or with K/M/G/T)" help="If specified, will be used for p-value calculation instead of an estimated size from k-mer content." >
+                        <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
+                    </param>
+                </when>
+            </conditional>
+            <!-- alphabet -->
+            <param name="preserve_strand" type="boolean" checked="false" truevalue="-n" falsevalue="" argument="-n" label="Preserve strand" help="By default, strand is ignored by using canonical DNA k-mers, which are alphabetical minima of forward-reverse pairs." />
+            <param name="use_aaa" type="boolean" checked="false" truevalue="-a" falsevalue="" argument="-a" label="Use amino acid alphabet (A-Z, except BJOUXZ)" help="Implied kmer size of 9 and preserve strand" />
+            <param name="alphabet" type="text" area="false" label="Alphabet to base hashes on" >
+                <validator type="regex"><![CDATA[^[A-Za-z]*$]]></validator>
+            </param>
+            <param name="preserve_case" type="boolean" checked="false" truevalue="-Z" falsevalue="" argument="-Z" label="Preserve case in k-mers and alphabet" help="Sequence letters whose case is not in the current alphabet will be skipped when sketching." />
+        </xml>
+    </macros>
+</tool>
