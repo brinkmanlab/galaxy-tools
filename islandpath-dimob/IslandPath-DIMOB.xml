@@ -2,20 +2,21 @@
     <requirements>
         <requirement type="package" version="1.0.3">islandpath</requirement>
     </requirements>
-    <command>
-    input="$input" output="$output" 
+    <command><![CDATA[
+    {#import os}
     #if $input.is_of_type("embl")
-        input_type="embl"
+        {#set inp=$os.path.basename($input)+".embl" }
     #else
-        input_type="gbk"
+        {#set inp=$os.path.basename($input)+".gbk" }
     #end if
-    /usr/bin/env bash $__tool_directory__/wrapper
-    </command>
+    ln -s "$input" "$inp"
+    && islandpath "$inp" "$output"
+    ]]></command>
     <inputs>
-        <param type="data" format="genbank,embl" name="input" argument="input" label="Input" optional="false" help="" />
+        <param type="data" format="genbank,embl" name="input" argument="input" label="Input" optional="false"/>
     </inputs>
     <outputs>
-        <data format="txt" name="output" />
+        <data format="gff" name="output" />
     </outputs>
     <!-- TODO tests -->
     <help>
