@@ -1,0 +1,28 @@
+<tool id="feature_merge" name="GFF/GTF Feature Merge" version="1.0" profile="16.04">
+    <requirements>
+        <!--requirement type="package" version="1.0.0">feature_merge</requirement-->
+    </requirements>
+    <version_command><![CDATA[ feature_merge.py -v ]]></version_command>
+    <command><![CDATA[
+        feature_merge.py $ignore_strand $exclude_components
+        #for $input in $inputs
+            $input
+        #end for
+        >> $output
+    ]]></command>
+    <inputs>
+        <param name="inputs" type="data" format="gff,gtf" multiple="true" label="Input" />
+        <param name="ignore_strand" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Ignore feature strand when merging" />
+        <param name="exclude_components" type="boolean" checked="false" truevalue="-e" falsevalue="" label="Don't include original feature records in output" />
+    </inputs>
+    <outputs>
+        <data name="output" format="gff" />
+    </outputs>
+    <!-- TODO tests -->
+    <help><![CDATA[
+        https://github.com/brinkmanlab/feature_merge
+    ]]></help>
+    <citations>
+        <!--citation type="doi"></citation-->
+    </citations>
+</tool>
