@@ -36,7 +36,7 @@
     <version_command>mash --version</version_command>
     <command><![CDATA[
         #def sketching
-            $table_output -v $max_p -d max_dist -k $kmer_size -s $sketch_size -S $hash_seed -w $kmer_size_thresh $individual_seq
+            $output -v $max_p -d max_dist -k $kmer_size -s $sketch_size -S $hash_seed -w $kmer_size_thresh $individual_seq
             #unless $individual_seq
                 $input_read_set
                 #if $bloom_size
@@ -53,29 +53,29 @@
             -p \${GALAXY_SLOTS:-1}
         #end if
         #if $command == "bounds"
-            >> $bounds_output
+            >> $output
         #else if $command == "dist"
             $sketching $reference
             #for $query in $queries
                 $query
             #end for
-            >> $dist_output
+            >> $output
         #else if $command == "info"
-            $info_mode $sketch >> $info_output
+            $info_mode $sketch >> $output
         #else if $command == "paste"
             "$out_prefix"
             #for $sketch in $sketches
                 $sketch
             #end for
-            >> $paste_output
+            >> $output
         #else if $command == "screen"
             $winner_takes_all -i $min_ident -v $max_p $query
             #for $pool in $pools
                 $pool
             #end for
-            >> $screen_output
+            >> $output
         #else if $command == "sketch"
-            -o $sketch_output $sketching
+            -o $output $sketching
             #for $input in $inputs
                 $input
             #end for
@@ -84,7 +84,7 @@
             #for $sequence in $sequences
                 $sequence
             #end for
-            >> $triangle_output
+            >> $output
         #end if
     ]]></command>
     <inputs>
@@ -108,7 +108,7 @@
                 <param name="queries" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Queries" />
                 <!--param name="list_input" type="boolean" checked="false" truevalue="-l" falsevalue="" argument="-l" label="List input" help="Lines in each <query> specify paths to sequence files, one per line. The reference file is not affected." /-->
                 <!-- output -->
-                <param name="table_output" type="boolean" checked="false" truevalue="-t" falsevalue="" argument="-t" label="Table output" help="Table output (will not report p-values, but fields will be blank if they do not meet the p-value threshold)." />
+                <param name="output" type="boolean" checked="false" truevalue="-t" falsevalue="" argument="-t" label="Table output" help="Table output (will not report p-values, but fields will be blank if they do not meet the p-value threshold)." />
                 <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
                 <param name="max_dist" type="float" min="0" max="1" value="1" argument="-d" label="Maximum distance to report" />
                 <expand macro="sketching_options" />
@@ -146,26 +146,16 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="bounds_output" format="txt">
-            <filter>$command == "bounds"</filter>
-        </data>
-        <data name="dist_output" format="txt">
-            <filter>$command == "dist"</filter>
-        </data>
-        <data name="info_output" format="txt">
-            <filter>$command == "info"</filter>
-        </data>
-        <data name="paste_output" format="msh">
-            <filter>$command == "paste"</filter>
-        </data>
-        <data name="screen_output" format="txt">
-            <filter>$command == "screen"</filter>
-        </data>
-        <data name="sketch_output" format="msh">
-            <filter>$command == "sketch"</filter>
-        </data>
-        <data name="triangle_output" format="phylip"> <!-- TODO may require phylipnon -->
-            <filter>$command == "triangle"</filter>
+        <data name="output" format="txt">
+            <change_format>
+                <when input="command" value="bounds" format="txt" />
+                <when input="command" value="dist" format="csv" />
+                <when input="command" value="info" format="txt" />
+                <when input="command" value="paste" format="msh" />
+                <when input="command" value="screen" format="txt" />
+                <when input="command" value="sketch" format="msh" />
+                <when input="command" value="triangle" format="phylip" />
+            </change_format>
         </data>
     </outputs>
     <!-- TODO tests -->

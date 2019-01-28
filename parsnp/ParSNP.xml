@@ -125,10 +125,10 @@
             </conditional>
             <param name="extend_lcb" type="boolean" checked="false" truevalue="-e" falsevalue="" argument="-e" label="Greedily extend LCBs" />              
             <param name="aligner" type="select" argument="-n" label="Alignment program">
-                <option selected="true">muscle</option>
-                <option>mafft</option>
-                <option>fsa</option>
-                <option>prank</option>
+                <option value="muscle" selected="true">muscle</option>
+                <option value="mafft">mafft</option>
+                <option value="fsa">fsa</option>
+                <option value="prank">prank</option>
             </param>
             <param name="output_unaligned" type="boolean" checked="false" truevalue="-u" falsevalue="" argument="-u" label="Output unaligned regions" />
         </section>
