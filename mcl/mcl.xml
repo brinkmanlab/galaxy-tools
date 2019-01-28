@@ -37,6 +37,7 @@
                 <param type="data" format="sif" name="input" argument="input" label="Input" optional="false"/>
             </when>
         </conditional>
+        <param name="inflation" type="float" value="4.0" label="Inflation" help="This value is the main handle for affecting cluster granularity. It is usually chosen somewhere in the range [1.2-5.0]. -I 5.0 will tend to result in fine-grained clusterings, and -I 1.2 will tend to result in very coarse grained clusterings. Your mileage will vary depending on the characteristics of your data. That is why it is a good idea to test the quality and coherency of your clusterings using clm dist and clm info. This will most likely reveal that certain values of -I are simply not right for your data." />
         <param name="transform" type="text" area="true" label="Transform input matrix values" help="See https://micans.org/mcl/man/mcxio.html#trans for the transformation syntax" />
         <param name="discard_loops" type="boolean" checked="true" truevalue="" falsevalue="--discard-loops=n" argument="--discard-loops" label="Discard loops in input" help="Remove any loops that are present in the input. Bear in mind that loops will still be modified in all cases where the loop weight is not maximal among the list of edge weights for a given node." />
         <param name="sum_loops" type="boolean" checked="false" truevalue="--sum-loops" falsevalue="" argument="--sum-loops" label="Set loops to sum of other arcs weights"  />
