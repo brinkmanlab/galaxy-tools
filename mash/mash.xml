@@ -11,12 +11,12 @@
                 <when value="">
                     <param name="input_read_set" type="boolean" checked="false" truevalue="-r" falsevalue="" argument="-r" label="Input is a read set" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
                     <!-- sketching reads -->
-                    <param name="bloom_size" type="text" argument="-b" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
+                    <param name="bloom_size" type="text" argument="-b" optional="true" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
                         <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
                     </param>
                     <param name="kmer_count" type="integer" min="0" value="1" argument="-m" label="Minimum copies of each k-mer required to pass noise filter for reads." />
                     <param name="target_coverage" type="float" min="0" value="0" argument="-c" label="Target coverage" help="Sketching will conclude if this coverage is reached before the end of the input file (estimated by average k-mer multiplicity)." />
-                    <param name="genome_size" type="text" argument="-g" label="Genome size (raw bases or with K/M/G/T)" help="If specified, will be used for p-value calculation instead of an estimated size from k-mer content." >
+                    <param name="genome_size" type="text" argument="-g" optional="true" label="Genome size (raw bases or with K/M/G/T)" help="If specified, will be used for p-value calculation instead of an estimated size from k-mer content." >
                         <validator type="regex"><![CDATA[^[0-9]+[KMGT]?$]]></validator>
                     </param>
                 </when>
