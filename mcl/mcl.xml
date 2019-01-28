@@ -5,11 +5,9 @@
     <version_command>mcl --version</version_command>
     <command><![CDATA[
     mcl $input -I $inflation $input_type -V all -te \${GALAXY_SLOTS:-1} $sum_loops $discard_loops
-    #if $verbosity and "none" not in $verbosity
-        #for $v in $verbosity
-            -v $v
-        #end for
-    #end if
+    #for $v in $verbosity
+        -v $v
+    #end for
     #if $reweight and $reweight != 1
         -c $reweight
     #end if
@@ -47,7 +45,6 @@
             <option value="pruning">pruning</option>
             <option value="explain">explain</option>
             <option value="cls">cls</option>
-            <option value="none">none</option>
         </param>
     </inputs>
     <outputs>
