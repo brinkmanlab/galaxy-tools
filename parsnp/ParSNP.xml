@@ -6,48 +6,51 @@
     <command><![CDATA[
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
-        && ln -s $genome GENOME_DIR/\$(basename $genome)
+        && ln -sf $genome \$GENOME_DIR/\$(basename $genome)
     #end for
-    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR $curated $MUMi_only $extend_lcb $output_unaligned
-    #if $ref_type == "fasta"
-        #if $random_ref
+    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR
+    #if $ref_or_gbk.ref_type == "fasta"
+        #if $ref_or_gbk.ref_genome.random_ref
             -r !
-        #else if $reference
-            -r $reference
+        #else
+            -r $ref_or_gbk.ref_genome.reference
         #end if
     #else
-        if $genbank_files
-            -g "
-            #for $gbk_file in $genbank_files
-                #if $gbk_file
-                    $gbk_file,
-                #end if
-            #end for
-            "
-        #end if
+        -g "
+        #for $gbk_file in $ref_or_gbk.genbank_files
+            #if $gbk_file
+                $gbk_file,
+            #end if
+        #end for
+        "
     #end if
-    #if $query_genome
-        -q $query_genome
+    $adv.MUMi_or_curated.curated $adv.extend_lcb $adv.output_unaligned
+    #if $adv.query_genome
+        -q $adv.query_genome
     #end if
-    #unless $max_distribution_default
-        -U $max_distribution
+    #unless $adv.MUMi_or_curated.curated
+        $adv.MUMi_or_curated.MUMi.MUMi_only
+        #unless $adv.MUMi_or_curated.MUMi.max_mumi_distribution.max_distribution_default
+            -U $adv.MUMi_or_curated.MUMi.max_mumi_distribution.max_distribution
+        #end unless
+        #unless $adv.MUMi_or_curated.MUMi.max_mumi_distance.max_distance_default
+            -i $adv.MUMi_or_curated.MUMi.max_mumi_distance.max_distance
+        #end unless
     #end unless
-    #unless $max_distance_default
-        -i $max_distance
+    #unless $adv.min_anchor_len.anchor_default
+        -a $adv.min_anchor_len.anchor
     #end unless
-    #unless $anchor_default
-        -a $anchor
-    #end unless
-    -C $d_value
-    -z $lcb_size
-    #if $diag_diff_unit
-        -D $diag_diff_bp$diag_diff_unit
+    -C $adv.d_value
+    -z $adv.lcb_size
+    #if $adv.max_diag_diff.diag_diff_unit
+        -D $adv.max_diag_diff.diag_diff_bp$adv.max_diag_diff.diag_diff_unit
     #else
-        -D $diag_diff
+        -D $adv.max_diag_diff.diag_diff
     #end if
-    #unless $aligner == "muscle"
-        -n $aligner
+    #unless $adv.aligner == "muscle"
+        -n $adv.aligner
     #end unless
+
     ]]></command>
     <inputs>
         <!-- Inputs -->
@@ -61,12 +64,12 @@
                 <conditional name="ref_genome" label="Reference genome">
                     <param name="random_ref" type="boolean" checked="false" label="Use random genome from above" />
                     <when value="false">
-                        <param name="reference" type="data" format="fasta" optional="true" label="Reference"/>
+                        <param name="reference" type="data" format="fasta" label="Reference"/>
                     </when>
                 </conditional>
             </when>
             <when value="gbk">
-                <param name="genbank_files" type="data" format="genbank" argument="-g" multiple="true" optional="true" label="Reference genbank files" />
+                <param name="genbank_files" type="data" format="genbank" argument="-g" multiple="true" label="Reference genbank files" />
             </when>
         </conditional>
         
@@ -77,10 +80,10 @@
             <param name="filter_snp" type="boolean" checked="false"  truevalue="-x" falsevalue="" label="Enable filtering of SNPs located in PhiPack identified regions of recombination" />
 
             <!-- MUM -->
-            <conditional name="min_anchor_len" label="Minimum ANCHOR length">
-                <param name="anchor_default" type="boolean" checked="true" />
+            <conditional name="min_anchor_len">
+                <param name="anchor_default" type="boolean" checked="true" label="Minimum ANCHOR length default" />
                 <when value="false">
-                    <param name="anchor" type="float" min="0" value="1.1" />
+                    <param name="anchor" type="float" min="0" value="1.1" label="Minimum ANCHOR length"/>
                 </when>
             </conditional>
             <param name="d_value" type="integer" min="0" value="100" argument="-C" label="Maximal cluster D value"/>

@@ -4,25 +4,25 @@
     </requirements>
     <version_command><![CDATA[ echo "4.0" ]]></version_command>
     <command detect_errors="exit_code"><![CDATA[
-        {#import os }
-        {#set input_l=$os.path.basename($input)+".embl" }
-        {#set output_l=$os.path.basename($input)+".embl" }
-        ln -s "$input" "$input_l"
-        && ln -s "$output" "$output_l"
+        #import os 
+        #set input_l=$os.path.basename(str($input))+".embl" 
+        #set output_l=$os.path.basename(str($output))+".embl" 
+        ln -sf "$input" "$input_l"
+        && ln -sf "$output" "$output_l"
         #if $cut
-            {#set cut_l=$os.path.basename($cut)+".cut" }
-            && ln -s "$cut" "$cut_l"
+            #set cut_l=$os.path.basename(str($cut))+".cut"
+            && ln -sf "$cut" "$cut_l"
         #end if
         #if $gff
-            {#set gff_l=$os.path.basename($gff)+".gff" }
-            && ln -s "$gff" "$gff_l"
+            #set gff_l=$os.path.basename(str($gff))+".gff"
+            && ln -sf "$gff" "$gff_l"
         #end if
-        && SigiHMM input="$input_l" output="$output_l" sens=$sens outlier=$outlier phx=$phx join=$join
+        && SigiHMM input="`pwd`/$input_l" output="`pwd`/$output_l" sens=$sens outlier=$outlier phx=$phx join=$join
         #if $cut
-            cut="$cut_l"
+            cut="`pwd`/$cut_l"
         #end if
         #if $gff
-            gff="$gff_l"
+            gff="`pwd`/$gff_l"
         #end if
     ]]></command>
     <inputs>

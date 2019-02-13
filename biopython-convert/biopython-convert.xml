@@ -1,0 +1,60 @@
+<tool id="biopython-convert" name="BioPython SeqIO Converter" version="1.0" profile="16.04">
+    <requirements>
+        <requirement type="package">python</requirement>
+        <requirement type="package">biopython</requirement>
+    </requirements>
+    <command><![CDATA[
+        python -c \$'from Bio import SeqIO\nSeqIO.convert("$input", "$input.ext", "$output", "$output_type")'
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="abi,abi-trim,ace,cif-atom,cif-seqres,clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,ig,imgt,nexus,pdb-seqres,pdb-atom,phd,phylip,pir,seqxml,sff,sff-trim,stockholm,swiss,tab,qual,uniprot-xml" label="Input" />
+        <param name="output_type" type="select" label="Output Format">
+            <option value="clustal">clustal</option>
+            <option value="embl">embl</option>
+            <option value="fasta">fasta</option>
+            <option value="fasta-2line">fasta-2line</option>
+            <option value="fastq-sanger">fastq-sanger</option>
+            <option value="fastq">fastq</option>
+            <option value="fastq-solexa">fastq-solexa</option>
+            <option value="fastq-illumina">fastq-illumina</option>
+            <option value="genbank">genbank</option>
+            <option value="gb">gb</option>
+            <option value="imgt">imgt</option>
+            <option value="nexus">nexus</option>
+            <option value="phd">phd</option>
+            <option value="phylip">phylip</option>
+            <option value="pir">pir</option>
+            <option value="seqxml">seqxml</option>
+            <option value="sff">sff</option>
+            <option value="stockholm">stockholm</option>
+            <option value="tab">tab</option>
+            <option value="qual">qual</option>        
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output" format="txt">
+            <change_format>
+                <when input="output_type" value="clustal" format="clustal" />
+                <when input="output_type" value="embl" format="embl" />
+                <when input="output_type" value="fasta" format="fasta" />
+                <when input="output_type" value="fasta-2line" format="fasta-2line" />
+                <when input="output_type" value="fastq-sanger" format="fastq-sanger" />
+                <when input="output_type" value="fastq" format="fastq" />
+                <when input="output_type" value="fastq-solexa" format="fastq-solexa" />
+                <when input="output_type" value="fastq-illumina" format="fastq-illumina" />
+                <when input="output_type" value="genbank" format="genbank" />
+                <when input="output_type" value="gb" format="genbank" />
+                <when input="output_type" value="imgt" format="imgt" />
+                <when input="output_type" value="nexus" format="nexus" />
+                <when input="output_type" value="phd" format="phd" />
+                <when input="output_type" value="phylip" format="phylip" />
+                <when input="output_type" value="pir" format="pir" />
+                <when input="output_type" value="seqxml" format="seqxml" />
+                <when input="output_type" value="sff" format="sff" />
+                <when input="output_type" value="stockholm" format="stockholm" />
+                <when input="output_type" value="tab" format="tabular" />
+                <when input="output_type" value="qual" format="qual" />
+            </change_format>
+        </data>
+    </outputs>
+</tool>

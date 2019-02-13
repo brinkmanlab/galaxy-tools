@@ -1,10 +1,15 @@
 <tool id="feature_merge" name="GFF/GTF Feature Merge" version="1.0" profile="16.04">
     <requirements>
         <!--requirement type="package" version="1.0.0">feature_merge</requirement-->
+        <requirement type="package">python</requirement>
+        <requirement type="package">gffutils</requirement>
     </requirements>
-    <version_command><![CDATA[ feature_merge.py -v ]]></version_command>
+    <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
     <command><![CDATA[
-        feature_merge.py $ignore_strand $exclude_components
+        $__tool_directory__/feature_merge.py $ignore_strand $exclude_components $exact_only
+        #for set in $features
+            -f "${str($set.csv).replace(" ", "")}"
+        #end for
         #for $input in $inputs
             $input
         #end for
@@ -14,6 +19,10 @@
         <param name="inputs" type="data" format="gff,gtf" multiple="true" label="Input" />
         <param name="ignore_strand" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Ignore feature strand when merging" />
         <param name="exclude_components" type="boolean" checked="false" truevalue="-e" falsevalue="" label="Don't include original feature records in output" />
+        <param name="exact_only" type="boolean" checked="false" truevalue="-x" falsevalue="" label="Only merge features with identical coordinates" />
+        <repeat name="features" title="Features" help="Can be provided more than once to specify multiple merge groups">
+            <param name="csv" type="text" label="Feature set to merge" help="Comma seperated types of features to merge. Must be terms or accessions from the SOFA sequence ontology, ALL, or NONE" />
+        </repeat>
     </inputs>
     <outputs>
         <data name="output" format="gff" />

@@ -1,4 +1,4 @@
-<tool id="mash" name="MASH" version="2.1" profile="16.04">
+<tool id="mash" name="MASH" version="2.1" profile="18.09">
     <macros>
         <xml name="sketching_options">
             <!-- sketching -->
@@ -7,8 +7,8 @@
             <param name="hash_seed" type="integer" min="0" max="4294967296" value="42" argument="-S" label="Seed to provide to the hash function" />
             <param name="kmer_size_thresh" type="float" min="0" max="1" value="0.01" argument="-w" label="Probability threshold for warning about low k-mer size" />
             <conditional name="input_option">
-                <param name="individual_seq" type="boolean" checked="false" truevalue="-i" falsevalue="" argument="-i" label="Sketch individual sequences" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
-                <when value="">
+                <param name="individual_seq" type="boolean" checked="false" argument="-i" label="Sketch individual sequences" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
+                <when value="false">
                     <param name="input_read_set" type="boolean" checked="false" truevalue="-r" falsevalue="" argument="-r" label="Input is a read set" help="Sketch individual sequences, rather than whole files, e.g. for multi-fastas of single-chromosome genomes or pair-wise gene comparisons." />
                     <!-- sketching reads -->
                     <param name="bloom_size" type="text" argument="-b" optional="true" label="Use a Bloom filter of this size (raw bytes or with K/M/G/T)" help="Use a Bloom filter of this size (raw bytes or with K/M/G/T) to filter out unique k-mers. This is useful if exact filtering uses too much memory. However, some unique k-mers may pass erroneously, and copies cannot be counted beyond 2." >
@@ -24,7 +24,7 @@
             <!-- alphabet -->
             <param name="preserve_strand" type="boolean" checked="false" truevalue="-n" falsevalue="" argument="-n" label="Preserve strand" help="By default, strand is ignored by using canonical DNA k-mers, which are alphabetical minima of forward-reverse pairs." />
             <param name="use_aaa" type="boolean" checked="false" truevalue="-a" falsevalue="" argument="-a" label="Use amino acid alphabet (A-Z, except BJOUXZ)" help="Implied kmer size of 9 and preserve strand" />
-            <param name="alphabet" type="text" area="false" label="Alphabet to base hashes on" >
+            <param name="alphabet" type="text" area="false" argument="-z" label="Alphabet to base hashes on" >
                 <validator type="regex"><![CDATA[^[A-Za-z]*$]]></validator>
             </param>
             <param name="preserve_case" type="boolean" checked="false" truevalue="-Z" falsevalue="" argument="-Z" label="Preserve case in k-mers and alphabet" help="Sequence letters whose case is not in the current alphabet will be skipped when sketching." />
@@ -35,60 +35,123 @@
     </requirements>
     <version_command>mash --version</version_command>
     <command><![CDATA[
+        #import os
+        ## =====  Declare reusable parameter output for different modes ===
         #def sketching
-            $output -v $max_p -d max_dist -k $kmer_size -s $sketch_size -S $hash_seed -w $kmer_size_thresh $individual_seq
-            #unless $individual_seq
-                $input_read_set
-                #if $bloom_size
-                    -b $bloom_size
+            -k $commands.kmer_size -s $commands.sketch_size
+            #if $commands.input_option.individual_seq
+                -i ##Hack around current conditional truevalue/falsevalue behavior
+            #end if
+            -S $commands.hash_seed -w $commands.kmer_size_thresh
+            #unless $commands.input_option.individual_seq
+                $commands.input_option.input_read_set
+                #if $commands.input_option.bloom_size
+                    -b $commands.input_option.bloom_size
                 #end if
-                -m $kmer_count -c $target_coverage
-                #if $genome_size
-                    -g $genome_size
+                -m $commands.input_option.kmer_count
+                -c $commands.input_option.target_coverage
+                #if $commands.input_option.genome_size
+                    -g $commands.input_option.genome_size
                 #end if
             #end unless
+            $commands.preserve_strand $commands.use_aaa
+            #if $commands.alphabet
+                -z "$commands.alphabet"
+            #end if
+            $commands.preserve_case
         #end def
-        mash
-        #if $command in ["dist", "screen", "sketch", "triangle"]
-            -p \${GALAXY_SLOTS:-1}
+
+        ## ===== Change to extension MASH expects =====
+        #if $commands.command in ["dist", "screen"] and $commands.reference.is_of_type("msh")
+            ln -sf $commands.reference ${os.path.basename(str($commands.reference))}.msh &&
         #end if
-        #if $command == "bounds"
+        #if $commands.command in ["dist", "sketch", "triangle"]
+            #for $input in $commands.inputs
+                #if $input.is_of_type("msh")
+                    ln -sf $input ${os.path.basename(str($input))}.msh &&
+                #end if
+            #end for
+        #end if
+        #if $commands.command in ["sketch"]
+            ln -sf $output output.msh &&
+        #end if
+
+        ## ===== Execute MASH =====
+        mash $commands.command
+
+        ## ===== Enable threading =====
+        #if False and $commands.command in ["dist", "screen", "sketch", "triangle"]
+            -p \${GALAXY_SLOTS:-1} ## -p seems broken at the time of writing
+        #end if
+
+        ## ===== Select correct output parameters for selected mode =====
+        #if $commands.command == "bounds"
             >> $output
-        #else if $command == "dist"
-            $sketching $reference
-            #for $query in $queries
-                $query
+        #else if $commands.command == "dist"
+            $commands.table_output -v $commands.max_p -d $commands.max_dist
+            #set $sketch=True
+            #for $input in $commands.inputs
+                #if $input.is_of_type("msh")
+                    #set $sketch=False
+                    #break
+                #end if
+            #end for
+            #if $sketch
+                $sketching()
+            #end if
+            #if $commands.reference.is_of_type("msh")
+                ${os.path.basename(str($commands.reference))}.msh
+            #else
+                $commands.reference
+            #end if
+            #for $input in $commands.inputs
+                #if $input.is_of_type("msh")
+                    ${os.path.basename(str($input))}.msh
+                #else
+                    $input
+                #end if
             #end for
             >> $output
-        #else if $command == "info"
-            $info_mode $sketch >> $output
-        #else if $command == "paste"
-            "$out_prefix"
-            #for $sketch in $sketches
+        #else if $commands.command == "info"
+            $commands.info_mode $commands.sketch >> $output
+        #else if $commands.command == "paste"
+            "$commands.out_prefix"
+            #for $sketch in $commands.sketches
                 $sketch
             #end for
             >> $output
-        #else if $command == "screen"
-            $winner_takes_all -i $min_ident -v $max_p $query
-            #for $pool in $pools
+        #else if $commands.command == "screen"
+            $commands.winner_takes_all -i $commands.min_ident -v $commands.max_p
+            #if $commands.reference.is_of_type("msh")
+                ${os.path.basename(str($commands.reference))}.msh
+            #else
+                $commands.reference
+            #end if
+            #for $pool in $commands.pools
                 $pool
             #end for
             >> $output
-        #else if $command == "sketch"
-            -o $output $sketching
-            #for $input in $inputs
+        #else if $commands.command == "sketch"
+            -o output
+            $sketching()
+            #for $input in $commands.inputs
                 $input
             #end for
-        #else if $command == "triangle"
-            $comment_fields $sketching
-            #for $sequence in $sequences
-                $sequence
+        #else if $commands.command == "triangle"
+            $commands.comment_fields
+            $sketching()
+            #for $input in $commands.inputs
+                #if $input.is_of_type("msh")
+                    ${os.path.basename(str($input))}.msh
+                #else
+                    $input
+                #end if
             #end for
             >> $output
         #end if
     ]]></command>
     <inputs>
-        <conditional name="command_list">
+        <conditional name="commands">
             <param name="command" type="select" label="Mode">
                 <option value="bounds">Bounds: Print a table of Mash error bounds</option>
                 <option value="dist">Dist: Estimate the distance of query sequences to references</option>
@@ -105,10 +168,9 @@
             <when value="dist">
                 <!-- input -->
                 <param name="reference" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" label="Reference" />
-                <param name="queries" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Queries" />
-                <!--param name="list_input" type="boolean" checked="false" truevalue="-l" falsevalue="" argument="-l" label="List input" help="Lines in each <query> specify paths to sequence files, one per line. The reference file is not affected." /-->
+                <param name="inputs" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Queries" />
                 <!-- output -->
-                <param name="output" type="boolean" checked="false" truevalue="-t" falsevalue="" argument="-t" label="Table output" help="Table output (will not report p-values, but fields will be blank if they do not meet the p-value threshold)." />
+                <param name="table_output" type="boolean" checked="false" truevalue="-t" falsevalue="" argument="-t" label="Table output" help="Table output (will not report p-values, but fields will be blank if they do not meet the p-value threshold)." />
                 <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
                 <param name="max_dist" type="float" min="0" max="1" value="1" argument="-d" label="Maximum distance to report" />
                 <expand macro="sketching_options" />
@@ -127,9 +189,9 @@
                 <param name="out_prefix" type="text" area="false" label="Out prefix" />
             </when>
             <when value="screen">
-                <param name="query" type="data" format="msh" label="Queries" help="Use the sketch command to combine multiple sketch queries." />
-                <param name="pools" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Pools" help="The pool sequences are assumed to be nucleotides, and will be 6-frame translated if the queries are amino acids." />
-                <param name="winner_takes_all" type="boolean" checked="false" truevalue="-w" falsevalue="" argument="-w" label="Winner-takes-all strategy for identity estimates" help="After counting hashes for each query, hashes that appear in multiple queries will be removed from all except the one with the best identity (ties broken by larger query), and other identities will be reduced. This removes output redundancy, providing a rough compositional outline." />
+                <param name="reference" type="data" format="msh" label="inputs" help="Use the sketch command to combine multiple sketch inputs." />
+                <param name="pools" type="data" format="fasta,fastq,fasta.gz,fastq.gz" multiple="true" label="Pools" help="The pool sequences are assumed to be nucleotides, and will be 6-frame translated if the inputs are amino acids." />
+                <param name="winner_takes_all" type="boolean" checked="false" truevalue="-w" falsevalue="" argument="-w" label="Winner-takes-all strategy for identity estimates" help="After counting hashes for each query, hashes that appear in multiple inputs will be removed from all except the one with the best identity (ties broken by larger query), and other identities will be reduced. This removes output redundancy, providing a rough compositional outline." />
                 <param name="min_ident" type="float" min="-1" max="1" value="0" argument="-i" label="Minimum identity to report" help="Inclusive unless set to zero, in which case only identities greater than zero (i.e. with at least one shared hash) will be reported. Set to -1 to output everything." />
                 <param name="max_p" type="float" min="0" max="1" value="1" argument="-v" label="Maximum p-value to report" />
             </when>
@@ -139,7 +201,7 @@
                 <expand macro="sketching_options" />
             </when>
             <when value="triangle">
-                <param name="sequences" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Input sequences" />
+                <param name="inputs" type="data" format="fasta,fastq,fasta.gz,fastq.gz,msh" multiple="true" label="Input sequences" />
                 <param name="comment_fields" type="boolean" checked="false" truevalue="-C" falsevalue="" label="Use comment fields for sequence names instead of IDs" />
                 <expand macro="sketching_options" />
             </when>
@@ -148,13 +210,13 @@
     <outputs>
         <data name="output" format="txt">
             <change_format>
-                <when input="command" value="bounds" format="txt" />
-                <when input="command" value="dist" format="csv" />
-                <when input="command" value="info" format="txt" />
-                <when input="command" value="paste" format="msh" />
-                <when input="command" value="screen" format="txt" />
-                <when input="command" value="sketch" format="msh" />
-                <when input="command" value="triangle" format="phylip" />
+                <when input="commands.command" value="bounds" format="txt" />
+                <when input="commands.command" value="dist" format="tsv" />
+                <when input="commands.command" value="info" format="txt" />
+                <when input="commands.command" value="paste" format="msh" />
+                <when input="commands.command" value="screen" format="txt" />
+                <when input="commands.command" value="sketch" format="msh" />
+                <when input="commands.command" value="triangle" format="phylip" />
             </change_format>
         </data>
     </outputs>

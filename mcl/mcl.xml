@@ -4,17 +4,19 @@
     </requirements>
     <version_command>mcl --version</version_command>
     <command><![CDATA[
-    mcl $input -I $inflation $input_type -V all -te \${GALAXY_SLOTS:-1} $sum_loops $discard_loops
-    #for $v in $verbosity
-        -v $v
-    #end for
-    #if $reweight and $reweight != 1
+    mcl $input_type_select.input -I $inflation $input_type_select.input_type -V all -te \${GALAXY_SLOTS:-1} $sum_loops $discard_loops
+    #if $verbosity
+        #for $v in $verbosity
+            -v $v
+        #end for
+    #end if
+    #if $reweight and $reweight != 1.0
         -c $reweight
     #end if
     #if $transform
-        #if input_type == "--abc"
+        #if $input_type_select.input_type == "--abc"
             -abc-tf "$transform"
-        #else if input_type == ""
+        #else if $input_type_select.input_type == ""
             -tf "$transform"
         #end if
     #end if
@@ -51,9 +53,9 @@
     <outputs>
         <data format="txt" name="output">
             <change_format>
-                <when input="input_type" value="" format="mclmat" />
-                <when input="input_type" value="--abc" format="tabular" />
-                <when input="input_type" value="--sif" format="tabular" />
+                <when input="input_type_select.input_type" value="" format="mclmat" />
+                <when input="input_type_select.input_type" value="--abc" format="tabular" />
+                <when input="input_type_select.input_type" value="--sif" format="tabular" />
             </change_format>
         </data>
     </outputs>

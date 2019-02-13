@@ -1,13 +1,13 @@
-<tool id="IslandPath-DIMOB" name="IslandPath-DIMOB" version="1.0.3" profile="16.04">
+<tool id="IslandPath-DIMOB" name="IslandPath-DIMOB" version="1.0.4" profile="16.04">
     <requirements>
-        <requirement type="package" version="1.0.3">islandpath</requirement>
+        <requirement type="package" version="1.0.4">islandpath</requirement>
     </requirements>
     <command><![CDATA[
-    {#import os}
+    #import os
     #if $input.is_of_type("embl")
-        {#set inp=$os.path.basename($input)+".embl" }
+        #set inp=$os.path.basename(str($input))+".embl"
     #else
-        {#set inp=$os.path.basename($input)+".gbk" }
+        #set inp=$os.path.basename(str($input))+".gbk"
     #end if
     ln -s "$input" "$inp"
     && islandpath "$inp" "$output"
