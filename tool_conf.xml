@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<toolbox monitor="true">
+  <section id="islandcompare" name="IslandCompare">
+	<tool file="/local_tools/colombo/SigiHMM.xml" />
+	<tool file="/local_tools/feature_merge/feature_merge.xml" />
+	<tool file="/local_tools/islandpath-dimob/IslandPath-DIMOB.xml" />
+	<tool file="/local_tools/mash/mash.xml" />
+	<tool file="/local_tools/parsnp/ParSNP.xml" />
+	<tool file="/local_tools/mcl/mcl.xml" />
+	<tool file="/local_tools/biopython-convert/biopython-convert.xml" />
+  </section>
+</toolbox>
