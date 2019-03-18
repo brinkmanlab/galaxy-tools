@@ -142,7 +142,7 @@
         <data name="ggr" format="ggr" from_work_dir="parsnp.ggr" />
         <data name="xfma" format="xfma" from_work_dir="parsnp.xmfa" />
         <data name="unaligned" format="txt" from_work_dir="parsnp.unaligned">
-            <filter>output_unaligned</filter>
+            <filter>adv['output_unaligned']</filter>
         </data>
     </outputs>
     <!-- TODO tests -->
