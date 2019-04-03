@@ -6,7 +6,12 @@
     <command><![CDATA[
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
-        && ln -sf $genome \$GENOME_DIR/\$(basename $genome)
+        && ln -sf $genome 
+        #if $adv.use_ids
+            \$GENOME_DIR/$genome.element_identifier
+        #else
+            \$GENOME_DIR/\$(basename $genome)
+        #fi
     #end for
     && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR
     #if $ref_or_gbk.ref_type == "fasta"
@@ -75,6 +80,7 @@
         
         <section name="adv" title="Advanced options" expanded="false">
             <param name="query_genome" type="data" format="fasta" optional="true" label="Specify additional (assembled) query genome to use" />
+            <param name="use_ids" type="boolean" checked="true" label="Use dataset name or collection id's instead of file name in output" />
             
             <!-- Recombination filtration -->
             <param name="filter_snp" type="boolean" checked="false"  truevalue="-x" falsevalue="" label="Enable filtering of SNPs located in PhiPack identified regions of recombination" />
