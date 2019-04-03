@@ -80,7 +80,7 @@
         
         <section name="adv" title="Advanced options" expanded="false">
             <param name="query_genome" type="data" format="fasta" optional="true" label="Specify additional (assembled) query genome to use" />
-            <param name="use_ids" type="boolean" checked="true" label="Use dataset name or collection id's instead of file name in output" />
+            <param name="use_ids" type="boolean" checked="true" label="Use dataset name or collection id's instead of file name in output" help="IDs must be valid POSIX file names" />
             
             <!-- Recombination filtration -->
             <param name="filter_snp" type="boolean" checked="false"  truevalue="-x" falsevalue="" label="Enable filtering of SNPs located in PhiPack identified regions of recombination" />
