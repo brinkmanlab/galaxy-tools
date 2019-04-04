@@ -11,7 +11,7 @@
             \$GENOME_DIR/$genome.element_identifier
         #else
             \$GENOME_DIR/\$(basename $genome)
-        #fi
+        #end if
     #end for
     && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR
     #if $ref_or_gbk.ref_type == "fasta"
