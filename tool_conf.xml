@@ -8,5 +8,6 @@
 	<tool file="/home/galaxy/local_tools/parsnp/ParSNP.xml" />
 	<tool file="/home/galaxy/local_tools/mcl/mcl.xml" />
 	<tool file="/home/galaxy/local_tools/biopython-convert/biopython-convert.xml" />
+	<tool file="/home/galaxy/local_tools/extract_tree_order/extract_tree_order.xml" />
   </section>
 </toolbox>

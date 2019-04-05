@@ -1,0 +1,15 @@
+<tool id="extract-tree-order" name="BioPython Phylo Parse Newick Leaf Order" version="1.0" profile="16.04">
+    <requirements>
+        <requirement type="package">python</requirement>
+        <requirement type="package">biopython</requirement>
+    </requirements>
+    <command><![CDATA[
+        python -c \$'from Bio import Phylo\nfor clade in Phylo.read("$input", "newick").get_terminals(order='preorder'): print clade.name' > '$output'
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="newick" label="Input" />
+    </inputs>
+    <outputs>
+        <data name="output" format="txt">
+    </outputs>
+</tool>
