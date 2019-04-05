@@ -4,7 +4,7 @@
         <requirement type="package">biopython</requirement>
     </requirements>
     <command><![CDATA[
-        python -c \$'from Bio import Phylo\nfor clade in Phylo.read("$input", "newick").get_terminals(order='preorder'): print clade.name' > '$output'
+        python -c \$'from Bio import Phylo\nfor clade in Phylo.read("$input", "newick").get_terminals(order='preorder'): print(clade.name)' > '$output'
     ]]></command>
     <inputs>
         <param name="input" type="data" format="newick" label="Input" />
