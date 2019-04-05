@@ -10,6 +10,6 @@
         <param name="input" type="data" format="newick" label="Input" />
     </inputs>
     <outputs>
-        <data name="output" format="txt">
+        <data name="output" format="txt" />
     </outputs>
 </tool>
