@@ -3,9 +3,11 @@ import shutil
 
 import gffutils
 import sys
+import os
 import getopt
 
-usage = "Usage: feature_merge.py [-i] [-e] [-x] [-v] [-f type[,type..]].. <input1> <input2> [..<input_n>]. Accepts GFF or GTF format.\n" \
+usage = "Usage: feature_merge.py [-i] [-e] [-x] [-v] [-f type[,type..]].. <input1> [<input_n>..]\n" \
+        "Accepts GFF or GTF format.\n" \
         "-v Print version and exit\n" \
         "-f Comma seperated types of features to merge. Must be terms or accessions from the SOFA sequence ontology, \"ALL\", or \"NONE\". (Can be provided more than once to specify multiple merge groups)\n" \
         "-i Ignore strand, merge feature regardless of strand\n" \
@@ -49,6 +51,7 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
     current_merged_stop = feature.stop
     current_merged_seqid = feature.seqid
     strand = feature.strand
+    frame = feature.frame
     featuretype = feature.featuretype
     feature_components = [feature]
     if exact_only:
@@ -60,6 +63,9 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
         # Does this feature start within the currently merged feature?...
         if coordinate_criteria(feature.seqid, feature.start, feature.stop) and (ignore_strand or feature.strand == strand) and (ignore_featuretype or feature.featuretype == featuretype):
             feature_components.append(feature)
+            if feature.strand != strand: strand = '.'
+            if feature.frame != frame: frame = '.'
+            if feature.featuretype != featuretype: featuretype = "sequence_feature"
             # ...It starts within, so leave current_merged_start where it
             # is.  Does it extend any farther?
             if feature.stop >= current_merged_stop:
@@ -77,20 +83,21 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
             yield self._feature_returner(
                 seqid=current_merged_seqid,
                 source=",".join(set(component.source for component in feature_components)),
-                featuretype="sequence_feature" if ignore_featuretype else featuretype,
+                featuretype=featuretype,
                 start=current_merged_start,
                 end=current_merged_stop,
                 score='.',
-                strand='.' if ignore_strand else strand,
-                frame='.' if not all(map(lambda x: x.frame == feature_components[0].frame, feature_components)) else feature_components[0].frame,
+                strand=strand,
+                frame=frame,
                 attributes=attributes), feature_components
 
             # and we start a new one, initializing with this feature's
             # start and stop.
             current_merged_start = feature.start
             current_merged_stop = feature.stop
-            seqid = feature.seqid
+            current_merged_seqid = feature.seqid
             strand = feature.strand
+            frame = feature.frame
             featuretype = feature.featuretype
             feature_components = [feature]
 
@@ -99,12 +106,12 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
     yield self._feature_returner(
         seqid=current_merged_seqid,
         source = ",".join(set(component.source for component in feature_components)),
-        featuretype="sequence_feature" if ignore_featuretype else featuretype,
+        featuretype=featuretype,
         start=current_merged_start,
         end=current_merged_stop,
         score='.',
-        strand='.' if ignore_strand else strand,
-        frame='.',
+        strand=strand,
+        frame=frame,
         attributes=attributes), feature_components
 
 
@@ -138,6 +145,9 @@ def update(self, data, **kwargs):
     else:
         raise ValueError
 
+    peek, data = iterators.peek(data, 1)
+    if len(peek) == 0: return # If the file is empty then do nothing
+
     db._autoincrements.update(self._autoincrements)
     db._populate_from_lines(data)
     db._update_relations()
@@ -152,7 +162,7 @@ if __name__ == '__main__':
     featuretypes_groups = []
 
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vief:')
+        opts, args = getopt.gnu_getopt(sys.argv[1:], 'viexf:')
         for opt, val in opts:
             if opt == '-v':
                 import __version
@@ -169,11 +179,16 @@ if __name__ == '__main__':
                 exact_only = True
 
     except getopt.GetoptError as err:
+        print("Argument error(", err.opt, "): ", err.msg, file=sys.stderr)
         args = []
 
     if len(args) < 1:
         print(usage, file=sys.stderr)
         exit(1)
+
+    #Remove any empty files as GFFutils gets angry
+    args = list(filter(os.path.getsize, args))
+    if not len(args): exit(0)
 
     if not featuretypes_groups:
         featuretypes_groups.append(None)
@@ -184,10 +199,15 @@ if __name__ == '__main__':
         merge_order = ('seqid', 'featuretype', 'strand', 'start')
 
     #Load input data
-    db = gffutils.create_db(args[0], ":memory:", merge_strategy="create_unique")
+    try:
+        input = args[0]
+        db = gffutils.create_db(input, ":memory:", merge_strategy="create_unique")
 
-    for input in args[1:]:
-        update(db, input, merge_strategy="create_unique")
+        for input in args[1:]:
+            update(db, input, merge_strategy="create_unique")
+    except Exception as e:
+        print("Error while parsing ", input, e, file=sys.stderr)
+        raise
 
     remaining_featuretypes = set(db.featuretypes())
 
