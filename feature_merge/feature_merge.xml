@@ -18,7 +18,7 @@
     <inputs>
         <param name="inputs" type="data" format="gff,gtf" multiple="true" label="Input" />
         <param name="ignore_strand" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Ignore feature strand when merging" />
-        <param name="exclude_components" type="boolean" checked="false" truevalue="-e" falsevalue="" label="Don't include original feature records in output" />
+        <param name="exclude_components" type="boolean" checked="false" truevalue="" falsevalue="-e" label="Include original feature records in output" />
         <param name="exact_only" type="boolean" checked="false" truevalue="-x" falsevalue="" label="Only merge features with identical coordinates" />
         <repeat name="features" title="Features" help="Can be provided more than once to specify multiple merge groups">
             <param name="csv" type="text" label="Feature set to merge" help="Comma seperated types of features to merge. Must be terms or accessions from the SOFA sequence ontology, ALL, or NONE" />
