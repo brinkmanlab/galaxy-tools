@@ -2,9 +2,14 @@
     <requirements>
         <requirement type="package">python</requirement>
         <requirement type="package">biopython</requirement>
+        <requirement type="package">gffutils</requirement>
     </requirements>
     <command><![CDATA[
-        python -c \$'from Bio import SeqIO\nSeqIO.convert("$input", "$input.ext", "$output", "$output_type")'
+        #if $input.ext == $output_type
+            cp $input $output
+        #else
+            python biopython-convert.py $input.ext $output_type < $input > $output
+        #endif
     ]]></command>
     <inputs>
         <param name="input" type="data" format="abi,abi-trim,ace,cif-atom,cif-seqres,clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,ig,imgt,nexus,pdb-seqres,pdb-atom,phd,phylip,pir,seqxml,sff,sff-trim,stockholm,swiss,tab,qual,uniprot-xml" label="Input" />
@@ -28,7 +33,8 @@
             <option value="sff">sff</option>
             <option value="stockholm">stockholm</option>
             <option value="tab">tab</option>
-            <option value="qual">qual</option>        
+            <option value="qual">qual</option>
+            <option value="gff3">gff3</option>
         </param>
     </inputs>
     <outputs>
@@ -54,6 +60,7 @@
                 <when input="output_type" value="stockholm" format="stockholm" />
                 <when input="output_type" value="tab" format="tabular" />
                 <when input="output_type" value="qual" format="qual" />
+                <when input="output_type" value="gff3" format="gff3" />
             </change_format>
         </data>
     </outputs>
