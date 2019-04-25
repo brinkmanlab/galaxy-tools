@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+"""
+Feature Merge - Merge annotations in GFF files.
+Can merge overlapping annotations based on criteria.
+
+Run without arguments for options help.
+
+Nolan Woods (nolan_w@sfu.ca) 2019
+Brinkman Lab, SFU
+"""
 import shutil
 
 import gffutils
@@ -119,6 +128,7 @@ def update(self, data, **kwargs):
     """
     Ripped this out of FeatureDB.update() to deal with a bug.
     Update database with features in `data`.
+    If the file is empty, return rather than throw exception.
 
     data : str, iterable, FeatureDB instance
         If FeatureDB, all data will be used. If string, assume it's
@@ -145,7 +155,7 @@ def update(self, data, **kwargs):
     else:
         raise ValueError
 
-    peek, data = iterators.peek(data, 1)
+    peek, data._iter = iterators.peek(data._iter, 1)
     if len(peek) == 0: return # If the file is empty then do nothing
 
     db._autoincrements.update(self._autoincrements)
@@ -160,7 +170,7 @@ if __name__ == '__main__':
     exact_only = False
     exclude_components = False
     featuretypes_groups = []
-
+    # Parse arguments
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'viexf:')
         for opt, val in opts:
@@ -186,7 +196,7 @@ if __name__ == '__main__':
         print(usage, file=sys.stderr)
         exit(1)
 
-    #Remove any empty files as GFFutils gets angry
+    # Remove any empty files as GFFutils gets angry
     args = list(filter(os.path.getsize, args))
     if not len(args): exit(0)
 
@@ -198,7 +208,7 @@ if __name__ == '__main__':
     else:
         merge_order = ('seqid', 'featuretype', 'strand', 'start')
 
-    #Load input data
+    # Load input data
     try:
         input = args[0]
         db = gffutils.create_db(input, ":memory:", merge_strategy="create_unique")
@@ -211,10 +221,10 @@ if __name__ == '__main__':
 
     remaining_featuretypes = set(db.featuretypes())
 
-    #Output header
+    # Output header
     print("##gff-version 3")
 
-    #Merge features per featuregroup
+    # Merge features per featuregroup
     for featuregroup in featuretypes_groups:
         if featuregroup:
             remaining_featuretypes -= featuregroup
@@ -230,7 +240,7 @@ if __name__ == '__main__':
                         component.id = hex(hash(component) + 2**63)[2:]
                     merged.id += "-" + component.id
 
-                #If id is too long, hash and encode it
+                # If id is too long, hash and encode it
                 if len(merged.id) > 32:
                     merged.id = hex(hash(merged.id)+ 2**63)[2:]
 
@@ -242,17 +252,17 @@ if __name__ == '__main__':
                         component.attributes["Parent"] = []
                     component.attributes["Parent"].append(merged.id)
 
-            #Output components
+            # Output components
             if len(components) == 1 or not exclude_components:
                 for component in components:
                     component.attributes["ID"] = component.attributes.get('ID', [component.id])
                     print(component)
 
-            #Output merged record if more than one component
+            # Output merged record if more than one component
             if len(components) > 1:
                 print(merged)
 
-    #Output any features that may have not been in the -f arguments
+    # Output any features that may have not been in the -f arguments
     if remaining_featuretypes:
         for feature in db.all_features(featuretype=remaining_featuretypes, order_by=merge_order):
             print(feature)
