@@ -4,13 +4,13 @@
         <requirement type="package">biopython</requirement>
         <requirement type="package">gffutils</requirement>
     </requirements>
-    <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
+    <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
     <command><![CDATA[
         #if $split
             mkdir -p output &&
-            python biopython-convert.py $split $input $input.ext output/record $output_type
+            python $__tool_directory__/biopython-convert.py $split $input $input.ext output/record $output_type
         #else
-            python biopython-convert.py $split $input $input.ext $output $output_type
+            python $__tool_directory__/biopython-convert.py $split $input $input.ext $output $output_type
         #endif
     ]]></command>
     <inputs>
