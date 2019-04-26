@@ -4,11 +4,13 @@
         <requirement type="package">biopython</requirement>
         <requirement type="package">gffutils</requirement>
     </requirements>
+    <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
     <command><![CDATA[
-        #if $input.ext == $output_type
-            cp $input $output
+        #if $split
+            mkdir -p output &&
+            python biopython-convert.py $split $input $input.ext output/record $output_type
         #else
-            python biopython-convert.py $split $input.ext $output_type < $input > $output
+            python biopython-convert.py $split $input $input.ext $output $output_type
         #endif
     ]]></command>
     <inputs>
@@ -40,6 +42,7 @@
     </inputs>
     <outputs>
         <data name="output" format="txt">
+            <filter>not split</filter>
             <change_format>
                 <when input="output_type" value="clustal" format="clustal" />
                 <when input="output_type" value="embl" format="embl" />
@@ -64,8 +67,9 @@
                 <when input="output_type" value="gff3" format="gff3" />
             </change_format>
         </data>
-        <collection name="split_output" type="list" label="Table split on first column">
-            <discover_datasets pattern="__name_and_ext__" directory="outputs" />
+        <collection name="split_output" type="list" label="Output split per record">
+            <filter>split</filter>
+            <discover_datasets directory="output" />
         </collection>
     </outputs>
 </tool>
