@@ -8,7 +8,7 @@
         #if $input.ext == $output_type
             cp $input $output
         #else
-            python biopython-convert.py $input.ext $output_type < $input > $output
+            python biopython-convert.py $split $input.ext $output_type < $input > $output
         #endif
     ]]></command>
     <inputs>
@@ -36,6 +36,7 @@
             <option value="qual">qual</option>
             <option value="gff3">gff3</option>
         </param>
+        <param name="split" type="boolean" checked="false" truevalue="-s" falsevalue="" label="Split each record into a different file" />
     </inputs>
     <outputs>
         <data name="output" format="txt">
@@ -63,5 +64,8 @@
                 <when input="output_type" value="gff3" format="gff3" />
             </change_format>
         </data>
+        <collection name="split_output" type="list" label="Table split on first column">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs" />
+        </collection>
     </outputs>
 </tool>
