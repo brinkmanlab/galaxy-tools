@@ -1,4 +1,4 @@
-<tool id="sendmail" name="Send Email" version="1.0" profile="16.04">
+<tool id="inspect" name="Inspect" version="1.0" profile="16.04">
     <command><![CDATA[
         #for k, v in $data.__dict__
             echo '$k : $v' >> $output &&
