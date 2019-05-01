@@ -9,5 +9,6 @@
 	<tool file="/home/galaxy/local_tools/mcl/mcl.xml" />
 	<tool file="/home/galaxy/local_tools/biopython-convert/biopython-convert.xml" />
 	<tool file="/home/galaxy/local_tools/extract_tree_order/extract_tree_order.xml" />
+	<tool file="/home/galaxy/local_tools/mauve_contig_mover/mauve_contig_mover.xml" />
   </section>
 </toolbox>

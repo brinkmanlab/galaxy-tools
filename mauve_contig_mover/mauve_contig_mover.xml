@@ -1,0 +1,19 @@
+<tool id="mauve-contig-mover" name="Mauve Contig Mover" version="1.0" profile="16.04">
+    <requirements>
+        <requirement type="package">mauve</requirement>
+    </requirements>
+    <command><![CDATA[
+        MauveCM -output output -ref $ref -draft $draft &&
+        ln -s output/`ls -1 output | tail -n1` final &&
+        ln -s output/`ls -1 final/*.backbone | tail -n1` final.backbone &&
+        ln -s output/`ls -1 final/*.tab | tail -n1` final.tab
+    ]]></command>
+    <inputs>
+        <param name="ref" type="data" format="genbank,fasta" label="Draft" />
+        <param name="data" type="data" format="genbank,fasta" label="Reference" />
+    </inputs>
+    <outputs>
+        <data name="backbone" format="tabular" from_work_dir="final.backbone" label="${tool.name} on ${on_string}: Backbone">
+        <data name="tab" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Contig Order">
+    </outputs>
+</tool>
