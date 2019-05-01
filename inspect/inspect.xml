@@ -1,13 +1,23 @@
 <tool id="inspect" name="Inspect" version="1.0" profile="16.04">
     <command><![CDATA[
-        #for k, v in $data.__dict__
+        echo 'Data: $dir(data)' >> $output &&
+        #for k, v in $data.__dict__.items()
             echo '$k : $v' >> $output &&
         #end for
+        echo "Metadata: " >> $output &&
+        #for k, v in $data.metadata.__dict__.items()
+            echo '$k : $v' >> $output &&
+        #end for
+        echo "Locals: " >> $output &&
+        #for k in $locals().keys()
+            echo '$k' >> $output &&
+        #end for
+        echo
     ]]></command>
     <inputs>
         <param name="data" type="data" label="Data" />
     </inputs>
     <outputs>
-        <data name="output" type="txt" />
+        <data name="output" format="txt" />
     </outputs>
 </tool>
