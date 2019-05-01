@@ -1,14 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
-<toolbox monitor="true">
+<toolbox monitor="true" tool_path="${tool_conf_dir}" is_shed_conf="false">
   <section id="islandcompare" name="IslandCompare">
-	<tool file="/home/galaxy/local_tools/colombo/SigiHMM.xml" />
-	<tool file="/home/galaxy/local_tools/feature_merge/feature_merge.xml" />
-	<tool file="/home/galaxy/local_tools/islandpath-dimob/IslandPath-DIMOB.xml" />
-	<tool file="/home/galaxy/local_tools/mash/mash.xml" />
-	<tool file="/home/galaxy/local_tools/parsnp/ParSNP.xml" />
-	<tool file="/home/galaxy/local_tools/mcl/mcl.xml" />
-	<tool file="/home/galaxy/local_tools/biopython-convert/biopython-convert.xml" />
-	<tool file="/home/galaxy/local_tools/extract_tree_order/extract_tree_order.xml" />
-	<tool file="/home/galaxy/local_tools/mauve_contig_mover/mauve_contig_mover.xml" />
+	<tool file="colombo/SigiHMM.xml" />
+	<tool file="feature_merge/feature_merge.xml" />
+	<tool file="islandpath-dimob/IslandPath-DIMOB.xml" />
+	<tool file="mash/mash.xml" />
+	<tool file="parsnp/ParSNP.xml" />
+	<tool file="mcl/mcl.xml" />
+	<tool file="biopython-convert/biopython-convert.xml" />
+	<tool file="extract_tree_order/extract_tree_order.xml" />
+	<tool file="mauve_contig_mover/mauve_contig_mover.xml" />
+	<tool file="sendmail/sendmail.xml" />
+	<tool file="inspect/inspect.xml" />
   </section>
 </toolbox>
