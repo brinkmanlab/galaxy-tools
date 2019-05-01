@@ -1,0 +1,13 @@
+<tool id="sendmail" name="Send Email" version="1.0" profile="16.04">
+    <command><![CDATA[
+        #for k, v in $data.__dict__
+            echo '$k : $v' >> $output &&
+        #end for
+    ]]></command>
+    <inputs>
+        <param name="data" type="data" label="Data" />
+    </inputs>
+    <outputs>
+        <data name="output" type="txt" />
+    </outputs>
+</tool>
