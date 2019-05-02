@@ -6,53 +6,48 @@
         <configfile name="out"><![CDATA[
             <html><body>
             <div>
-            <em>Data:</em> <span>$dir($data)</span>
+            <h1>Data:</h1> <span>$dir($data)</span>
             <ul>
             #for k, v in $data.__dict__.items()
                 <li>$k : $v</li>
             #end for
             </ul>
-            <em>Data.dataset:</em> <span>$dir($data.dataset)</span>
+            <h1>Data.dataset:</h1> <span>$dir($data.dataset)</span>
             <ul>
             #for k, v in $data.dataset.__dict__.items()
                 <li>$k : $v</li>
             #end for
             </ul>
-            <em>Metadata:</em>
+            <h1>Metadata:</h1>
             <ul>
             #for k, v in $data.metadata.__dict__.items()
                 <li>$k : $v</li>
             #end for
             </ul>
             </div><hr><div>
-            <em>Locals:</em>
+            <h1>Locals:</h1>
             <ul>
             #for k in $locals().keys()
                 <li>$k</li>
             #end for
             </ul>
             </div><hr><div>
-            <em>Globals:</em> <span>$dir(globals())</span>
+            <h1>Globals:</h1> <span>$dir(globals())</span>
             <ul>
             #for k in $locals().keys()
                 <li>$k</li>
             #end for
             </ul>
             </div><hr><div>
-            <em>Self:</em> <span>$dir(self)</span>
-            <ul>
-            #for k, v in $self.__dict__.items()
-                <li>$k : $v</li>
-            #end for
-            </ul>
+            <h1>Self:</h1> <span>$dir(self)</span>
             </div><hr><div>
-            <em>__app__:</em> <span>$dir($__app__)</span>
+            <h1>__app__:</h1> <span>$dir($__app__)</span>
             <ul>
             #for k, v in $__app__.obj.__dict__.items()
                 <li>$k : $v</li>
             #end for
             </ul>
-            <em>__app__.config:</em> <span>$dir($__app__.config)</span>
+            <h1>__app__.config:</h1> <span>$dir($__app__.config)</span>
             <ul>
             #for k, v in $__app__.config.__dict__.items()
                 <li>$k : $v</li>
