@@ -25,19 +25,9 @@
             #end for
             </ul>
             </div><hr><div>
-            <h1>Locals:</h1>
-            <ul>
-            #for k in $locals().keys()
-                <li>$k</li>
-            #end for
-            </ul>
+            <h1>Locals:</h1> <span>$dir(locals())</span>
             </div><hr><div>
             <h1>Globals:</h1> <span>$dir(globals())</span>
-            <ul>
-            #for k in $locals().keys()
-                <li>$k</li>
-            #end for
-            </ul>
             </div><hr><div>
             <h1>Self:</h1> <span>$dir(self)</span>
             </div><hr><div>
@@ -58,7 +48,7 @@
         ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="data" type="data" multiple="true" label="Data" />
+        <param name="data" type="data" label="Data" />
     </inputs>
     <outputs>
         <data name="output" format="html" />
