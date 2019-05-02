@@ -61,9 +61,9 @@
             </div>
             </body></html>
         ]]></configfile>
-    <configfiles>
+    </configfiles>
     <inputs>
-        <param name="data" type="data" label="Data" />
+        <param name="data" type="data" multiple="true" label="Data" />
     </inputs>
     <outputs>
         <data name="output" format="html" />
