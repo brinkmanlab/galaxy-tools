@@ -1,0 +1,20 @@
+<tool id="collection-info" name="Collection information" version="1.0" profile="16.04">
+    <command><![CDATA[
+        mv $out $output
+    ]]></command>
+    <configfiles>
+        <configfile name="out"><![CDATA[
+length: $len(input)
+#for i in $input
+${i.element_identifier}:
+    $dir(i)
+#end for
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="input" type="data_collection" label="Input" />
+    </inputs>
+    <outputs>
+        <data name="output" format="tabular" />
+    </outputs>
+</tool>

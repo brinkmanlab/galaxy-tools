@@ -12,5 +12,6 @@
 	<tool file="mauve_contig_mover/mauve_contig_mover.xml" />
 	<tool file="sendmail/sendmail.xml" />
 	<tool file="inspect/inspect.xml" />
+	<tool file="collection_info/collection_info.xml" />
   </section>
 </toolbox>
