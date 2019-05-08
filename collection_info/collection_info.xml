@@ -4,9 +4,9 @@
     ]]></command>
     <configfiles>
         <configfile name="out"><![CDATA[
-$input.element_identifier	collection	$len(list(iter($input)))
+label	type	length
 #for i in $input
-#slurp ${i.element_identifier}	
+${i.element_identifier}	#slurp
 #if $i.is_collection
 collection	$len(list(iter($i)))
 #else
