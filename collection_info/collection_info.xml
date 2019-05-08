@@ -4,10 +4,14 @@
     ]]></command>
     <configfiles>
         <configfile name="out"><![CDATA[
-length: $len(input)
+$input.element_identifier	collection	$len(list(iter($input)))
 #for i in $input
-${i.element_identifier}:
-    $dir(i)
+#slurp ${i.element_identifier}	
+#if $i.is_collection
+collection	$len(list(iter($i)))
+#else
+dataset	1
+#end if
 #end for
         ]]></configfile>
     </configfiles>
