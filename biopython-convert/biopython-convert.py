@@ -19,9 +19,9 @@ def append_filename(path, s):
     :param s: string to append
     :return: appended file name
     """
-    s = output_path.rsplit(".", 1)
-    if len(s) > 1:
-        return f"{s[0]}{s}.{s[1]}"
+    seg = path.rsplit(".", 1)
+    if len(seg) > 1:
+        return f"{seg[0]}{s}.{seg[1]}"
     else:
         return path + s
 
