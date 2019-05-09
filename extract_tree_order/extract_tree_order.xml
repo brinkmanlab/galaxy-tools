@@ -1,6 +1,6 @@
 <tool id="extract-tree-order" name="BioPython Phylo Parse Newick Leaf Order" version="1.0" profile="16.04">
     <requirements>
-        <requirement type="package">python</requirement>
+        <requirement type="package" version="3">python</requirement>
         <requirement type="package">biopython</requirement>
     </requirements>
     <command><![CDATA[
