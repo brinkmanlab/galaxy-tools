@@ -43,7 +43,7 @@ if __name__ == '__main__':
                 jpath = val
 
     except getopt.GetoptError as err:
-        print("Argument error(", err.opt, "): ", err.msg, file=sys.stderr)
+        print("Argument error(" + err.opt + "): " + err.msg, file=sys.stderr)
         args = []
 
     if len(args) < 4:
