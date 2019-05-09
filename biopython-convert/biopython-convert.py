@@ -21,7 +21,7 @@ def append_filename(path, s):
     """
     seg = path.rsplit(".", 1)
     if len(seg) > 1:
-        return f"{seg[0]}{s}.{seg[1]}"
+        return seg[0] + s + "." + seg[1]
     else:
         return path + s
 
