@@ -15,13 +15,23 @@ import sys
 import os
 import getopt
 
-usage = "Usage: feature_merge.py [-i] [-e] [-x] [-v] [-f type[,type..]].. <input1> [<input_n>..]\n" \
-        "Accepts GFF or GTF format.\n" \
-        "-v Print version and exit\n" \
-        "-f Comma seperated types of features to merge. Must be terms or accessions from the SOFA sequence ontology, \"ALL\", or \"NONE\". (Can be provided more than once to specify multiple merge groups)\n" \
-        "-i Ignore strand, merge feature regardless of strand\n" \
-        "-x Only merge features with identical coordinates\n" \
-        "-e Exclude component features from output"
+usage = """
+Usage: feature_merge.py [-i] [-e] [-x] [-v] [-m merge|append|error|skip|replace] [-f type[,type..]].. <input1> [<input_n>..]
+Accepts GFF or GTF format.
+-v Print version and exit
+-f Comma seperated types of features to merge. Must be terms or accessions from the SOFA sequence ontology, \"ALL\", or \"NONE\". (Can be provided more than once to specify multiple merge groups)
+-i Ignore strand, merge feature regardless of strand
+-x Only merge features with identical coordinates
+-e Exclude component features from output
+-m Merge strategy used to deal with id collisions between input files.
+    merge: attributes of all features with the same primary key will be merged
+    append: entry will have a unique, autoincremented primary key assigned to it
+    error: exception will be raised. This means you will have to edit the file yourself to fix the duplicated IDs
+    skip: ignore duplicates, emitting a warning
+    replace: keep last duplicate
+"""[1:-1]
+
+merge_strategies = {"merge": "merge", "append": "create_unique", "error": "error", "skip": "warning", "replace": "replace"}
 
 def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuretype=False):
     """
@@ -170,6 +180,7 @@ if __name__ == '__main__':
     exact_only = False
     exclude_components = False
     featuretypes_groups = []
+    merge_strategy = "create_unique"
     # Parse arguments
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'viexf:')
@@ -187,6 +198,11 @@ if __name__ == '__main__':
                 if val != "ALL": featuretypes_groups.append(set(filter(None, val.split(','))))
             elif opt == '-x':
                 exact_only = True
+            elif opt == '-m':
+                if val in merge_strategies:
+                    merge_strategy = merge_strategies[val]
+                else:
+                    raise getopt.GetoptError("Invalid merge strategy", opt)
 
     except getopt.GetoptError as err:
         print("Argument error(", err.opt, "): ", err.msg, file=sys.stderr)
@@ -211,10 +227,10 @@ if __name__ == '__main__':
     # Load input data
     try:
         input = args[0]
-        db = gffutils.create_db(input, ":memory:", merge_strategy="create_unique")
+        db = gffutils.create_db(input, ":memory:", merge_strategy=merge_strategy)
 
         for input in args[1:]:
-            update(db, input, merge_strategy="create_unique")
+            update(db, input, merge_strategy=merge_strategy)
     except Exception as e:
         print("Error while parsing ", input, e, file=sys.stderr)
         raise
