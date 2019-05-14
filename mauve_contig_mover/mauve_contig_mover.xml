@@ -3,6 +3,22 @@
         <requirement type="package">mauve</requirement>
     </requirements>
     <command><![CDATA[
+        #if $ref_select.ref_source == "db"
+            #set $index = $ref_select.ref_db
+        #else if $ref_select.ref_source == "meta"
+            #set $index = $data.metadata.dbkey
+        #else if $ref_select.ref_source == "key"
+            #set $index = $ref_select.key
+        #else
+            #set $index = None
+            #set $ref = $ref_select.ref
+        #end if
+
+        #if $index
+            ## Get path to database file
+            #set $ref = ${ next(record for record in $ __app__.tool_data_tables['all_fasta'].get_fields() if str( x[0] ) == str( $index ))[-1] }
+        #end if
+        
         MauveCM -output output -ref $ref -draft $draft &&
         ln -s output/`ls -1 output | tail -n1` final &&
         ln -s `ls -1 -I '*.*' final | tail -n1` final.merged &&
@@ -12,7 +28,29 @@
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="genbank,fasta" label="Draft" />
-        <param name="ref" type="data" format="genbank,fasta" label="Reference" />
+        <conditional name="ref_select">
+            <param name="ref_source" type="select" label="Select the source of the reference to align the draft to">
+                <option value="db">Data manager</option>
+                <option value="file">History</option>
+                <option value="meta" selected="true">Input Metadata</option>
+                <option value="key">Key</option>
+            </param>
+            <when value="file">
+                <param name="ref" type="data" format="genbank,fasta" label="Reference" />
+            </when>
+            <when value="db">
+                <param name="ref_db" type="select" label="Using reference genome" help="Select genome from the list">
+                    <options from_data_table="all_fasta">
+                        <filter type="sort_by" column="2" />
+                    </options>
+                    <validator type="no_options" message="A built-in reference genome is not available for the build associated with the selected input file"/>
+                </param>
+            </when>
+            <when value="meta">
+            </when>
+            <when value="key">
+                <param name="key" type="text" label="Provide a dbkey to use" />
+            </when>
     </inputs>
     <outputs>
         <data name="merged" format="fasta" from_work_dir="final.merged" label="${tool.name} on ${on_string}: Merged" />
