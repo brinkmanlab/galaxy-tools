@@ -22,25 +22,25 @@
             </div><hr><div>
             <h1>Locals:</h1>
             <ul>
-            #for k, v in $locals().items()
-                <li>$k : $v</li>
-            #end for
+            ##for k, v in $locals().items()
+            ##    <li>$k : $v</li>
+            ##end for
             </ul>
             </div><hr><div>
             <h1>Globals:</h1>
             <ul>
-            #for k, v in $globals().items()
-                <li>$k : $v</li>
-            #end for
+            ##for k, v in $globals().items()
+            ##    <li>$k : $v</li>
+            ##end for
             </ul>
             </div><hr><div>
             <h1>Self:</h1> <span>$dir(self)</span>
             </div><hr><div>
             <h1>__app__:</h1> <span>$dir($__app__)</span>
             <ul>
-            #for k, v in $__app__.obj.__dict__.items()
-                <li>$k : $v</li>
-            #end for
+            ##for k, v in $__app__.obj.__dict__.items()
+            ##    <li>$k : $v</li>
+            ##end for
             </ul>
             <h1>__app__.config:</h1> <span>$dir($__app__.config)</span>
             <ul>
