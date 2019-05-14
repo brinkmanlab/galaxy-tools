@@ -1,6 +1,6 @@
 <tool id="inspect" name="Inspect" version="1.0" profile="16.04">
     <command><![CDATA[
-        cp $out $output
+        mv $out $output
     ]]></command>
     <configfiles>
         <configfile name="out"><![CDATA[
@@ -13,21 +13,26 @@
             #end for
             </ul>
             <h1>Data.dataset:</h1> <span>$dir($data.dataset)</span>
-            <ul>
-            #for k, v in $data.dataset.__dict__.items()
-                <li>$k : $v</li>
-            #end for
-            </ul>
-            <h1>Metadata:</h1>
+            <h1>Data.metadata:</h1>
             <ul>
             #for k, v in $data.metadata.__dict__.items()
                 <li>$k : $v</li>
             #end for
             </ul>
             </div><hr><div>
-            <h1>Locals:</h1> <span>$dir(locals())</span>
+            <h1>Locals:</h1>
+            <ul>
+            #for k, v in $locals().items()
+                <li>$k : $v</li>
+            #end for
+            </ul>
             </div><hr><div>
-            <h1>Globals:</h1> <span>$dir(globals())</span>
+            <h1>Globals:</h1>
+            <ul>
+            #for k, v in $globals().items()
+                <li>$k : $v</li>
+            #end for
+            </ul>
             </div><hr><div>
             <h1>Self:</h1> <span>$dir(self)</span>
             </div><hr><div>
