@@ -48,7 +48,13 @@
             <option value="gff3">gff3</option>
         </param>
         <param name="split" type="boolean" checked="false" truevalue="-s" falsevalue="" label="Split each record into a different file" />
-        <param name="query" type="text" label="Query records, keeping only what matches path" help="Provide a JMESPath selecting records to keep. The root is the list of records. The path must return a list of records." />
+        <param name="query" type="text" label="Query records, keeping only what matches path" help="Provide a JMESPath selecting records to keep. The root is the list of records. The path must return a list of records.">
+            <sanitizer>
+                <valid initial="string.printable">
+                    <remove value="&apos;" />
+                </valid>
+            </sanitizer>
+        </param>
     </inputs>
     <outputs>
         <data name="output" format="txt">
