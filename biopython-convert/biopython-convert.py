@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+Biopython Convert
+Convert between any formats that Biopython supports or gffutils.
+Provides a means of querying/filtering documents using JMESPath query language.
+"""
 from Bio import SeqIO
 import itertools
 import getopt
@@ -46,6 +51,7 @@ if __name__ == '__main__':
         print("Argument error(" + str(err.opt) + "): " + err.msg, file=sys.stderr)
         args = []
 
+    # Check for minimum number of arguments
     if len(args) < 4:
         print(usage, file=sys.stderr)
         exit(1)
@@ -57,12 +63,10 @@ if __name__ == '__main__':
     output_type = args[3]
 
     with open(input_path, "r") as input:
-        #if input_type not in gff_types and output_type not in gff_types:
-        #    SeqIO.convert(sys.stdin, args[1], sys.stdout, args[1])
-        #    exit(0)
-
         if input_type in gff_types:
+            # If input is GFF load with gffutils library
             db = gffutils.create_db(input, ":memory:", merge_strategy="create_unique")
+            # Wrap features in generator that converts to BioPython SeqRecords
             input_records = map(
                 lambda x: SeqIO.SeqRecord("", features=list(x)),
                 itertools.groupby(
@@ -73,19 +77,23 @@ if __name__ == '__main__':
         else:
             input_records = SeqIO.parse(input_path, input_type)
 
+        # Open output file with file name suffix if splitting
         output = open(append_filename(output_path, ".0") if split else output_path, "w")
 
+        # Wrap input in JMESPath selector if provided
         if jpath:
             input_records = JMESPathGen.search(jpath, input_records)
 
         for i, record in enumerate(input_records):
             # TODO allow objects other than SeqRecord, transform to SeqRecord or handle special output (like if output format == txt|json, pretty print object)
             if output_type in gff_types:
+                # If output type is GFF, use gffutils library
                 for feature in record.features:
                     print(biopython_integration.from_seqfeature(feature), file=output)
             else:
                 SeqIO.write(record, output, args[3])
             if split:
+                # If splitting, open next file
                 output.close()
                 output = open(append_filename(output_path, "." + str(i+1)))
 
