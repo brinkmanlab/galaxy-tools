@@ -34,7 +34,7 @@
         <requirement type="package" version="2.1">mash</requirement>
     </requirements>
     <version_command>mash --version</version_command>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         #import os
         ## =====  Declare reusable parameter output for different modes ===
         #def sketching

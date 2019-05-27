@@ -6,7 +6,7 @@
         <requirement type="package">jmespath</requirement>
     </requirements>
     <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         #if $split
             mkdir -p output &&
             python $__tool_directory__/biopython-convert.py $split

@@ -1,20 +1,20 @@
 <tool id="sendmail" name="Send Email" version="1.0" profile="16.04">
     <command><![CDATA[
         #from galaxy.util import send_mail
-        $send_mail(from, to, subject, "", __app__.config, open(body).read())
+        $send_mail($__app__.config.email_from, $to, $subject, "", $__app__.config, open($body).read())
     ]]></command>
     <configfiles>
         <configfile name="body"><![CDATA[
             #set $template_path = '/'.join([$__tool_data_path__, "sendmail", $template])
             #import os
-            #if $os.path.isfile(template_path)
+            #if $os.path.isfile($template_path)
                 #include $template_path
             #else
                 <html>
                     <body>
                         $data.name is now complete.
                         #if $hasattr(__app__.config, "public_url")
-                        You can view it <a href="${__app__.config.public_url}/datasets/${data.id}">here</a>.
+                        You can view it <a href="${__app__.config.public_url}/datasets/${data.dataset.id}/display">here</a>.
                         #end if
                     </body>
                 </html>
@@ -22,13 +22,14 @@
         ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="data" type="data" label="Data" />
-        <param name="from" type="text" label="From" />
+        <param name="data" type="data" multiple="true" label="Data" />
         <param name="to" type="text" label="To" />
-        <param name="subject" type="text" label="Subject" />
+        <param name="subject" type="text" value="Job complete" label="Subject" />
         <repeat name="extras">
             <param name="extra" type="text" label="Extra data to make available in the template body" />
         </repeat>
-        <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/sendmail/" />
+        <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/sendmail/">
+            <!-- TODO sanitise "../" -->
+        </param>
     </inputs>
 </tool>

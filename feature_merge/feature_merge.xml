@@ -5,7 +5,7 @@
         <requirement type="package">gffutils</requirement>
     </requirements>
     <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         $__tool_directory__/feature_merge.py $ignore_strand $exclude_components $exact_only -m $merge_strategy
         #for set in $features
             -f "${str($set.csv).replace(" ", "")}"

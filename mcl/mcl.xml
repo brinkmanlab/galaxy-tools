@@ -3,7 +3,7 @@
         <requirement type="package">mcl</requirement>
     </requirements>
     <version_command>mcl --version</version_command>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
     mcl $input_type_select.input -I $inflation $input_type_select.input_type -V all -te \${GALAXY_SLOTS:-1} $sum_loops $discard_loops
     #if $verbosity
         #for $v in $verbosity
