@@ -33,6 +33,10 @@ Accepts GFF or GTF format.
 
 merge_strategies = {"merge": "merge", "append": "create_unique", "error": "error", "skip": "warning", "replace": "replace"}
 
+# The following two functions are waiting to be integrated into the gffutils library.
+# PR https://github.com/daler/gffutils/pull/130
+# PR https://github.com/daler/gffutils/pull/131
+
 def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuretype=False):
     """
     Merge overlapping features together.
@@ -121,7 +125,7 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
             feature_components = [feature]
 
     attributes = {}
-    for component in components: attributes = gffutils.helpers.merge_attributes(attributes, component.attributes)
+    for component in feature_components: attributes = gffutils.helpers.merge_attributes(attributes, component.attributes)
     yield self._feature_returner(
         seqid=current_merged_seqid,
         source = ",".join(set(component.source for component in feature_components)),
@@ -173,6 +177,8 @@ def update(self, data, **kwargs):
     db._update_relations()
     db._finalize()
     self._autoincrements.update(db._autoincrements)
+
+# -- Begin feature_merge specific code --
 
 if __name__ == '__main__':
     ignore_strand = False
@@ -282,3 +288,4 @@ if __name__ == '__main__':
     if remaining_featuretypes:
         for feature in db.all_features(featuretype=remaining_featuretypes, order_by=merge_order):
             print(feature)
+
