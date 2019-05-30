@@ -25,7 +25,7 @@ Accepts GFF or GTF format.
 -e Exclude component features from output
 -m Merge strategy used to deal with id collisions between input files.
     merge: attributes of all features with the same primary key will be merged
-    append: entry will have a unique, autoincremented primary key assigned to it
+    append: entry will have a unique, autoincremented primary key assigned to it (default)
     error: exception will be raised. This means you will have to edit the file yourself to fix the duplicated IDs
     skip: ignore duplicates, emitting a warning
     replace: keep last duplicate
@@ -80,7 +80,7 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
     if exact_only:
         coordinate_criteria = lambda seqid, start, stop: start == current_merged_start and stop == current_merged_stop and seqid == current_merged_seqid
     else:
-        coordinate_criteria = lambda seqid, start, stop: start <= current_merged_stop + 1 and seqid == current_merged_seqid
+        coordinate_criteria = lambda seqid, start, stop: current_merged_start <= start and start <= current_merged_stop + 1 and seqid == current_merged_seqid
 
     for feature in features:
         # Does this feature start within the currently merged feature?...
@@ -102,7 +102,7 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
             # The start position is outside the merged feature, so we're
             # done with the current merged feature.  Prepare for output...
             attributes={}
-            for component in feature_components: attributes = gffutils.helpers.merge_attributes(attributes, component.attributes)
+            for component in feature_components: attributes = gffutils.helpers.merge_attributes(component.attributes, attributes)
             yield self._feature_returner(
                 seqid=current_merged_seqid,
                 source=",".join(set(component.source for component in feature_components)),
@@ -125,7 +125,7 @@ def merge(self, features, exact_only=False, ignore_strand=False, ignore_featuret
             feature_components = [feature]
 
     attributes = {}
-    for component in feature_components: attributes = gffutils.helpers.merge_attributes(attributes, component.attributes)
+    for component in feature_components: attributes = gffutils.helpers.merge_attributes(component.attributes, attributes)
     yield self._feature_returner(
         seqid=current_merged_seqid,
         source = ",".join(set(component.source for component in feature_components)),
@@ -273,6 +273,10 @@ if __name__ == '__main__':
                     if "Parent" not in component.attributes:
                         component.attributes["Parent"] = []
                     component.attributes["Parent"].append(merged.id)
+
+                # Set source
+                merged.attributes["sources"] = merged.source.split(',')
+                merged.source = "feature_merge"
 
             # Output components
             if len(components) == 1 or not exclude_components:
