@@ -84,11 +84,21 @@ if __name__ == '__main__':
         if jpath:
             input_records = JMESPathGen.search(jpath, input_records)
 
+        if isinstance(input_records, dict):
+            # Support generating a new record in JMESPath
+            input_records = SeqIO.SeqRecord(**input_records)
+
         if isinstance(input_records, SeqIO.SeqRecord):
+            # Support returning single record from JMESPath
             input_records = (input_records,)
 
-        for i, record in enumerate(input_records):
+        for i, record in enumerate(input_records): # type: (Integer, SeqIO.SeqRecord)
             # TODO allow objects other than SeqRecord, transform to SeqRecord or handle special output (like if output format == txt|json, pretty print object)
+            if isinstance(input_records, dict):
+                # Support generating new records in JMESPath
+                record = SeqIO.SeqRecord(**record)
+
+
             if output_type in gff_types:
                 # If output type is GFF, use gffutils library
                 for feature in record.features:
