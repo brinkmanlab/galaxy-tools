@@ -52,7 +52,7 @@ class TreeInterpreterGenerator(jmespath.visitor.TreeInterpreter):
     def visit(self, node, *args, **kwargs):
         # if a visit caused list conversion, get list. Assume that 'value' is args[0].
         if len(args) and isinstance(args[0], types.GeneratorType):
-            args = list(args)
+            args = list(args) #convert from tuple
             args[0] = self._generators.get(id(args[0]), args[0])
         return super().visit(node, *args, **kwargs)
 
@@ -107,7 +107,7 @@ class TreeInterpreterGenerator(jmespath.visitor.TreeInterpreter):
 
     def visit_index(self, node, value):
         value = self._gen_to_list(value)
-        super().visit_index(node, value)
+        return super().visit_index(node, value)
 
     def visit_slice(self, node, value):
         return itertools.islice(value, *node['children'])
