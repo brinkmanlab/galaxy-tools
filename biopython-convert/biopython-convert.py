@@ -12,9 +12,10 @@ from gffutils import biopython_integration
 import JMESPathGen
 import sys
 
-usage = "Use: biopython-convert.py [-s] [-v] [-f JMESPath] input_file input_type output_file output_type\n" \
+usage = "Use: biopython-convert.py [-s] [-v] [-i] [-q JMESPath] input_file input_type output_file output_type\n" \
         "\t-s Split records into seperate files\n" \
         "\t-q JMESPath to select records. Must return list of SeqIO records. Root is list of input SeqIO records.\n" \
+        "\t-i Print out details of records during conversion\n" \
         "\t-v Print version and exit\n"
 
 def append_filename(path, s):
@@ -33,9 +34,10 @@ def append_filename(path, s):
 if __name__ == '__main__':
     split = False
     jpath = None
+    stats = False
     # Parse arguments
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vsq:')
+        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vsiq:')
         for opt, val in opts:
             if opt == '-v':
                 import __version
@@ -46,6 +48,8 @@ if __name__ == '__main__':
                 split = True
             elif opt == '-q':
                 jpath = val
+            elif opt == '-i':
+                stats = True
 
     except getopt.GetoptError as err:
         print("Argument error(" + str(err.opt) + "): " + err.msg, file=sys.stderr)
@@ -98,6 +102,8 @@ if __name__ == '__main__':
                 # Support generating new records in JMESPath
                 record = SeqIO.SeqRecord(**record)
 
+            if stats:
+                print(f"${i}\t${record.id}\t${record.name}\t${record.description}\t${len(record)}")
 
             if output_type in gff_types:
                 # If output type is GFF, use gffutils library
