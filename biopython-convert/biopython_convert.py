@@ -82,7 +82,7 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
             )
         )
     else:
-        input_records = SeqIO.parse(input_path, input_type)
+        input_records = SeqIO.parse(input, input_type)
 
     # Open output file with file name suffix if splitting
     output = open(append_filename(output_path, ".0") if split else output_path, "w")
