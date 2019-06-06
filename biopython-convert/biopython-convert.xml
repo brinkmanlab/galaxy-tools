@@ -60,7 +60,7 @@
                 </valid>
             </sanitizer>
         </param>
-        <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files simmilar to bioperl" />
+        <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files similar to bioperl" />
     </inputs>
     <outputs>
         <data name="output" format="txt">
