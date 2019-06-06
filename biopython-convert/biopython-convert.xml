@@ -7,15 +7,20 @@
     </requirements>
     <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
+        #if $bioperl
+            #set $script = 'bioperl_compat.py'
+        #else
+            #set $script = 'biopython_convert.py'
+        #end if
         #if $split
             mkdir -p output &&
-            python $__tool_directory__/biopython-convert.py $split
+            python $__tool_directory__/$script $split
             #if $query
                 -q '$query'
             #end if
             $input $input.ext output/record $output_type
         #else
-            python $__tool_directory__/biopython-convert.py $split
+            python $__tool_directory__/$script $split
             #if $query
                 -q '$query'
             #end if
@@ -55,6 +60,7 @@
                 </valid>
             </sanitizer>
         </param>
+        <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files simmilar to bioperl" />
     </inputs>
     <outputs>
         <data name="output" format="txt">
