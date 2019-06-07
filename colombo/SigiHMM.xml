@@ -1,6 +1,6 @@
-<tool id="SigiHMM" name="SigiHMM" version="4.0.0" profile="16.04">
+<tool id="SigiHMM" name="SigiHMM" version="3.8.0" profile="16.04">
     <requirements>
-        <requirement type="package" version="4.0">colombo</requirement>
+        <requirement type="package" version="3.8">colombo</requirement>
     </requirements>
     <version_command><![CDATA[ echo "4.0" ]]></version_command>
     <command detect_errors="exit_code"><![CDATA[
