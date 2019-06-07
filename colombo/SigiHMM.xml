@@ -2,7 +2,7 @@
     <requirements>
         <requirement type="package" version="3.8">colombo</requirement>
     </requirements>
-    <version_command><![CDATA[ echo "4.0" ]]></version_command>
+    <version_command><![CDATA[ echo "3.8" ]]></version_command>
     <command detect_errors="exit_code"><![CDATA[
         #import os 
         #set input_l=$os.path.basename(str($input))+".embl" 
