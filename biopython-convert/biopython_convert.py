@@ -106,7 +106,8 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
             record = SeqIO.SeqRecord(**record)
 
         if stats:
-            print(f"${i}\t${record.id}\t${record.name}\t${record.description}\t${len(record)}")
+            desc = record.description.replace('"', '""')
+            print(f"{i}\t{record.id}\t{record.name}\t{len(record)}\t\"{desc}\"")
 
         if output_type in gff_types:
             # If output type is GFF, use gffutils library
