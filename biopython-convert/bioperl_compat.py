@@ -10,3 +10,4 @@ if __name__ == '__main__':
 
     with open(input_path, "r") as input:
         convert(input, input_type, output_path, output_type, jpath, split, stats)
+

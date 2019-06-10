@@ -226,9 +226,16 @@ if __name__ == '__main__':
         featuretypes_groups.append(None)
 
     if ignore_featuretypes:
-        merge_order = ('seqid', 'strand', 'start', 'featuretype')
+        if ignore_strand:
+            merge_order = ('seqid', 'start', 'featuretype')
+        else:
+            merge_order = ('seqid', 'strand', 'start', 'featuretype')
     else:
-        merge_order = ('seqid', 'featuretype', 'strand', 'start')
+        if ignore_strand:
+            merge_order = ('seqid', 'featuretype', 'start')
+        else:
+            merge_order = ('seqid', 'featuretype', 'strand', 'start')
+
 
     # Load input data
     try:
