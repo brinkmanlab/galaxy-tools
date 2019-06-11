@@ -19,6 +19,7 @@ usage = "Use: biopython_convert.py [-s] [-v] [-i] [-q JMESPath] input_file input
         "\t-v Print version and exit\n"
 
 gff_types = ["gff", "gff3"]
+stat_annotations = ['molecule_type', 'topology', 'data_file_division', 'date', 'accessions', 'sequence_version', 'gi', 'keywords', 'source', 'organism']
 
 def append_filename(path, s):
     """
@@ -99,6 +100,9 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
         # Support returning single record from JMESPath
         input_records = (input_records,)
 
+    if stats:
+        print("##gff-version 3")
+
     for i, record in enumerate(input_records):  # type: (Integer, SeqIO.SeqRecord)
         # TODO allow objects other than SeqRecord, transform to SeqRecord or handle special output (like if output format == txt|json, pretty print object)
         if isinstance(input_records, dict):
@@ -106,8 +110,16 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
             record = SeqIO.SeqRecord(**record)
 
         if stats:
-            desc = record.description.replace('"', '""')
-            print(f"{i}\t{record.id}\t{record.name}\t{len(record)}\t\"{desc}\"")
+            attributes={'Name': [record.name]}
+            for k, v in record.annotations.items():
+                if k in stat_annotations:
+                    if isinstance(v, list):
+                        v = [str(a) for a in v]
+                    else:
+                        v = [str(v)]
+                    attributes[k] = v
+            attributes['desc'] = [record.description]
+            print(gffutils.Feature(record.id, "biopython-convert", "sequence", start=1, end=len(record), attributes=attributes))
 
         if output_type in gff_types:
             # If output type is GFF, use gffutils library
