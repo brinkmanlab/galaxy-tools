@@ -14,17 +14,20 @@
         #end if
         #if $split
             mkdir -p output &&
-            python $__tool_directory__/$script $split
+            python $__tool_directory__/$script $split $info
             #if $query
                 -q '$query'
             #end if
             $input $input.ext output/record $output_type
         #else
-            python $__tool_directory__/$script $split
+            python $__tool_directory__/$script $split $info
             #if $query
                 -q '$query'
             #end if
             $input $input.ext $output $output_type
+        #end if
+        #if $info
+            > $info_output
         #end if
     ]]></command>
     <inputs>
@@ -53,6 +56,7 @@
             <option value="gff3">gff3</option>
         </param>
         <param name="split" type="boolean" checked="false" truevalue="-s" falsevalue="" label="Split each record into a different file" />
+        <param name="info" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Output record information while converting" />
         <param name="query" type="text" label="Query records, keeping only what matches path" help="Provide a JMESPath selecting records to keep. The root is the list of records. The path must return a list of records.">
             <sanitizer>
                 <valid initial="string.printable">
@@ -63,7 +67,10 @@
         <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files similar to bioperl" />
     </inputs>
     <outputs>
-        <data name="output" format="txt">
+        <data name="info_output" format="tabular" label="Info">
+            <filter>info</filter>
+        </data>
+        <data name="output" format="txt" label="Output">
             <filter>not split</filter>
             <change_format>
                 <when input="output_type" value="clustal" format="clustal" />
