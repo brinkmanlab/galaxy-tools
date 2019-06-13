@@ -16,7 +16,7 @@
 
         #if $index
             ## Get path to database file
-            #set $ref = ${ next(record for record in $ __app__.tool_data_tables['all_fasta'].get_fields() if str( x[0] ) == str( $index ))[-1] }
+            #set $ref = ${ next(record for record in $__app__.tool_data_tables['all_fasta'].get_fields() if str( x[0] ) == str( $index ))[-1] }
         #end if
         
         MauveCM -output output -ref $ref -draft $draft &&
