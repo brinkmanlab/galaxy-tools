@@ -67,10 +67,10 @@
         <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files similar to bioperl" />
     </inputs>
     <outputs>
-        <data name="info_output" format="tabular" label="Info">
+        <data name="info_output" format="tabular" label="Record Info from ${tool.name} on ${on_string}">
             <filter>info</filter>
         </data>
-        <data name="output" format="txt" label="Output">
+        <data name="output" format="txt" label="Output from ${tool.name} on ${on_string}">
             <filter>not split</filter>
             <change_format>
                 <when input="output_type" value="clustal" format="clustal" />
@@ -96,7 +96,7 @@
                 <when input="output_type" value="gff3" format="gff3" />
             </change_format>
         </data>
-        <collection name="split_output" type="list" label="Output split per record">
+        <collection name="split_output" type="list" label="Output split per record from ${tool.name} on ${on_string}">
             <filter>split</filter>
             <discover_datasets directory="output" format="$output_type" />
         </collection>
