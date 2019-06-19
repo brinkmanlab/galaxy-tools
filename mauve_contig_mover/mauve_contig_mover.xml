@@ -26,15 +26,19 @@
 
         #if $draft.is_of_type("genbank")
             ln -sf $draft `basename ${draft}.gbk` &&
-            #set $draft = $os.path.basename(str($draft)) + ".gbk"
+            #set $draft_path = $os.path.basename(str($draft)) + ".gbk"
+        #else
+            #set $draft_path = str($draft)
         #end if
         
-        MauveCM -output output -ref $ref -draft $draft &&
+        MauveCM -output output -ref $ref -draft $draft_path &&
         ln -sf output/`ls -1 output | tail -n1` final &&
-        ln -sf final/`ls -1 -I '*.*' final | tail -n1` final.merged &&
-        ln -sf "`ls -1 final/*.fas | tail -n1`" final.reordered &&
         ln -sf "`ls -1 final/*.backbone | tail -n1`" final.backbone &&
-        ln -sf "`ls -1 final/*.tab | tail -n1`" final.tab
+        ln -sf "`ls -1 final/*_contigs.tab | tail -n1`" final.contigs.tab &&
+        #if $draft.is_of_type("genbank")        
+            ln -sf "`ls -1 final/*_features.tab | tail -n1`" final.features.tab &&
+        #end if
+        ln -sf "`ls -1 final/*.fas | tail -n1`" final.reordered
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="genbank,fasta" label="Draft" />
@@ -64,9 +68,11 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="fasta" format="fasta" from_work_dir="final.merged" label="${tool.name} on ${on_string}: Reordered FASTA" />
-        <data name="reordered" format_source="$draft" from_work_dir="final.reordered" label="${tool.name} on ${on_string}: Reordered" />
+        <data name="reordered" format="fasta" from_work_dir="final.reordered" label="${tool.name} on ${on_string}: Reordered" />
         <data name="backbone" format="tabular" from_work_dir="final.backbone" label="${tool.name} on ${on_string}: Backbone" />
-        <data name="tab" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Contig Order" />
+        <data name="contigs" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Contig Order">
+        <data name="features" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Features">
+            <filter>$draft.is_of_type("genbank")</filter>
+        </data>
     </outputs>
 </tool>
