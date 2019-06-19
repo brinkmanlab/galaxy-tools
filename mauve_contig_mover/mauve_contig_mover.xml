@@ -33,12 +33,12 @@
         
         MauveCM -output output -ref $ref -draft $draft_path &&
         ln -sf output/`ls -1 output | tail -n1` final &&
-        ln -sf "`ls -1 final/*.backbone | tail -n1`" final.backbone &&
-        ln -sf "`ls -1 final/*_contigs.tab | tail -n1`" final.contigs.tab &&
+        mv "`ls -1 final/*.backbone | tail -n1`" final.backbone &&
+        mv "`ls -1 final/*_contigs.tab | tail -n1`" final.contigs.tab &&
         #if $draft.is_of_type("genbank")        
-            ln -sf "`ls -1 final/*_features.tab | tail -n1`" final.features.tab &&
+            mv "`ls -1 final/*_features.tab | tail -n1`" final.features.tab &&
         #end if
-        ln -sf "`ls -1 final/*.fas | tail -n1`" final.reordered
+        mv "`ls -1 final/*.fas | tail -n1`" final.reordered
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="genbank,fasta" label="Draft" />
@@ -70,9 +70,52 @@
     <outputs>
         <data name="reordered" format="fasta" from_work_dir="final.reordered" label="${tool.name} on ${on_string}: Reordered" />
         <data name="backbone" format="tabular" from_work_dir="final.backbone" label="${tool.name} on ${on_string}: Backbone" />
-        <data name="contigs" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Contig Order">
-        <data name="features" format="tabular" from_work_dir="final.tab" label="${tool.name} on ${on_string}: Features">
-            <filter>$draft.is_of_type("genbank")</filter>
+        <data name="contigs" format="tabular" from_work_dir="final.contigs.tab" label="${tool.name} on ${on_string}: Contig Order" />
+        <data name="features" format="tabular" from_work_dir="final.features.tab" label="${tool.name} on ${on_string}: Features">
+            <filter>draft.is_of_type("genbank")</filter>
         </data>
     </outputs>
+    <help><![CDATA[
+        The Mauve Contig Mover (MCM) can be used to order a draft genome relative to a related reference genome. 
+        The functionality of this software module has been described in Rissman et al. 2009, a publication in Bioinformatics. 
+        The Mauve Contig Mover can ease a comparative study between draft and reference sequences by ordering draft contigs according to the reference genome. 
+        In many cases, true rearrangements in the draft relative to the reference can be identified. The quality of the reorder is limited by the distance between 
+        the sequences, as indicated by the amount of shared gene content among the two organisms. A more distant reference will usually yield fewer ordered draft genome contigs, 
+        and may also induce erroneous placements of draft contigs. In addition to ordering contigs, MCM also orient them in the most likely orientation, and, if annotated sequence 
+        features are specified in an input file (e.g. with GenBank format input for the draft), MCM will output adjusted coordinates ranges for the features.
+    
+        Outputs:
+        
+        "Backbone" is the backbone output by mauveAligner representing the alignements.
+        
+        "Reordered" is a fasta file with the contigs reordered. Contigs aligned in reverse will be thier compliment sequence.
+        
+        "Contig Order" acts as an index to the fasta as the contig orders and orientations change (even if the draft was originally 
+        input as a genbank, after the first alignment, it will be converted to a fasta with annotation information preserved in a file described below). 
+        The file is divided into 3 sections, each containing a list of contigs. The data for each contig includes its label (name), 
+        its location in the genome (numbered in pseudocoordinates from the first to last contig, and whether it is oriented the same as originally input, 
+        or was complemented. 
+        
+        The three sections are described below:
+        
+        Contigs to reverse: 
+            This section contains contigs whose order is reversed with respect to the previous iteration. 
+            Note that contigs in this section may be oriented the same as originally input, this can be determined from the forward orcomplement designation.
+        
+        Ordered Contings:
+            This is a list of all the contigs in the order and orientation they appear in the fasta for the draft of this iteration of the reorder. 
+            Since these include all the contigs in the original input, those with no ordering information (no aligned region) will be clustered at the end. 
+            These will appear as contigs with no LCBs at the end of the draft genome.
+        
+        Contigs with Conflicting Order information: This is a list of contigs containing LCBs suggesting multiple possible locations. 
+            These may be of interest to verify positioning, or to look at points of potential rearrangement or misassembly.
+        
+        If the draft was input as an annotated genbank file, a second file will appear called "Features". This file will contain a line for each annotation, 
+        information about its current orientation and location (which will change if the contig is inverted), coordinates from the previous iteration (indicating 
+        relative orientation), and whether it is reversed from the original input. It will also have a label field used to identify each feature. 
+        This will be gotten from the annotation, as checked in the following order: db_xref, label, gene, and locus_tag.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1093/bioinformatics/btp356</citation>
+    </citations>
 </tool>
