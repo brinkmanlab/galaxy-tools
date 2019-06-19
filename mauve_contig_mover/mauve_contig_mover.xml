@@ -31,14 +31,7 @@
             #set $draft_path = str($draft)
         #end if
         
-        MauveCM -output output -ref $ref -draft $draft_path &&
-        ln -sf output/`ls -1 output | tail -n1` final &&
-        mv "`ls -1 final/*.backbone | tail -n1`" final.backbone &&
-        mv "`ls -1 final/*_contigs.tab | tail -n1`" final.contigs.tab &&
-        #if $draft.is_of_type("genbank")        
-            mv "`ls -1 final/*_features.tab | tail -n1`" final.features.tab &&
-        #end if
-        mv "`ls -1 final/*.fas | tail -n1`" final.reordered
+        MauveCM -output output -ref $ref -draft $draft_path && $__tool_directory__/mcm_final.sh
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="genbank,fasta" label="Draft" />
