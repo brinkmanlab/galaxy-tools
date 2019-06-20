@@ -1,0 +1,19 @@
+<tool id="make_unique_id" name="BioPython Make Unique ID" version="1.0" profile="16.04">
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package">biopython</requirement>
+    </requirements>
+    <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
+    <command detect_errors="aggressive"><![CDATA[
+        $__tool_directory__/make_unique_id.py ${inputs[0].ext}
+        #for $input, $output in $zip($inputs, $outputs)
+            $input $output
+        #end for
+    ]]></command>
+    <inputs>
+        <param name="inputs" type="data_collection" format="clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,imgt,nexus,phd,phylip,pir,seqxml,sff,stockholm,tab,qual" label="Input" />
+    </inputs>
+    <outputs>
+        <collection name="outputs" type="list" structured_like="inputs" inherit_format="true" inherit_metadata="true" />
+    </outputs>
+</tool>
