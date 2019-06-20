@@ -100,7 +100,8 @@
             Since these include all the contigs in the original input, those with no ordering information (no aligned region) will be clustered at the end. 
             These will appear as contigs with no LCBs at the end of the draft genome.
         
-        Contigs with Conflicting Order information: This is a list of contigs containing LCBs suggesting multiple possible locations. 
+        Contigs with Conflicting Order information:
+            This is a list of contigs containing LCBs suggesting multiple possible locations. 
             These may be of interest to verify positioning, or to look at points of potential rearrangement or misassembly.
         
         If the draft was input as an annotated genbank file, a second file will appear called "Features". This file will contain a line for each annotation, 
