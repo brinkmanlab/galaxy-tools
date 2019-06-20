@@ -67,7 +67,7 @@
         <param name="bioperl" type="boolean" checked="false" label="Modify biopython to generate files similar to bioperl" />
     </inputs>
     <outputs>
-        <data name="info_output" format="tabular" label="Record Info from ${tool.name} on ${on_string}">
+        <data name="info_output" format="gff3" label="Record Info from ${tool.name} on ${on_string}">
             <filter>info</filter>
         </data>
         <data name="output" format="txt" label="Output from ${tool.name} on ${on_string}">
