@@ -10,8 +10,9 @@
 	<tool file="biopython-convert/biopython-convert.xml" />
 	<tool file="extract_tree_order/extract_tree_order.xml" />
 	<tool file="mauve_contig_mover/mauve_contig_mover.xml" />
+	<tool file="mauve_contig_mover/mcm_stitch.xml" />
 	<tool file="sendmail/sendmail.xml" />
-	<tool file="inspect/inspect.xml" />
+	<!-- tool file="inspect/inspect.xml" / -->
 	<tool file="collection_info/collection_info.xml" />
   </section>
 </toolbox>
