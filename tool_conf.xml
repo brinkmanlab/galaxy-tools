@@ -13,6 +13,7 @@
 	<tool file="mauve_contig_mover/mcm_stitch.xml" />
 	<tool file="make_unique_id/make_unique_id.xml" />
 	<tool file="sendmail/sendmail.xml" />
+	<tool file="hash/sha256sum.xml" />
 	<!-- tool file="inspect/inspect.xml" / -->
 	<tool file="collection_info/collection_info.xml" />
   </section>
