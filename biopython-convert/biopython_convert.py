@@ -130,7 +130,7 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
         if split:
             # If splitting, open next file
             output.close()
-            output = open(append_filename(output_path, "." + str(i + 1)))
+            output = open(append_filename(output_path, "." + str(i + 1)), "w")
 
 if __name__ == '__main__':
     input_path, input_type, output_path, output_type, jpath, split, stats = get_args(sys.argv[1:])
