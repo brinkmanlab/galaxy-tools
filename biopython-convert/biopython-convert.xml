@@ -1,9 +1,20 @@
 <tool id="biopython-convert" name="BioPython SeqIO Converter" version="1.0" profile="16.04">
+    <description>Interconvert between the various sequence file formats that BioPython supports</description>
+    <edam_topics>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3434</edam_operation>
+        <edam_operation>operation_0335</edam_operation>
+        <edam_operation>operation_3359</edam_operation>
+        <edam_operation>operation_0224</edam_operation>
+        <edam_operation>operation_3695</edam_operation>
+    </edam_operations>
     <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package">biopython</requirement>
-        <requirement type="package">gffutils</requirement>
-        <requirement type="package">jmespath</requirement>
+        <requirement type="package" version="3.7.3">python</requirement>
+        <requirement type="package" version="1.73">biopython</requirement>
+        <requirement type="package" version="0.9">gffutils</requirement>
+        <requirement type="package" version="0.9.4">jmespath</requirement>
     </requirements>
     <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
@@ -55,8 +66,8 @@
             <option value="qual">qual</option>
             <option value="gff3">gff3</option>
         </param>
-        <param name="split" type="boolean" checked="false" truevalue="-s" falsevalue="" label="Split each record into a different file" />
-        <param name="info" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Output record information while converting" />
+        <param name="split" type="boolean" truevalue="-s" falsevalue="" checked="false" label="Split each record into a different file" />
+        <param name="info" type="boolean" truevalue="-i" falsevalue="" checked="false" label="Output record information while converting" />
         <param name="query" type="text" label="Query records, keeping only what matches path" help="Provide a JMESPath selecting records to keep. The root is the list of records. The path must return a list of records.">
             <sanitizer>
                 <valid initial="string.printable">
@@ -98,7 +109,7 @@
         </data>
         <collection name="split_output" type="list" label="Output split per record from ${tool.name} on ${on_string}">
             <filter>split</filter>
-            <discover_datasets directory="output" format="$output_type" />
+            <discover_datasets pattern=".*" directory="output" format="$output_type" />
         </collection>
     </outputs>
 </tool>
