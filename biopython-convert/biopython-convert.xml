@@ -11,7 +11,7 @@
         <edam_operation>operation_3695</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="3.7.3">python</requirement>
+        <requirement type="package" version="3.7">python</requirement>
         <requirement type="package" version="1.73">biopython</requirement>
         <requirement type="package" version="0.9">gffutils</requirement>
         <requirement type="package" version="0.9.4">jmespath</requirement>
@@ -112,4 +112,62 @@
             <discover_datasets pattern=".*" directory="output" format="$output_type" />
         </collection>
     </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <!-- Test basic conversion to same format -->
+            <param name="input" value="test-data/has_plasmids.gbff" ftype="genbank" />
+            <param name="output_type" value="genbank" />
+            <output name="output" checksum="sha256:2808187bb8e2231545e4d2d7a27dc802df4d1f7c0e953a8399300b2df6b0c737" ftype="genbank" />
+        </test>
+        <test expect_num_outputs="1">
+            <!-- Test basic conversion to same format with info -->
+            <param name="input" value="test-data/has_plasmids.gbff" ftype="genbank" />
+            <param name="info" value="-i" />
+            <param name="output_type" value="genbank" />
+            <output name="output" checksum="sha256:2808187bb8e2231545e4d2d7a27dc802df4d1f7c0e953a8399300b2df6b0c737" ftype="genbank" />
+        </test>
+        <test expect_num_outputs="1">
+            <!-- Test basic conversion to different format -->
+            <param name="input" value="test-data/has_plasmids.gbff" ftype="genbank" />
+            <param name="output_type" value="embl" />
+            <output name="output" checksum="sha256:5598cb679f5f6c31349968ddde3646fe97296da42ee528ed3f46dec3f5490cbd" ftype="embl" />
+        </test>
+        <test expect_num_outputs="1">
+            <!-- Test basic conversion to same format with filter -->
+            <param name="input" value="test-data/has_plasmids.gbff" ftype="genbank" />
+            <param name="query" value="[?!(features[?type==`source`].qualifiers.plasmid)]" />
+            <param name="output_type" value="genbank" />
+            <output name="output" checksum="sha256:e142d7e1fbd103c96e3b728e3b75f7af6955c97cdbddb87c3202f2c1e2f133d4" ftype="genbank" />
+        </test>
+        <test expect_num_outputs="1">
+            <!-- Test split -->
+            <param name="input" value="test-data/has_plasmids.gbff" ftype="genbank" />
+            <param name="output_type" value="genbank" />
+            <output_collection name="split_output" type="list" count="3">
+                <element name="record.0" ftype="genbank" checksum="TODO" />
+                <element name="record.1" ftype="genbank" checksum="TODO" />
+                <element name="record.2" ftype="genbank" checksum="TODO" />
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+        Interconvert between different file formats that BioPython SeqIO supports. Support for GFF3 has also been included.
+
+        Included features are:
+        - Split: Output a collection of datasets, one for each record in the input.
+                This is useful when a tool only accepts single records.
+                The resulting output collection can then be mapped over the receiving tool.
+        - Info: Output an additional GFF3 dataset that contains a summary record for each record in the output dataset.
+                This is useful for extracting sequence IDs, counting how many records are in the output dataset, and various
+                diagnostic processes.
+        - Query: Datasets can be queried or filtered using JMESPath query language.
+                For example ``[?!(features[?type==`source`].qualifiers.plasmid)]`` will remove any plasmid records sometimes
+                found in prokaryotic Genbank or EMBL reference genomes.
+                See http://jmespath.org/ for documentation, and https://biopython.org/DIST/docs/api/Bio.SeqFeature.SeqFeature-class.html
+                for the data structure. Single quotes `'` are not permitted in the query.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">TODO</citation>
+    </citations>
 </tool>
