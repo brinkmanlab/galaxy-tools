@@ -85,9 +85,6 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
     else:
         input_records = SeqIO.parse(input, input_type)
 
-    # Open output file with file name suffix if splitting
-    output = open(append_filename(output_path, ".0") if split else output_path, "w")
-
     # Wrap input in JMESPath selector if provided
     if jpath:
         input_records = JMESPathGen.search(jpath, input_records)
@@ -102,6 +99,8 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
 
     if stats:
         print("##gff-version 3")
+
+    output = None
 
     for i, record in enumerate(input_records):  # type: (Integer, SeqIO.SeqRecord)
         # TODO allow objects other than SeqRecord, transform to SeqRecord or handle special output (like if output format == txt|json, pretty print object)
@@ -121,16 +120,21 @@ def convert(input, input_type, output_path, output_type, jpath, split, stats):
             attributes['desc'] = [record.description]
             print(gffutils.Feature(record.id, "biopython-convert", "sequence", start=1, end=len(record), attributes=attributes))
 
+        if not output:
+            # Open output file with file name suffix if splitting
+            output = open(append_filename(output_path, "." + str(i)) if split else output_path, "w")
+
         if output_type in gff_types:
             # If output type is GFF, use gffutils library
             for feature in record.features:
                 print(biopython_integration.from_seqfeature(feature), file=output)
         else:
             SeqIO.write(record, output, output_type)
+
         if split:
             # If splitting, open next file
             output.close()
-            output = open(append_filename(output_path, "." + str(i + 1)), "w")
+            output = None
 
 if __name__ == '__main__':
     input_path, input_type, output_path, output_type, jpath, split, stats = get_args(sys.argv[1:])
