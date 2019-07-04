@@ -5,7 +5,7 @@ from collections import defaultdict
 
 usage = """
 make_unique_id
-Makes all ids unique across all input data.
+Makes all record ids unique across all input data.
 All input data must be the same format.
 
 Use: make_unique_id.py [-v] <format> <input1> <output1> [<input2> <output2> ... <inputn> <outputn>]

@@ -1,4 +1,12 @@
-<tool id="SigiHMM" name="SigiHMM" version="3.8.0" profile="16.04">
+<tool id="sigihmm" name="SigiHMM" version="3.8.0" profile="16.04">
+    <description>Score-based prediction of genomic islands in prokaryotic genomes using hidden Markov models</description>
+    <edam_topics>
+        <edam_topic>topic_0194</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0362</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3.8">colombo</requirement>
     </requirements>
@@ -7,31 +15,27 @@
         #import os 
         #set input_l=$os.path.basename(str($input))+".embl" 
         #set output_l=$os.path.basename(str($output))+".embl" 
-        ln -sf "$input" "$input_l"
-        && ln -sf "$output" "$output_l"
+        ln -sf "$input" "$input_l" &&
+        ln -sf "$output" "$output_l" &&
         #if $cut
             #set cut_l=$os.path.basename(str($cut))+".cut"
-            && ln -sf "$cut" "$cut_l"
+            ln -sf "$cut" "$cut_l" &&
         #end if
-        #if $gff
-            #set gff_l=$os.path.basename(str($gff))+".gff"
-            && ln -sf "$gff" "$gff_l"
-        #end if
-        && SigiHMM input="`pwd`/$input_l" output="`pwd`/$output_l" sens=$sens outlier=$outlier phx=$phx join=$join
+        #set gff_l=$os.path.basename(str($gff))+".gff"
+        ln -sf "$gff" "$gff_l" &&
+        
+        SigiHMM input="`pwd`/$input_l" output="`pwd`/$output_l" sens=$sens outlier=$outlier phx=$phx join=$join gff="`pwd`/$gff_l"
         #if $cut
             cut="`pwd`/$cut_l"
         #end if
-        #if $gff
-            gff="`pwd`/$gff_l"
-        #end if
     ]]></command>
     <inputs>
-        <param type="data" format="embl" name="input" argument="input" label="Input" optional="false" help="" />
-        <param type="data" format="cut" name="cut" argument="cut" label="Donor candidates CUT file" optional="true" help="" />
-        <param type="float" name="sens" argument="sens" label="PUTAL Sensitivity" optional="false" min="0" max="1.0" value="0.7" help="" />
-        <param type="boolean" name="outlier" argument="outlier" label="Assess Outliers" optional="false" truevalue="Yes" falsevalue="No" checked="false" help="" />
-        <param type="boolean" name="phx" argument="phx" label="Assess PHX" optional="false" truevalue="Yes" falsevalue="No" checked="true" help="" />
-        <param type="select" name="join" argument="join" label="Merge Islands Of Distance" optional="false" help="" >
+        <param type="data" format="embl" name="input" argument="input" label="Input" optional="false" />
+        <param type="data" format="cut" name="cut" argument="cut" label="Donor candidates CUT file" optional="true" />
+        <param type="float" name="sens" argument="sens" label="PUTAL Sensitivity" optional="false" min="0" max="1.0" value="0.7" />
+        <param type="boolean" name="outlier" argument="outlier" label="Assess Outliers" optional="false" truevalue="Yes" falsevalue="No" checked="false" />
+        <param type="boolean" name="phx" argument="phx" label="Assess PHX" optional="false" truevalue="Yes" falsevalue="No" checked="true" />
+        <param type="select" name="join" argument="join" label="Merge Islands Of Distance" optional="false" >
             <option value="0">0</option>
             <option value="1" selected="true">1</option>
             <option value="2">2</option>
@@ -40,13 +44,27 @@
     </inputs>
     <outputs>
         <data format="embl" name="output" metadata_source="input" />
-        <data format="gff" name="gff" />
+        <data format="gff" name="gff" label="${tool.name} on ${on_string} features" />
     </outputs>
-    <!-- TODO tests -->
+    <tests>
+        <test expected_outputs="2">
+            <!-- SigiHMM uses biojava which currently has a bug: https://github.com/biojava/biojava/issues/843 -->
+            <param name="input" file="test-data/test.embl" ftype="embl" />
+            <param name="join" value="3" />
+            <output name="output" checksum="sha256:f87830fad329a0c47f734cffa069593be0423a064878bd894df8b8dc4b451c3d" ftype="embl" />
+            <output name="gff" checksum="sha256:6af8fb320804803f54870c3e7b024d5e1305cee7e464e89355fba1f00f94ce44" ftype="gff" />
+        </test>
+        <test expect_failure="true">
+            <!-- SigiHMM 3.8 crashes for an unknown reason on some datasets. v4.0 does not seem to have this issue. -->
+            <param name="input" file="test-data/crash.embl" ftype="embl" />
+            <param name="join" value="3" />
+        </test>
+    </tests>
     <help><![CDATA[
         https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-7-142
     ]]></help>
     <citations>
+        <!-- citation type="doi">TODO</citation -->
         <citation type="doi">10.1186/1471-2105-7-142</citation>
     </citations>
 </tool>

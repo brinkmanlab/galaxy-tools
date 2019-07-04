@@ -1,4 +1,14 @@
 <tool id="ParSNP" name="ParSNP" version="1.2" profile="16.04">
+    <description>Efficient microbial core genome alignment and SNP detection</description>
+    <edam_topics>
+        <edam_topic>topic_3293</edam_topic>
+        <edam_topic>topic_0194</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_2451</edam_operation>
+        <edam_operation>operation_0323</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.2">parsnp</requirement>
     </requirements>
@@ -21,13 +31,13 @@
             -r $ref_or_gbk.ref_genome.reference
         #end if
     #else
-        -g "
+        -g '
         #for $gbk_file in $ref_or_gbk.genbank_files
             #if $gbk_file
                 $gbk_file,
             #end if
         #end for
-        "
+        '
     #end if
     $adv.MUMi_or_curated.curated $adv.extend_lcb $adv.output_unaligned
     #if $adv.query_genome
@@ -143,19 +153,46 @@
         </section>
     </inputs>
     <outputs>
-        <data name="tree" format="newick" from_work_dir="parsnp.tree" />
-        <data name="vcf" format="vcf" from_work_dir="parsnp.vcf" />
-        <data name="ggr" format="ggr" from_work_dir="parsnp.ggr" />
-        <data name="xfma" format="xfma" from_work_dir="parsnp.xmfa" />
-        <data name="unaligned" format="txt" from_work_dir="parsnp.unaligned">
+        <data name="tree" format="newick" from_work_dir="parsnp.tree" label="${tool.name} on ${on_string}: Newick formatted core genome SNP tree" />
+        <data name="vcf" format="vcf" from_work_dir="parsnp.vcf" label="${tool.name} on ${on_string}: SNPs used to infer phylogeny" />
+        <data name="ggr" format="ggr" from_work_dir="parsnp.ggr" label="${tool.name} on ${on_string}: Gingr formatted binary archive" />
+        <data name="xfma" format="xfma" from_work_dir="parsnp.xmfa" label="${tool.name} on ${on_string}: XMFA formatted multiple alignment" />
+        <data name="unaligned" format="txt" from_work_dir="parsnp.unaligned" label="${tool.name} on ${on_string}: Unaligned regions" >
             <filter>adv['output_unaligned']</filter>
         </data>
     </outputs>
-    <!-- TODO tests -->
+    <tests>
+        <test expect_num_outputs="4">
+            <param name="genomes" >
+                <collection type="list">
+                    <element name="test1" value="test-data/15596_genome.fasta" ftype="fasta" />
+                    <element name="test2" value="test-data/15602_genome.fasta" ftype="fasta" />
+                    <element name="test3" value="test-data/15599_genome.fasta" ftype="fasta" />
+                </collection>
+            </param>
+            <conditional name="ref_or_gbk">
+                <param name="ref_type" value="fasta" />
+                <conditional name="ref_genome">
+                    <param name="random_ref" value="false" />
+                    <param name="reference" value="test-data/15600_genome.fasta" ftype="fasta" />
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="MUMi_or_curated">
+                    <param name="curated" value="-c" />
+                </conditional>
+            </section>
+            <output name="tree" checksum="sha256:66a2cc47666452fae008b546ab2bd5f9a06c7c7daca88e34e2be7a5cdd371137" ftype="newick" />
+            <output name="vcf" checksum="sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ftype="vcf" />
+            <output name="ggr" checksum="sha256:9e91807a25a9549070cfde5cc60844991db5cbee55d9181c61e75220b67f35c5" ftype="xfma" />
+            <output name="xfma" checksum="sha256:1774759cc4c34b53e117406a9055f933620960be852ab77501eab1d34badbbfa" ftype="txt" />
+        </test>
+    </tests>
     <help><![CDATA[
         https://harvest.readthedocs.io/en/latest/content/parsnp.html
     ]]></help>
     <citations>
+        <!--citation type="doi">TODO</citation-->
         <citation type="doi">10.1101/007351</citation>
     </citations>
 </tool>

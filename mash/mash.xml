@@ -1,4 +1,12 @@
 <tool id="mash" name="MASH" version="2.1" profile="18.09">
+    <description>Fast genome and metagenome distance estimation using MinHash</description>
+    <edam_topics>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0289</edam_operation>
+        <edam_operation>operation_0296</edam_operation>
+    </edam_operations>
     <macros>
         <xml name="sketching_options">
             <!-- sketching -->
@@ -210,7 +218,7 @@
     <outputs>
         <data name="output" format="txt">
             <change_format>
-                <when input="commands.command" value="bounds" format="txt" />
+                <when input="commands.command" value="bounds" format="tabular" />
                 <when input="commands.command" value="dist" format="tsv" />
                 <when input="commands.command" value="info" format="txt" />
                 <when input="commands.command" value="paste" format="msh" />
@@ -220,11 +228,41 @@
             </change_format>
         </data>
     </outputs>
-    <!-- TODO tests -->
+    <tests>
+        <test expect_num_outputs="1">
+            <conditional name="commands">
+                <param name="command" value="bounds" />
+            </conditional>
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <has_text text="Mash distance" />
+                    <has_text text="Screen distance" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="commands">
+                <param name="command" value="dist" />
+                <param name="reference" value="test-data/15600_genome.fasta" ftype="fasta" />
+                <param name="genomes" >
+                    <collection type="list">
+                        <element name="test1" value="test-data/15596_genome.fasta" ftype="fasta" />
+                        <element name="test2" value="test-data/15602_genome.fasta" ftype="fasta" />
+                        <element name="test3" value="test-data/15599_genome.fasta" ftype="fasta" />
+                    </collection>
+                </param>
+                <conditional name="input_option">
+                    <param name="individual_seq" value="true" />
+                </conditional>
+            </conditional>
+            <output name="output" checksum="sha256:701ecc0d4fec3383267699ebd9d78dd7b84360ff57754aac4f2bc8bc00aee580" ftype="tsv" />
+        </test>
+    </tests>
     <help><![CDATA[
         https://mash.readthedocs.io/en/latest/
     ]]></help>
     <citations>
+        <!--citation type="doi">TODO</citation-->
         <citation type="doi">10.1186/s13059-016-0997-x</citation>
     </citations>
 </tool>

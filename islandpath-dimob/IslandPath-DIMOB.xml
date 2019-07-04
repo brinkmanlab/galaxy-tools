@@ -1,7 +1,16 @@
-<tool id="IslandPath-DIMOB" name="IslandPath-DIMOB" version="1.0.4" profile="16.04">
+<tool id="islandpath-dimob" name="IslandPath-DIMOB" version="1.0.4" profile="16.04">
+    <description>The Markov Cluster Algorithm, a cluster algorithm for graphs</description>
+    <edam_topics>
+        <edam_topic>topic_0194</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0362</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.0.4">islandpath</requirement>
     </requirements>
+    <version_command><![CDATA[ echo "1.0.4" ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
     #import os
     #if $input.is_of_type("embl")
@@ -18,14 +27,26 @@
     <outputs>
         <data format="gff" name="output" />
     </outputs>
-    <!-- TODO tests -->
-    <help>
-    <p>
-        <p><a href="http://www.pathogenomics.sfu.ca/islandpath/">IslandPath</a> was originally designed to aid to the identification of prokaryotic genomics islands (GIs), including pathogenicity islands, of potentially horizontally transferred genes by visualizing several common characteristics of GIs such as abnormal sequence composition or the presence of genes that functionally related to mobile elements (termed mobility genes). </p>
-        <p>Further studies (see <a href="http://www.ncbi.nlm.nih.gov/pubmed/16299586">Hsiao et al 2005</a>) used dinucleotide sequence compostion bias   and the presence of mobility genes   to develop a dataset of GIs (IslandPath DIMOB) for multiple organisms and revealed that these genomic regions contain higher proportions of novel genes. </p>
-        <p>A recent study (see Langille et al 2008 (submitted)), developed a new method called <a href="http://www.pathogenomics.sfu.ca/islandpick/">IslandPick</a> that used comparative genomics  to develop  stringent data sets of GIs and non-GIs. These positive and negative data sets that were not based on sequence composition bias allowed for an independent review of several previously published GI predictors. Although the overall accuracy of several of the tools were similar, IslandPath DIMOB was shown to have the highest accuracy. </p>
-    </p>
-    </help>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input" value="test-data/test.embl" ftype="embl" />
+            <output name="output" checksum="sha256:36d25184326c3415001675921bf76be588edce9fe3313b8082c3eeac83dcf958" ftype="gff" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        [IslandPath](http://www.pathogenomics.sfu.ca/islandpath/) was originally designed to aid to the identification of prokaryotic genomics islands (GIs),
+        including pathogenicity islands, of potentially horizontally transferred genes by visualizing several common characteristics of GIs such as abnormal
+        sequence composition or the presence of genes that functionally related to mobile elements (termed mobility genes).
+        
+        Further studies (see [Hsiao et al 2005](http://www.ncbi.nlm.nih.gov/pubmed/16299586)) used dinucleotide sequence compostion bias and the presence of
+        mobility genes to develop a dataset of GIs (IslandPath DIMOB) for multiple organisms and revealed that these genomic regions contain higher
+        proportions of novel genes.
+        
+        A recent study (see Langille et al 2008 (submitted)), developed a new method called [IslandPick](http://www.pathogenomics.sfu.ca/islandpick/)
+        that used comparative genomics to develop stringent data sets of GIs and non-GIs. These positive and negative data sets that were not based on
+        sequence composition bias allowed for an independent review of several previously published GI predictors. Although the overall accuracy of
+        several of the tools were similar, IslandPath DIMOB was shown to have the highest accuracy.
+    ]]></help>
     <citations>
         <citation type="doi">10.1093/bioinformatics/bty095</citation>
     </citations>

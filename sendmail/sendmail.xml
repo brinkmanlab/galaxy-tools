@@ -1,4 +1,5 @@
 <tool id="sendmail" name="Send Email" version="1.0" profile="16.04">
+    <description>Send mail using templates and include information about datasets</description>
     <command><![CDATA[
         #from galaxy.util import send_mail
         $send_mail($__app__.config.email_from, $to, $subject, "", $__app__.config, open($body).read())
@@ -7,7 +8,7 @@
         <configfile name="body"><![CDATA[
             #set $template_path = '/'.join([$__tool_data_path__, "sendmail", $template])
             #import os
-            #if $os.path.isfile($template_path)
+            #if '..' not in $template and $os.path.isfile($template_path)
                 #include $template_path
             #else
                 <html>
@@ -28,8 +29,21 @@
         <repeat name="extras">
             <param name="extra" type="text" label="Extra data to make available in the template body" />
         </repeat>
-        <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/sendmail/">
-            <!-- TODO sanitise "../" -->
-        </param>
+        <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/sendmail/" />
     </inputs>
+    <help><![CDATA[
+        Send mail using templates and include information about datasets.
+        
+        Templates are parsed using Galaxies Cheeta Template Engine. The variables available are everything that is available to a tool including:
+        - $data     Dataset instance passed to the tool input
+        - $to       Reciepent address specified in the tool parameters
+        - $subject  Subject specified in the tool parameters
+        - $extras[].extra   List of extras specified in the tool parameters
+        - $template Relative path to the current template
+        
+        See this tools xml for an example template.
+    ]]></help>
+    <citations>
+        <!--citation type="doi">TODO</citation-->
+    </citations>
 </tool>

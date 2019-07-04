@@ -1,4 +1,4 @@
-MIT License
+MIT License Amended
 
 Copyright (c) 2018 Simon Fraser University - Brinkman Lab
 
@@ -11,6 +11,9 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+Any publication resulting in the use of the Software or its code in whole or
+in part shall cite the citations listed in the tool xml files.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

@@ -1,5 +1,5 @@
 <tool id="sha256sum" name="Coreutils sha256sum" version="1.0" profile="16.04">
-    <description>Print or check SHA256 (256-bit) checksums</description>
+    <description>Generate or check SHA256 (256-bit) checksums</description>
     <edam_topics>
         <edam_topic>topic_3572</edam_topic>
     </edam_topics>
@@ -12,25 +12,49 @@
     </requirements>
     <version_command><![CDATA[ sha256sum --version ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
-        sha256sum $tag
         #if $input.is_of_type("binary")
-            --binary
+            #set $type = '--binary'
         #else
-            --text
+            #set $type = '--text'
         #end if
-        $input | sed 's/  .*//' > $output
+        #if $mode_select.mode == '--check'
+            echo '$input' | cat $mode_select.hash - | sha256sum $tag $type $mode_select.mode --warn --status
+        #else
+            sha256sum $tag $type $input | sed 's/  .*//' > $output
+        #end if
     ]]></command>
     <inputs>
         <param name="input" type="data" format="data" label="Input" />
+        <conditional name="mode_select">
+            <param name="mode" type="select" label="Mode">
+                <option value="" selected="true">Generate hash</option>
+                <option value="--check">Compare hash</option>
+            </param>
+            <when value="">
+            </when>
+            <when value="--check">
+                <param input="hash" type="data" format="txt" label="Hash" />
+            </when>
+        </conditional>
         <param name="tag" type="boolean" truevalue="--tag" falsevalue="" checked="false" label="Create a BSD-style checksum" />
     </inputs>
     <outputs>
         <data name="output" format="txt" />
     </outputs>
+    <tests>
+        <test expected_num_outputs="1">
+            <param name="input" value="test-data/test.txt" ftype="txt" />
+            <output name="output" ftype="txt" >
+                <assert_contents>
+                    <has_text text="53a8b4455d54e2d67c24c44763330338d65c883d9053d752710bc4e67e674b65" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
         GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
     ]]></help>
     <citations>
-        <citation type="doi">TODO</citation>
+        <!--citation type="doi">TODO</citation-->
     </citations>
 </tool>

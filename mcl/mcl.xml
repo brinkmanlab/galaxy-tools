@@ -1,6 +1,13 @@
 <tool id="mcl" name="MCL" version="14.137" profile="16.04">
+    <description>The Markov Cluster Algorithm, a cluster algorithm for graphs</description>
+    <edam_topics>
+        <edam_topic>topic_3570</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3432</edam_operation>
+    </edam_operations>
     <requirements>
-        <requirement type="package">mcl</requirement>
+        <requirement type="package" version="14.137">mcl</requirement>
     </requirements>
     <version_command>mcl --version</version_command>
     <command detect_errors="aggressive"><![CDATA[
@@ -59,11 +66,19 @@
             </change_format>
         </data>
     </outputs>
-    <!-- TODO tests -->
+    <test expect_num_outputs="1">
+        <conditional name="input_type_select">
+            <param name="input_type" value="--abc" />
+            <param name="input" value="test-data/mash-dist.tabular" ftype="tabular" />
+        </conditional>
+        <param name="transform" value="mul(-1),add(1),gq(0.96)" />
+        <output name="output" file="test-data/mash-dist-cluster.tabular" ftype="tabular" />
+    </test>
     <help>
     https://micans.org/mcl/man/mcl.html
     </help>
     <citations>
+        <!--citation type="doi">TODO</citation-->
         <citation type="bibtex"><![CDATA[
         @article{dongen29graph,
           title={Graph Clustering by Flow Simulation. 2000},
@@ -72,6 +87,6 @@
           volume={29},
           pages={3512}
         }
-]]></citation>
+        ]]></citation>
     </citations>
 </tool>

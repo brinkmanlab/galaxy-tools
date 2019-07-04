@@ -1,9 +1,18 @@
-<tool id="make_unique_id" name="BioPython Make Unique ID" version="1.0" profile="16.04">
+<tool id="make-unique-id" name="BioPython Make Unique ID" version="1.0" profile="16.04">
+    <description>Makes all record ids unique across all input data</description>
+    <edam_topics>
+        <edam_topic>topic_3345</edam_topic>
+        <edam_topic>topic_3489</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3282</edam_operation>
+    </edam_operations>
     <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package">biopython</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="1.73">biopython</requirement>
     </requirements>
-    <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
+    <version_command><![CDATA[ $__tool_directory__/make_unique_id.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
         $__tool_directory__/make_unique_id.py ${inputs[0].ext}
         #for $input, $output in $zip($inputs, $outputs)
@@ -16,4 +25,29 @@
     <outputs>
         <collection name="outputs" type="list" structured_like="inputs" inherit_format="true" inherit_metadata="true" />
     </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="inputs" >
+                <collection type="list">
+                    <element name="test1" value="test-data/1.fastq" ftype="fastq" />
+                    <element name="test2" value="test-data/1.fastq" ftype="fastq" />
+                    <element name="test3" value="test-data/1.fastq" ftype="fastq" />
+                </collection>
+            </param>
+            <output_collection name="outputs" type="list" count="3">
+                <element name="test1" ftype="fastq" checksum="TODO" />
+                <element name="test2" ftype="fastq" checksum="TODO" />
+                <element name="test3" ftype="fastq" checksum="TODO" />
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+    Ensure record IDs are unique across datasets.
+    Can read/write any formats supported by BioPython SeqIO.
+    
+    This is useful when aggregating data downstream and you want to ensure that there are no ID collisions.
+    ]]></help>
+    <citations>
+        <!--citation type="doi">TODO</citation-->
+    </citations>
 </tool>

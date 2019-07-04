@@ -1,8 +1,9 @@
-<tool id="feature_merge" name="GFF/GTF Feature Merge" version="1.0" profile="16.04">
+<tool id="feature-merge" name="GFF/GTF Feature Merge" version="1.0" profile="16.04">
+    <description>Merge GFF features based on a variety of criteria</description>
     <requirements>
         <!--requirement type="package" version="1.0.0">feature_merge</requirement-->
-        <requirement type="package">python</requirement>
-        <requirement type="package">gffutils</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="0.9">gffutils</requirement>
     </requirements>
     <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
@@ -16,7 +17,7 @@
         >> $output
     ]]></command>
     <inputs>
-        <param name="inputs" type="data" format="gff,gtf" multiple="true" label="Input" />
+        <param name="inputs" type="data" format="gff,gff3,gtf" multiple="true" label="Input" />
         <param name="ignore_strand" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Ignore feature strand when merging" argument="-i"/>
         <param name="exclude_components" type="boolean" checked="false" truevalue="" falsevalue="-e" label="Include original feature records in output" argument="-e"/>
         <param name="exact_only" type="boolean" checked="false" truevalue="-x" falsevalue="" label="Only merge features with identical coordinates" argument="-x"/>
@@ -34,11 +35,29 @@
     <outputs>
         <data name="output" format="gff" />
     </outputs>
-    <!-- TODO tests -->
+    <tests>
+        <test expected_outputs="1">
+            <param name="inputs" >
+                <collection type="list">
+                    <element name="test1" value="test-data/615598_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test2" value="test-data/915596_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test3" value="test-data/615598_genome.gbk_1.gff3" ftype="gff3" />
+                    <element name="test4" value="test-data/1015597_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test5" value="test-data/915596_genome.gbk_1.gff3" ftype="gff3" />
+                    <element name="test6" value="test-data/1015597_genome.gbk_1.gff3" ftype="gff3" />
+                </collection>
+            </param>
+            <param name="ignore_strand" value="-i" />
+            <output name="output" file="test-data/output.gff3" ftype="gff3" />
+        </test>
+    </tests>
     <help><![CDATA[
+        GFF/GTF Feature Merge
+        Merge GFF features based on a variety of criteria.
+        
         https://github.com/brinkmanlab/feature_merge
     ]]></help>
     <citations>
-        <!--citation type="doi"></citation-->
+        <!--citation type="doi">TODO</citation-->
     </citations>
 </tool>

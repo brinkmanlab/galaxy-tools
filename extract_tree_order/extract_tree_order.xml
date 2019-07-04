@@ -1,7 +1,16 @@
 <tool id="extract-tree-order" name="BioPython Phylo Parse Newick Leaf Order" version="1.0" profile="16.04">
+    <description>Convert a newick tree to an ordered list of its leaves</description>
+    <edam_topics>
+        <edam_topic>topic_0084</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0326</edam_operation>
+        <edam_operation>operation_3434</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3">python</requirement>
-        <requirement type="package">biopython</requirement>
+        <requirement type="package" version="1.73">biopython</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         python -c \$'from Bio import Phylo\nfor clade in Phylo.read("$input", "newick").get_terminals(order="preorder"): print(clade.name)' > '$output'
@@ -12,4 +21,34 @@
     <outputs>
         <data name="output" format="txt" />
     </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input" file="test-data/test.newick" ftype="newick" />
+            <output name="output" file="test-data/output.txt" ftype="txt" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        Convert a newick tree to an ordered list of its leaves as determined by BioPython.Phylo 'preorder'.
+        
+        This is useful when tree order affects order of processing of the related data.
+        
+        For example, you may want to do pairwise alignment of the sequences for adjacent leaves.
+        
+        `('NC_008463':1.25269,('NC_002516':0.21042,'NC_018080':0.20913)0.940:0.00444,('NZ_CH482384':0.24749,('NC_011770':0.00035,('NZ_CP006982':0.00036,'NC_023066':0.00018)0.940:0.00019)1.000:0.18245)0.990:0.01335);`
+        
+        returns
+        
+        ```
+        NC_008463
+        NC_002516
+        NC_018080
+        NZ_CH482384
+        NC_011770
+        NZ_CP006982
+        NC_023066
+        ```
+    ]]></help>
+    <citations>
+        <!--citation type="doi">TODO</citation-->
+    </citations>
 </tool>

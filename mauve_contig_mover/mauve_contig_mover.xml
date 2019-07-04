@@ -1,6 +1,15 @@
 <tool id="mauve-contig-mover" name="Mauve Contig Mover" version="1.0" profile="16.04">
+    <description>Reorder a multi-contig dataset against a reference genome</description>
+    <edam_topics>
+        <edam_topic>topic_0196</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0495</edam_operation>
+        <edam_operation>operation_0491</edam_operation>
+    </edam_operations>
     <requirements>
-        <requirement type="package">mauve</requirement>
+        <requirement type="package" version="2.4.0.r4736">mauve</requirement>
     </requirements>
     <version_command>mauveAligner --version</version_command>
     <command detect_errors="aggressive"><![CDATA[
@@ -68,6 +77,27 @@
             <filter>draft.is_of_type("genbank")</filter>
         </data>
     </outputs>
+    <tests>
+        <test expect_failure="true">
+            <!-- Mauve uses biojava which currently has a bug: https://github.com/biojava/biojava/issues/843 -->
+            <param name="draft" value="test-data/draft.gbff" ftype="genbank" />
+            <conditional name="ref_select">
+                <param name="ref_source" value="file" />
+                <param name="ref" value="test-data/ref.gbff" ftype="genbank" />
+            </conditional>
+        </test>
+        <test expect_num_outputs="4">
+            <param name="draft" value="test-data/draft_bioperl.gbff" ftype="genbank" />
+            <conditional name="ref_select">
+                <param name="ref_source" value="file" />
+                <param name="ref" value="test-data/ref_bioperl.gbff" ftype="genbank" />
+            </conditional>
+            <output name="reordered" checksum="sha256:2a5e621227f4967337cefd68273f78d3390c94f5fd7ce4dcbf8024a342aeb976" ftype="fasta" />
+            <output name="backbone" checksum="sha256:f46966bcaed3324e43cad91161f380427a7d3cc52bbf823ae811d3f5dfaf2927" ftype="tabular" />
+            <output name="contigs" file="test-data/contig_order.tabular" ftype="tabular" />
+            <output name="features" checksum="sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ftype="tabular" />
+        </test>
+    </tests>
     <help><![CDATA[
         The Mauve Contig Mover (MCM) can be used to order a draft genome relative to a related reference genome. 
         The functionality of this software module has been described in Rissman et al. 2009, a publication in Bioinformatics. 
@@ -110,6 +140,7 @@
         This will be gotten from the annotation, as checked in the following order: db_xref, label, gene, and locus_tag.
     ]]></help>
     <citations>
+        <!--citation type="doi">TODO</citation-->
         <citation type="doi">10.1093/bioinformatics/btp356</citation>
     </citations>
 </tool>

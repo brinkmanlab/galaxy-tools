@@ -60,6 +60,7 @@ def stitch(pad, contigs, order):
             if alignment[3] == "complement":
                 contig = contig.reverse_complement()
             if result:
+                # A lot is happening in the background here. Biopython handles the feature coordinates implicitly.
                 result += pad + contig
             else:
                 result = contig
@@ -102,6 +103,10 @@ if __name__ == '__main__':
     contigs = {seq.name: seq for seq in SeqIO.parse(draft_path, draft_format)}
 
     result = stitch(pad, contigs, order)
+
+    if result:
+        # Ensure there is only one 'source' feature
+        # TODO
 
     if result and len(sys.argv) > 5:
         result.id = sys.argv[5]

@@ -1,9 +1,18 @@
-<tool id="mauve_contig_mover_stitch" name="Mauve Contig Mover - Stitch" version="1.0" profile="16.04">
+<tool id="mauve-contig-mover-stitch" name="Mauve Contig Mover - Stitch" version="1.0" profile="16.04">
+    <description>Concatenate multiple contigs, complimenting reversed sequences and rewriting all feature coordinates</description>
+    <edam_topics>
+        <edam_topic>topic_0196</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3436</edam_operation>
+        <edam_operation>operation_0232</edam_operation>
+    </edam_operations>
     <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package">biopython</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="1.73">biopython</requirement>
     </requirements>
-    <version_command><![CDATA[ $__tool_directory__/biopython-convert.py -v ]]></version_command>
+    <version_command><![CDATA[ $__tool_directory__/stitch.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
         python $__tool_directory__/stitch.py $pad_len $contigs $draft $draft.ext $draft.element_identifier.replace(' ', '_') > $output
     ]]></command>
@@ -15,11 +24,19 @@
     <outputs>
         <data name="output" format_source="draft" />
     </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="draft" value="test-data/draft_bioperl.gbff" ftype="genbank" />
+            <param name="contigs" value="test-data/contig_order.tabular" ftype="tabular" />
+            <output name="output" checksum="sha256:08afe06a0f1eb96aa7f2a5b9e8a5ca15a4775c884f3144b6d82f2a0668cdb210" ftype="genbank" />
+        </test>
+    </tests>
     <help><![CDATA[
         Stitch contigs into a single contig.
         Compliments reversed sequences and rewrites all feature coordinates.
+        For gankbank and embl, 'source' features are combined.
     ]]></help>
     <citations>
-        <citation type="doi">TODO</citation>
+        <!--citation type="doi">TODO</citation-->
     </citations>
 </tool>
