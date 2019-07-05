@@ -1,0 +1,3 @@
+[submodule "biopython-convert/BioPython-Convert"]
+	path = biopython-convert/BioPython-Convert
+	url = git@github.com:brinkmanlab/BioPython-Convert.git

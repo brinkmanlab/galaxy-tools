@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 from biopython_convert import get_args, convert
 from Bio.SeqIO.InsdcIO import _InsdcWriter
