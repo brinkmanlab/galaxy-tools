@@ -3,11 +3,11 @@
     <requirements>
         <!--requirement type="package" version="1.0.0">feature_merge</requirement-->
         <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="0.9">gffutils</requirement>
+        <requirement type="package" version="1.0">feature_merge</requirement>
     </requirements>
-    <version_command><![CDATA[ $__tool_directory__/feature_merge.py -v ]]></version_command>
+    <version_command><![CDATA[ feature_merge.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
-        $__tool_directory__/feature_merge.py $ignore_strand $exclude_components $exact_only -m $merge_strategy
+        feature_merge $ignore_strand $exclude_components $exact_only -m $merge_strategy
         #for set in $features
             -f "${str($set.csv).replace(" ", "")}"
         #end for

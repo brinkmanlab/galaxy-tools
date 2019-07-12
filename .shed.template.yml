@@ -1,0 +1,10 @@
+name: <name of containing folder>
+owner: brinkmanlab
+description: 
+homepage_url: 
+long_description: |
+
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/<name of containing folder>
+type: unrestricted
+categories:
+    - 

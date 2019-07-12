@@ -15,6 +15,5 @@
 	<tool file="sendmail/sendmail.xml" />
 	<tool file="hash/sha256sum.xml" />
 	<!-- tool file="inspect/inspect.xml" / -->
-	<tool file="collection_info/collection_info.xml" />
   </section>
 </toolbox>

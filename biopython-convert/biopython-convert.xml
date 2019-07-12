@@ -17,7 +17,7 @@
     <version_command><![CDATA[ biopython.convert -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
         #if $bioperl
-            #set $script = '$__tool_directory__/bioperl_compat.py'
+            #set $script = 'python $__tool_directory__/bioperl_compat.py'
         #else
             #set $script = 'biopython.convert'
         #end if
@@ -123,6 +123,7 @@
             <param name="info" value="-i" />
             <param name="output_type" value="genbank" />
             <output name="output" checksum="sha256:2808187bb8e2231545e4d2d7a27dc802df4d1f7c0e953a8399300b2df6b0c737" ftype="genbank" />
+            <output name="info_output" checksum="sha256:a611656c5a7e7f719c3d64f6b348b67c1abcb8ed56fa82f51fc90cbe2125e5f0" ftype="gff3" />
         </test>
         <test expect_num_outputs="1">
             <!-- Test basic conversion to different format -->
@@ -142,9 +143,9 @@
             <param name="input" value="BioPython-Convert/test-data/has_plasmids.gbff" ftype="genbank" />
             <param name="output_type" value="genbank" />
             <output_collection name="split_output" type="list" count="3">
-                <element name="record.0" ftype="genbank" checksum="TODO" />
-                <element name="record.1" ftype="genbank" checksum="TODO" />
-                <element name="record.2" ftype="genbank" checksum="TODO" />
+                <element name="record.0" ftype="genbank" checksum="sha256:8d02b2087c4cea42da7c5f0a69b7a40d544d953c1a9d611b97bd116cc1f8cd7f" />
+                <element name="record.1" ftype="genbank" checksum="sha256:e37ecc4288ae8b2c3bea25484326a69ced9679fa791162ed593064fdf535944d" />
+                <element name="record.2" ftype="genbank" checksum="sha256:e142d7e1fbd103c96e3b728e3b75f7af6955c97cdbddb87c3202f2c1e2f133d4" />
             </output_collection>
         </test>
     </tests>

@@ -1,4 +1,5 @@
 <tool id="inspect" name="Inspect" version="1.0" profile="16.04">
+    <description>Dump Cheetah tool template environment. Useful for writing advanced tools. DO NOT INSTALL ON A PUBLIC SERVER</description>
     <command><![CDATA[
         mv $out $output
     ]]></command>

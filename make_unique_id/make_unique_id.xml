@@ -12,9 +12,9 @@
         <requirement type="package" version="3.7">python</requirement>
         <requirement type="package" version="1.73">biopython</requirement>
     </requirements>
-    <version_command><![CDATA[ $__tool_directory__/make_unique_id.py -v ]]></version_command>
+    <version_command><![CDATA[ python $__tool_directory__/make_unique_id.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
-        $__tool_directory__/make_unique_id.py ${inputs[0].ext}
+        python $__tool_directory__/make_unique_id.py ${inputs[0].ext}
         #for $input, $output in $zip($inputs, $outputs)
             $input $output
         #end for

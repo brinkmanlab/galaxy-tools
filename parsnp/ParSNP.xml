@@ -1,4 +1,4 @@
-<tool id="ParSNP" name="ParSNP" version="1.2" profile="16.04">
+<tool id="parsnp" name="ParSNP" version="1.2" profile="16.04">
     <description>Efficient microbial core genome alignment and SNP detection</description>
     <edam_topics>
         <edam_topic>topic_3293</edam_topic>

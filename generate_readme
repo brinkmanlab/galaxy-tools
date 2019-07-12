@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+pcregrep --only-matching=1 -e 'tool.*?file="([^"]+)"' tool_conf.xml \
+| xargs awk '
+BEGIN { OFS="\t"; ORS="" }
+match($0, /<tool.*?id="([^"]+)".*?name="([^"]+)"/, a) {
+    print FILENAME, a[1], a[2]
+}
+match($0, /<description>([^<]+)<\/description>/, a) {
+    print "\t"a[1]
+}
+ENDFILE { print "\n" }
+' \
+| column -t -N Path,ID,Name,Desc -s $'\t' -O 3,4,2,1 > README.table.rst
+# Build RestructuredText style table
+RSTDELIM=`head -n1 README.table.rst | sed 's/ /=/g;s/^..../====/g;s/==\(Path\|ID==\|Name\|Desc\)/  ====/g'`
+cat README.header.rst > README.rst
+echo "$RSTDELIM" >> README.rst
+head -n1 README.table.rst >> README.rst
+echo "$RSTDELIM" >> README.rst
+tail -n+2 README.table.rst >> README.rst
+echo "$RSTDELIM" >> README.rst
+rm README.table.rst
+cat README.rst
