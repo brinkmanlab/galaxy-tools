@@ -1,3 +1,6 @@
 [submodule "biopython-convert/BioPython-Convert"]
 	path = biopython-convert/BioPython-Convert
 	url = git@github.com:brinkmanlab/BioPython-Convert.git
+[submodule "feature_merge/feature_merge"]
+	path = feature_merge/feature_merge
+	url = git@github.com:brinkmanlab/feature_merge.git

@@ -39,12 +39,12 @@
         <test expected_outputs="1">
             <param name="inputs" >
                 <collection type="list">
-                    <element name="test1" value="test-data/615598_genome.gbk_2.gff3" ftype="gff3" />
-                    <element name="test2" value="test-data/915596_genome.gbk_2.gff3" ftype="gff3" />
-                    <element name="test3" value="test-data/615598_genome.gbk_1.gff3" ftype="gff3" />
-                    <element name="test4" value="test-data/1015597_genome.gbk_2.gff3" ftype="gff3" />
-                    <element name="test5" value="test-data/915596_genome.gbk_1.gff3" ftype="gff3" />
-                    <element name="test6" value="test-data/1015597_genome.gbk_1.gff3" ftype="gff3" />
+                    <element name="test1" value="feature_merge/test-data/615598_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test2" value="feature_merge/test-data/915596_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test3" value="feature_merge/test-data/615598_genome.gbk_1.gff3" ftype="gff3" />
+                    <element name="test4" value="feature_merge/test-data/1015597_genome.gbk_2.gff3" ftype="gff3" />
+                    <element name="test5" value="feature_merge/test-data/915596_genome.gbk_1.gff3" ftype="gff3" />
+                    <element name="test6" value="feature_merge/test-data/1015597_genome.gbk_1.gff3" ftype="gff3" />
                 </collection>
             </param>
             <param name="ignore_strand" value="-i" />
