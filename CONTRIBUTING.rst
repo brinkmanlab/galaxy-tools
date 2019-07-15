@@ -6,6 +6,7 @@ Contributions are welcome.
 
 Submit contributions as a pull request on GitHub.
 
+Use .shed.template.yml as a template when submitting a new tool to the Galaxy main toolshed.
 
 Standards
 ---------
