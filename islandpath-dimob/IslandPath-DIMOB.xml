@@ -1,5 +1,5 @@
 <tool id="islandpath-dimob" name="IslandPath-DIMOB" version="1.0.4" profile="16.04">
-    <description>The Markov Cluster Algorithm, a cluster algorithm for graphs</description>
+    <description>predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes</description>
     <edam_topics>
         <edam_topic>topic_0194</edam_topic>
         <edam_topic>topic_0091</edam_topic>

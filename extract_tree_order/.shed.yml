@@ -1,0 +1,11 @@
+name: extract_tree_order
+owner: brinkmanlab
+description: Convert a newick tree to an ordered list of its leaves
+homepage_url: https://biopython.org/wiki/Phylo
+long_description: |
+    Convert a newick tree to an ordered list of its leaves as determined by BioPython.Phylo 'preorder'.
+    This is useful when tree order affects order of processing of the related data.
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/<name of containing folder>
+type: unrestricted
+categories:
+- Phylogenetics

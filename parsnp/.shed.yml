@@ -1,0 +1,8 @@
+name: parsnp
+owner: brinkmanlab
+description: Efficient microbial core genome alignment and SNP detection
+homepage_url: https://harvest.readthedocs.io/en/latest/content/parsnp.html
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/parsnp
+type: unrestricted
+categories:
+    - Phylogenetics

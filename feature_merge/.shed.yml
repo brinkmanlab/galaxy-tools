@@ -1,0 +1,8 @@
+name: feature_merge
+owner: brinkmanlab
+description: Merge GFF features based on a variety of criteria
+homepage_url: https://github.com/brinkmanlab/feature_merge
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/feature_merge
+type: unrestricted
+categories:
+- Text Manipulation

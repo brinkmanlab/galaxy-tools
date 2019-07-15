@@ -1,0 +1,7 @@
+name: make_unique_id
+owner: brinkmanlab
+description: Makes all record ids unique across all input data
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/make_unique_id
+type: unrestricted
+categories:
+- Text Manipulation

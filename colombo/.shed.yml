@@ -1,0 +1,9 @@
+name: colombo
+owner: brinkmanlab
+description: Score-based prediction of genomic islands in prokaryotic genomes
+homepage_url: https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-7-142
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/colombo
+type: unrestricted
+categories:
+- Genome annotation
+- Sequence Analysis

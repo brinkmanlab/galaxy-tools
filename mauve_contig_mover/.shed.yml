@@ -1,0 +1,16 @@
+name: mauve_contig_mover
+owner: brinkmanlab
+description: Reorder a multi-contig dataset against a reference genome
+homepage_url: http://darlinglab.org/mauve/user-guide/reordering.html
+long_description: |
+    The Mauve Contig Mover (MCM) can be used to order a draft genome relative to a related reference genome. 
+    The functionality of this software module has been described in Rissman et al. 2009, a publication in Bioinformatics. 
+    The Mauve Contig Mover can ease a comparative study between draft and reference sequences by ordering draft contigs according to the reference genome. 
+    In many cases, true rearrangements in the draft relative to the reference can be identified. The quality of the reorder is limited by the distance between 
+    the sequences, as indicated by the amount of shared gene content among the two organisms. A more distant reference will usually yield fewer ordered draft genome contigs, 
+    and may also induce erroneous placements of draft contigs. In addition to ordering contigs, MCM also orient them in the most likely orientation, and, if annotated sequence 
+    features are specified in an input file (e.g. with GenBank format input for the draft), MCM will output adjusted coordinates ranges for the features.
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/mauve_contig_mover
+type: unrestricted
+categories:
+- Assembly

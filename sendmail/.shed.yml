@@ -1,0 +1,7 @@
+name: sendmail
+owner: brinkmanlab
+description: Send mail using templates and include information about datasets
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/sendmail
+type: unrestricted
+categories:
+- Data Export

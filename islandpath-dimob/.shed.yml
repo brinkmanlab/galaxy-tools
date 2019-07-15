@@ -1,0 +1,9 @@
+name: islandpath-dimob
+owner: brinkmanlab
+description: predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes
+homepage_url: https://github.com/brinkmanlab/islandpath
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/islandpath-dimob
+type: unrestricted
+categories:
+- Genome annotation
+- Sequence Analysis
