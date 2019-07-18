@@ -12,7 +12,7 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="1.73">biopython.convert</requirement>
+        <requirement type="package" version="1.0">biopython.convert</requirement>
     </requirements>
     <version_command><![CDATA[ biopython.convert -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
