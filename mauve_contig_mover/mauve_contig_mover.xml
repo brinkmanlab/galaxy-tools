@@ -65,6 +65,7 @@
             <when value="meta">
             </when>
             <when value="key">
+                <!-- this is a workaround until https://github.com/galaxyproject/galaxy/issues/7496 is resolved -->
                 <param name="key" type="text" label="Provide a dbkey to use" />
             </when>
         </conditional>
