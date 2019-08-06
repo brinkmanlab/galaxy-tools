@@ -1,5 +1,5 @@
 <tool id="mauve-contig-mover-stitch" name="Mauve Contig Mover - Stitch" version="1.0" profile="16.04">
-    <description>Concatenate multiple contigs, complimenting reversed sequences and rewriting all feature coordinates</description>
+    <description>Concatenate multiple contigs, complementing reversed sequences and rewriting all feature coordinates</description>
     <edam_topics>
         <edam_topic>topic_0196</edam_topic>
         <edam_topic>topic_0091</edam_topic>

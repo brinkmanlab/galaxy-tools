@@ -26,7 +26,7 @@ MCL                                      The Markov Cluster Algorithm, a cluster
 BioPython SeqIO Converter                Interconvert between the various sequence file formats that BioPython supports                                biopython-convert          biopython-convert/biopython-convert.xml
 BioPython Phylo Parse Newick Leaf Order  Convert a newick tree to an ordered list of its leaves                                                        extract-tree-order         extract_tree_order/extract_tree_order.xml
 Mauve Contig Mover                       Reorder a multi-contig dataset against a reference genome                                                     mauve-contig-mover         mauve_contig_mover/mauve_contig_mover.xml
-Mauve Contig Mover - Stitch              Concatenate multiple contigs, complimenting reversed sequences and rewriting all feature coordinates          mauve-contig-mover-stitch  mauve_contig_mover/mcm_stitch.xml
+Mauve Contig Mover - Stitch              Concatenate multiple contigs, complementing reversed sequences and rewriting all feature coordinates          mauve-contig-mover-stitch  mauve_contig_mover/mcm_stitch.xml
 BioPython Make Unique ID                 Makes all record ids unique across all input data                                                             make-unique-id             make_unique_id/make_unique_id.xml
 Send Email                               Send mail using templates and include information about datasets                                              sendmail                   sendmail/sendmail.xml
 Coreutils sha256sum                      Generate or check SHA256 (256-bit) checksums                                                                  sha256sum                  hash/sha256sum.xml
