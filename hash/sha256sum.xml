@@ -33,7 +33,7 @@
             <when value="">
             </when>
             <when value="--check">
-                <param input="hash" type="data" format="txt" label="Hash" />
+                <param name="hash" type="data" format="txt" label="Hash" />
             </when>
         </conditional>
         <param name="tag" type="boolean" truevalue="--tag" falsevalue="" checked="false" label="Create a BSD-style checksum" />
