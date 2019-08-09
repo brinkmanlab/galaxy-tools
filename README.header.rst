@@ -1,3 +1,6 @@
+.. image:: https://zenodo.org/badge/162751955.svg
+   :target: https://zenodo.org/badge/latestdoi/162751955
+
 ============
 galaxy-tools
 ============
