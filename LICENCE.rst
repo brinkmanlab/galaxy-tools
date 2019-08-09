@@ -13,7 +13,10 @@ The above copyright notice and this permission notice shall be included in all c
 portions of the Software.
 
 Any publication resulting in the use of the Software or its code in whole or in part shall cite:
-    Nolan Woods, Fiona Brinkman; Brinkman Lab, SFU. "Brinkman Galaxy Tools" dio: 
+    Nolan Woods, Fiona Brinkman; Brinkman Lab, SFU. "Brinkman Galaxy Tools" dio: 10.5281/zenodo.3364789 
+    
+    .. image:: https://zenodo.org/badge/162751955.svg
+       :target: https://zenodo.org/badge/latestdoi/162751955
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
