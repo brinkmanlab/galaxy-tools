@@ -29,7 +29,7 @@
             #end if
             $input $input.ext output/record $output_type
         #else
-            python $__tool_directory__/$script $split $info
+            $script $split $info
             #if $query
                 -q '$query'
             #end if
@@ -167,6 +167,7 @@
 
     ]]></help>
     <citations>
-        <citation type="doi">TODO</citation>
+        <citation type="doi">10.5281/zenodo.3364783</citation>
+        <citation type="doi">10.5281/zenodo.3364789</citation>
     </citations>
 </tool>

@@ -48,6 +48,6 @@
     This is useful when aggregating data downstream and you want to ensure that there are no ID collisions.
     ]]></help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364789</citation>
     </citations>
 </tool>

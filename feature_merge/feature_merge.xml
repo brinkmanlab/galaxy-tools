@@ -5,7 +5,7 @@
         <requirement type="package" version="3.7">python</requirement>
         <requirement type="package" version="1.0">feature_merge</requirement>
     </requirements>
-    <version_command><![CDATA[ feature_merge.py -v ]]></version_command>
+    <version_command><![CDATA[ feature_merge -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
         feature_merge $ignore_strand $exclude_components $exact_only -m $merge_strategy
         #for set in $features
@@ -58,6 +58,7 @@
         https://github.com/brinkmanlab/feature_merge
     ]]></help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364785</citation>
+        <citation type="doi">10.5281/zenodo.3364789</citation>
     </citations>
 </tool>

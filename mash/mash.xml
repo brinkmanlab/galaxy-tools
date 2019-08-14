@@ -262,7 +262,7 @@
         https://mash.readthedocs.io/en/latest/
     ]]></help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364789</citation>
         <citation type="doi">10.1186/s13059-016-0997-x</citation>
     </citations>
 </tool>

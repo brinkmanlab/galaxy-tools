@@ -78,7 +78,7 @@
     https://micans.org/mcl/man/mcl.html
     </help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364789</citation>
         <citation type="bibtex"><![CDATA[
         @article{dongen29graph,
           title={Graph Clustering by Flow Simulation. 2000},

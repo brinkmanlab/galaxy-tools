@@ -192,7 +192,7 @@
         https://harvest.readthedocs.io/en/latest/content/parsnp.html
     ]]></help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364789</citation>
         <citation type="doi">10.1101/007351</citation>
     </citations>
 </tool>

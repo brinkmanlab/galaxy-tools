@@ -141,7 +141,7 @@
         This will be gotten from the annotation, as checked in the following order: db_xref, label, gene, and locus_tag.
     ]]></help>
     <citations>
-        <!--citation type="doi">TODO</citation-->
+        <citation type="doi">10.5281/zenodo.3364789</citation>
         <citation type="doi">10.1093/bioinformatics/btp356</citation>
     </citations>
 </tool>
