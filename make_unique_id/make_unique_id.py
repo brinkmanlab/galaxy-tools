@@ -39,12 +39,16 @@ if __name__ == '__main__':
             seq.name += suffix
         else:
             count += 1
+        
+        ids[seq.id] = count
+        return seq
 
     paths = iter(sys.argv[2:])
 
     for input, output in zip(paths, paths):
         SeqIO.write(
             map(makeUnique, SeqIO.parse(input, format)),
+            output,
             format
         )
 
