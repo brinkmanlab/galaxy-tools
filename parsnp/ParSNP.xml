@@ -184,7 +184,7 @@
             </section>
             <output name="tree" checksum="sha256:66a2cc47666452fae008b546ab2bd5f9a06c7c7daca88e34e2be7a5cdd371137" ftype="newick" />
             <output name="vcf" checksum="sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ftype="vcf" />
-            <output name="ggr" checksum="sha256:9e91807a25a9549070cfde5cc60844991db5cbee55d9181c61e75220b67f35c5" ftype="xfma" />
+            <output name="ggr" checksum="sha256:9e91807a25a9549070cfde5cc60844991db5cbee55d9181c61e75220b67f35c5" ftype="txt" />
             <output name="xfma" checksum="sha256:1774759cc4c34b53e117406a9055f933620960be852ab77501eab1d34badbbfa" ftype="txt" />
         </test>
     </tests>
