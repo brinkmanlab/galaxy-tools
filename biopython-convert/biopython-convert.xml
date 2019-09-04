@@ -17,7 +17,7 @@
     <version_command><![CDATA[ biopython.convert -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
         #if $bioperl
-            #set $script = 'python $__tool_directory__/bioperl_compat.py'
+            #set $script = 'python ' + $__tool_directory__ + '/bioperl_compat.py'
         #else
             #set $script = 'biopython.convert'
         #end if
