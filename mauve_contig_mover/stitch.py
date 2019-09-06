@@ -4,14 +4,16 @@ import sys
 from Bio import SeqIO, Alphabet
 from Bio.Seq import Seq
 import csv
+import getopt
 
 usage = """
 Mauve Contig Mover - Stitch
 Stitch contigs into a single contig.
 Compliments reversed sequences and rewrites all feature coordinates.
 
-Use: stitch.py [-v] <padding length> <MauveCM contigs.tab path> <draft file path> <draft file format> [final sequence id]
+Use: stitch.py [-v] [-s 'final sequence id'] <padding length> <draft file path> <draft file format> [MauveCM contigs.tab path]
 \t-v Print version and exit
+\t-s Provide an ID for the final sequence, the first sequence ID will be used otherwise
 Valid draft file formats:
 abi, abi-trim, ace, cif-atom, cif-seqres, clustal, embl, fasta, fasta-2line, fastq-sanger, fastq, fastq-solexa, fastq-illumina,
 genbank, gb, ig, imgt, nexus, pdb-seqres, pdb-atom, phd, phylip, pir, seqxml, sff, sff-trim, stockholm, swiss, tab, qual, uniprot-xml, gff3
@@ -79,26 +81,39 @@ def stitch(pad, contigs, order):
 
 
 if __name__ == '__main__':
-    if '-v' in sys.argv:
-        print('1.0')
-        exit(0)
+    seqid = None
+    # Parse arguments
+    try:
+        opts, args = getopt.gnu_getopt(sysargs, 'vsiq:')
+        for opt, val in opts:
+            if opt == '-v':
+                print('1.0')
+                exit(0)
+            elif opt == '-s':
+                seqid = val
+    except getopt.GetoptError as err:
+        print("Argument error(" + str(err.opt) + "): " + err.msg, file=sys.stderr)
+        args = []
+    
+    # Check for minimum number of arguments
+    if len(args) < 3:
+        print(usage, file=sys.stderr)
+        exit(1)    
 
-    if len(sys.argv) < 5:
-        print("Missing arguments", file=sys.stderr)
-        print(help, file=sys.stderr)
-        exit(1)
-
-    pad_len = int(sys.argv[1])
+    pad_len = int(args[0])
     if pad_len < 0:
         print("Padding length must be >= 0", file=sys.stderr)
         print(help, file=sys.stderr)
         exit(1)
 
-    contig_path = sys.argv[2]
-    draft_path = sys.argv[3]
-    draft_format = sys.argv[4]
-
-    order = getOrder(contig_path)
+    draft_path = args[1]
+    draft_format = args[2]
+    
+    if len(args) < 4:
+        order = ()
+    else:
+        order = getOrder(args[3])
+        
     pad = Seq('N'*pad_len)
     contigs = {seq.name: seq for seq in SeqIO.parse(draft_path, draft_format)}
 
@@ -107,9 +122,10 @@ if __name__ == '__main__':
     if result:
         # Ensure there is only one 'source' feature
         # TODO
+        pass
 
-    if result and len(sys.argv) > 5:
-        result.id = sys.argv[5]
+    if result and seqid:
+        result.id = seqid
         result.description = ""
 
     SeqIO.write(result, sys.stdout, draft_format)
