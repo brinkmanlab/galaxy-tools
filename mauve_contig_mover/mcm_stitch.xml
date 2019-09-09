@@ -30,7 +30,7 @@
         <param name="draft" type="data" format="abi,abi-trim,ace,cif-atom,cif-seqres,clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,ig,imgt,nexus,pdb-seqres,pdb-atom,phd,phylip,pir,seqxml,sff,sff-trim,stockholm,swiss,tab,qual,uniprot-xml,gff3" label="Draft" />
         <param name="contigs" type="data" format="tabular" label="Contigs" optional="true" help="Contigs output from Mauve Contig Mover" />
         <param name="pad_len" type="integer" min="0" value="1000" label="Pad length" help="Specify the length of padding to put between contigs" />
-        <param name="seqid" type="text" value="" label="Stiched string ID" help="Specify an ID to use for the stitched record, the first record ID is used otherwise" />
+        <param name="seqid" type="text" value="" label="Stiched string ID" help="Specify an ID to use for the stitched record, the dataset ID is used otherwise" />
     </inputs>
     <outputs>
         <data name="output" format_source="draft" />
