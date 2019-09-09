@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import sys
+import csv
+import getopt
 
 from Bio import SeqIO, Alphabet
 from Bio.Seq import Seq
-import csv
-import getopt
 
 usage = """
 Mauve Contig Mover - Stitch
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     seqid = None
     # Parse arguments
     try:
-        opts, args = getopt.gnu_getopt(sysargs, 'vsiq:')
+        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vsiq:')
         for opt, val in opts:
             if opt == '-v':
                 print('1.0')
