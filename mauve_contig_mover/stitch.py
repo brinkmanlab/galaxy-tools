@@ -84,7 +84,7 @@ if __name__ == '__main__':
     seqid = None
     # Parse arguments
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vsiq:')
+        opts, args = getopt.gnu_getopt(sys.argv[1:], 'vs:iq:')
         for opt, val in opts:
             if opt == '-v':
                 print('1.0')
