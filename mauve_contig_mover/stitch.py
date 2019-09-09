@@ -128,4 +128,5 @@ if __name__ == '__main__':
         result.id = seqid
         result.description = ""
 
+    result.seq.alphabet = Alphabet.generic_dna # TODO Investigate why this is required for some datasets
     SeqIO.write(result, sys.stdout, draft_format)
