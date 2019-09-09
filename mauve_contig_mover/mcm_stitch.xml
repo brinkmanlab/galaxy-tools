@@ -17,8 +17,10 @@
         python $__tool_directory__/stitch.py
         #if $seqid
             -s '$seqid'
+        #else
+            -s '$draft.element_identifier.replace(" ", "_")'
         #end if
-        $pad_len $draft $draft.ext $draft.element_identifier.replace(' ', '_') $contigs > $output
+        $pad_len $draft $draft.ext $contigs > $output
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="abi,abi-trim,ace,cif-atom,cif-seqres,clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,ig,imgt,nexus,pdb-seqres,pdb-atom,phd,phylip,pir,seqxml,sff,sff-trim,stockholm,swiss,tab,qual,uniprot-xml,gff3" label="Draft" />
