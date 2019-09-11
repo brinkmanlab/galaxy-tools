@@ -9,7 +9,7 @@
         <edam_operation>operation_0491</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="2.4.0.r4736">mauve</requirement>
+        <requirement type="package" version="2.4.0.snapshot_2015_02_13">mauve</requirement>
     </requirements>
     <version_command>mauveAligner --version</version_command>
     <command detect_errors="aggressive"><![CDATA[
