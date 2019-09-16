@@ -14,7 +14,7 @@
         #for $input in $inputs
             $input
         #end for
-        >> $output
+        > $output
     ]]></command>
     <inputs>
         <param name="inputs" type="data" format="gff,gff3,gtf" multiple="true" label="Input" />
