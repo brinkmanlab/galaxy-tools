@@ -7,7 +7,7 @@
     </requirements>
     <version_command><![CDATA[ feature_merge -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
-        feature_merge $ignore_strand $exclude_components $exact_only -m $merge_strategy
+        feature_merge $ignore_strand $exclude_components $exact_only $no_children -m $merge_strategy
         #for set in $features
             -f "${str($set.csv).replace(" ", "")}"
         #end for
@@ -21,6 +21,7 @@
         <param name="ignore_strand" type="boolean" checked="false" truevalue="-i" falsevalue="" label="Ignore feature strand when merging" argument="-i"/>
         <param name="exclude_components" type="boolean" checked="false" truevalue="" falsevalue="-e" label="Include original feature records in output" argument="-e"/>
         <param name="exact_only" type="boolean" checked="false" truevalue="-x" falsevalue="" label="Only merge features with identical coordinates" argument="-x"/>
+        <param name="no_children" type="boolean" checked="true" truevalue="" falsevalue="-c" label="Do not merge features with a Parent attribute" argument="-c"/>
         <param name="merge_strategy" type="select" label="ID conflict resolution strategy" argument="-m">
             <option value="merge">merge: attributes of all features with the same primary key will be merged</option>
             <option value="append" selected="true">append: entry will have a unique, autoincremented primary key assigned to it</option>
