@@ -9,7 +9,7 @@
     <command detect_errors="aggressive"><![CDATA[
         feature_merge $ignore_strand $exclude_components $exact_only $no_children -m $merge_strategy
         #for set in $features
-            -f "${str($set.csv).replace(" ", "")}"
+            -f '${str($set.csv).replace(" ", "")}'
         #end for
         #for $input in $inputs
             $input
