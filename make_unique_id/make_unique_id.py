@@ -20,9 +20,9 @@ if __name__ == '__main__':
         print('1.0')
         exit(0)
 
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         print("Missing arguments", file=sys.stderr)
-        print(help, file=sys.stderr)
+        print(usage, file=sys.stderr)
         exit(1)
 
     format = sys.argv[1]
