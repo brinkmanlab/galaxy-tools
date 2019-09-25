@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<datatypes>
+    <registration>
+        <!-- TODO change to a more appropriate format -->
+        <datatype extension="xfma" subclass="True" type="type="galaxy.datatypes.binary:Binary" />
+        <datatype extension="ggr" subclass="True" type="type="galaxy.datatypes.binary:Binary" />
+    </registration>
+</datatypes>
