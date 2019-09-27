@@ -1,5 +1,14 @@
 <tool id="awkscript" name="AWK Script" version="1.0">
     <description>Transform, modify, or generate data</description>
+    <edam_topics>
+        <edam_topic>topic_0769</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3429</edam_operation>
+        <edam_operation>operation_3778</edam_operation>
+        <edam_operation>operation_3434</edam_operation>
+        <edam_operation>operation_2409</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="5.0.1">gawk</requirement>
     </requirements>
