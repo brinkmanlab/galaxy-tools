@@ -1,0 +1,79 @@
+<tool id="awkscript" name="AWK Script" version="1.0">
+    <description>Transform, modify, or generate data</description>
+    <requirements>
+        <requirement type="package" version="5.0.1">gawk</requirement>
+    </requirements>
+    <version_command>awk --version | head -n 1</version_command>
+    <command><![CDATA[
+        #set $tool_input = 0
+        env -i
+        #for env in $envs
+            '$env.name'='$env.val'
+        #end for
+        awk
+            --sandbox
+            -f '$awk_script'
+            #for group in $infiles
+                tool_input=$tool_input
+                #set $tool_input+=1
+                #if $group.input_type_selection.multiple
+                    #set $inputs = $group.input_type_selection.infile
+                    ## Allow capturing the collection id in the program
+                    ## tool_input_id='$inputs.element_identifier'  FIXME collections dont expose their label to tools.
+                #else
+                    #set $inputs = [$group.input_type_selection.infile]
+                #end if
+                #for file in $inputs
+                    tool_input_id='$file.element_identifier'
+                    '$file'
+                #end for
+            #end for
+        > '$outfile'
+    ]]></command>
+    <configfiles>
+        <configfile name="awk_script">$code</configfile>
+    </configfiles>
+    <inputs>
+        <repeat name="infiles" title="Inputs">
+            <conditional name="input_type_selection">
+                <param name="multiple" type="boolean" checked="false" label="Accept multiple" />
+                <when value="false">
+                    <param name="infile" format="txt" type="data" label="Single file to process" help="A separate execution will occur for each provided file"/>
+                </when>
+                <when value="true">
+                    <param name="infile" format="txt" type="data" multiple="true" label="File or collection to process" />
+                </when>
+            </conditional>
+        </repeat>
+        <param name="code" type="text" area="true" size="5x35" label="AWK Program" help="">
+            <sanitizer sanitize="false" />
+        </param>
+        <repeat name="envs" title="Environment Variables">
+            <param name="name" type="text" label="Name">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;" />
+                    </valid>
+                </sanitizer>
+            </param>
+            <param name="val" type="text" label="Value">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;" />
+                    </valid>
+                </sanitizer>
+            </param>
+        </repeat>
+    </inputs>
+    <outputs>
+        <data name="outfile" format="txt" />
+    </outputs>
+    <tests>
+    <!-- TODO -->
+    </tests>
+    <help><![CDATA[
+    TODO 
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
