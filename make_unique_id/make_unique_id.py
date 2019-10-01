@@ -29,19 +29,16 @@ if __name__ == '__main__':
     ids = defaultdict(int)
     
     def makeUnique(seq):
-        global ids
         count = ids[seq.id]
+        ids[seq.id] += 1
         if count:
-            count += 1
             suffix = "_" + str(count)
             print(f"{seq.id}\t{seq.id}{suffix}")
             seq.id += suffix
             seq.name += suffix
-        else:
-            count += 1
-        
-        ids[seq.id] = count
+
         return seq
+
 
     paths = iter(sys.argv[2:])
 
