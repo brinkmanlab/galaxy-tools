@@ -21,6 +21,8 @@
         #end for
         awk
             --sandbox
+            -v FS='	'
+            -v OFS='	'
             -f '$awk_script'
             #for group in $infiles
                 tool_input=$tool_input
