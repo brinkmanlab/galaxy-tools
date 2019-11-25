@@ -1,0 +1,35 @@
+name: awkscript
+owner: brinkmanlab
+description: GNU AWK; Transform, modify, or generate data
+homepage_url: https://www.gnu.org/software/gawk/manual/gawk.html
+long_description: |
+    GNU AWK Script
+
+    Several kinds of tasks occur repeatedly when working with text files.
+    You might want to extract certain lines and discard the rest. Or you may need to make changes wherever
+    certain patterns appear, but leave the rest of the file alone. Such jobs are often easy with awk.
+    The awk utility interprets a special-purpose programming language that makes it easy to handle simple data-reformatting jobs.
+
+    Each input can be set to single, causing any input collections to map over the tool running, a new instance for each.
+    Setting the input to multiple will pass the entire collection to a single instance of the tool, allowing aggregation of the input data.
+    A mixture of single and multiple inputs is allowed, the single inputs being mapped over and the multiple inputs passed to each instance.
+    This tool is also able to operate with no inputs, generating data for whatever purpose.
+
+    See [GNU AWK Users Guide](https://www.gnu.org/software/gawk/manual/gawk.html) for more information.
+
+    A variable 'tool_input' will be set to the index of the inputs, in order.
+    You can combine this with ARGIND to determine which file you are currently operating on and its position in any possible input collection.
+    A variable 'tool_input_id' is also set specifying the current inputs dataset name or collection id.
+    Beware that ARGIND will increment 3 between inputs as one is consumed setting tool_input and another setting tool_input_id.
+
+    The environment inputs allow you to generalise your scripts, specifying constants with the tool invocation, or allow attaching simple workflow inputs.
+    Environment variables are accessible via [ENVIRON](https://www.gnu.org/software/gawk/manual/gawk.html#index-environment-variables_002c-in-ENVIRON-array).
+
+    Due to a limitation in Galaxy, all output is assigned the 'txt' type. This can be changed in the tool settings in a workflow or modifying the dataset after invocation.
+
+    gawk is run with the [sandbox](https://www.gnu.org/software/gawk/manual/gawk.html#index-sandbox-mode) argument, disabling some functionality.
+
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/awkscript
+type: unrestricted
+categories:
+    - Text Manipulation
