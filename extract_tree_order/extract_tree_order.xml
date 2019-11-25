@@ -23,7 +23,7 @@
     </outputs>
     <tests>
         <test expect_num_outputs="1">
-            <param name="input" file="test-data/test.newick" ftype="newick" />
+            <param name="input" value="test-data/test.newick" ftype="newick" />
             <output name="output" file="test-data/output.txt" ftype="txt" />
         </test>
     </tests>

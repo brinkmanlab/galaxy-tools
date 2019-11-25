@@ -23,7 +23,7 @@
         <param name="inputs" type="data_collection" format="clustal,embl,fasta,fasta-2line,fastq-sanger,fastq,fastq-solexa,fastq-illumina,genbank,gb,imgt,nexus,phd,phylip,pir,seqxml,sff,stockholm,tab,qual" label="Input" />
     </inputs>
     <outputs>
-        <collection name="outputs" type="list" structured_like="inputs" inherit_format="true" inherit_metadata="true" />
+        <collection name="outputs" type="list" structured_like="inputs" inherit_format="true" />
     </outputs>
     <tests>
         <test expect_num_outputs="1">

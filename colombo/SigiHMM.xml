@@ -47,16 +47,16 @@
         <data format="gff" name="gff" label="${tool.name} on ${on_string} features" />
     </outputs>
     <tests>
-        <test expected_outputs="2">
+        <test expect_num_outputs="2">
             <!-- SigiHMM uses biojava which currently has a bug: https://github.com/biojava/biojava/issues/843 -->
-            <param name="input" file="test-data/test.embl" ftype="embl" />
+            <param name="input" value="test-data/test.embl" ftype="embl" />
             <param name="join" value="3" />
             <output name="output" checksum="sha256:f87830fad329a0c47f734cffa069593be0423a064878bd894df8b8dc4b451c3d" ftype="embl" />
             <output name="gff" checksum="sha256:6af8fb320804803f54870c3e7b024d5e1305cee7e464e89355fba1f00f94ce44" ftype="gff" />
         </test>
         <test expect_failure="true">
             <!-- SigiHMM 3.8 crashes for an unknown reason on some datasets. v4.0 does not seem to have this issue. -->
-            <param name="input" file="test-data/crash.embl" ftype="embl" />
+            <param name="input" value="test-data/crash.embl" ftype="embl" />
             <param name="join" value="3" />
         </test>
     </tests>

@@ -153,6 +153,7 @@
         Interconvert between different file formats that BioPython SeqIO supports. Support for GFF3 has also been included.
 
         Included features are:
+
         - Split: Output a collection of datasets, one for each record in the input.
                 This is useful when a tool only accepts single records.
                 The resulting output collection can then be mapped over the receiving tool.

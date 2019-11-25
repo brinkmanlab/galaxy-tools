@@ -42,7 +42,7 @@
         <data name="output" format="txt" />
     </outputs>
     <tests>
-        <test expected_num_outputs="1">
+        <test expect_num_outputs="1">
             <param name="input" value="test-data/test.txt" ftype="txt" />
             <output name="output" ftype="txt" >
                 <assert_contents>

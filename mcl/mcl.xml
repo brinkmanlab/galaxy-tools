@@ -66,14 +66,16 @@
             </change_format>
         </data>
     </outputs>
-    <test expect_num_outputs="1">
-        <conditional name="input_type_select">
-            <param name="input_type" value="--abc" />
-            <param name="input" value="test-data/mash-dist.tabular" ftype="tabular" />
-        </conditional>
-        <param name="transform" value="mul(-1),add(1),gq(0.96)" />
-        <output name="output" file="test-data/mash-dist-cluster.tabular" ftype="tabular" />
-    </test>
+	<tests>
+		<test expect_num_outputs="1">
+		    <conditional name="input_type_select">
+		        <param name="input_type" value="--abc" />
+		        <param name="input" value="test-data/mash-dist.tabular" ftype="tabular" />
+		    </conditional>
+		    <param name="transform" value="mul(-1),add(1),gq(0.96)" />
+		    <output name="output" file="test-data/mash-dist-cluster.tabular" ftype="tabular" />
+		</test>
+	</tests>
     <help>
     https://micans.org/mcl/man/mcl.html
     </help>

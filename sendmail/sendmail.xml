@@ -23,10 +23,10 @@
         ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="data" type="data" multiple="true" label="Data" />
+        <param name="data" type="data" format="data" multiple="true" label="Data" />
         <param name="to" type="text" label="To" />
         <param name="subject" type="text" value="Job complete" label="Subject" />
-        <repeat name="extras">
+        <repeat name="extras" title="Extras">
             <param name="extra" type="text" label="Extra data to make available in the template body" />
         </repeat>
         <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/sendmail/" />

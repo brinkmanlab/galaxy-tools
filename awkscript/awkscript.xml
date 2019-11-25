@@ -80,7 +80,18 @@
         <data name="outfile" format="txt" />
     </outputs>
     <tests>
-    <!-- TODO -->
+        <test>
+            <repeat name="envs">
+                <param name="name" value="message" />
+                <param name="val" value="Success!" />
+            </repeat>
+            <param name="code" value="BEGIN { print ENVIRON[&quot;message&quot;]; }" />
+	        <output name="outfile">
+	            <assert_contents>
+	                <has_text text="Success!" />
+	            </assert_contents>
+	        </output>
+        </test>
     </tests>
     <help><![CDATA[
     GNU AWK Script

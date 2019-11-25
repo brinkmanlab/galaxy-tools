@@ -40,7 +40,7 @@
         <data name="output" format="gff" />
     </outputs>
     <tests>
-        <test expected_outputs="1">
+        <test expect_num_outputs="1">
             <param name="inputs" >
                 <collection type="list">
                     <element name="test1" value="feature_merge/test-data/615598_genome.gbk_2.gff3" ftype="gff3" />
