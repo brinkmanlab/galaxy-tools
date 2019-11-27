@@ -6,6 +6,6 @@ mv "`ls -1 final/*.fas | tail -n1`" final.reordered
 
 FEATURES="`ls -1 final/*_features.tab | tail -n1`"
 if [[ -w ${FEATURES} ]]; then
-mv ${FEATURES} final.features.tab
+mv "${FEATURES}" final.features.tab
 fi
 
