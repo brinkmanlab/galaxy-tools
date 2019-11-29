@@ -12,7 +12,7 @@
         <requirement type="package" version="2.4.0.snapshot_2015_02_13">mauve</requirement>
     </requirements>
     <version_command>mauveAligner --version</version_command>
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors="exit_code"><![CDATA[
         #if $ref_select.ref_source == "db"
             #set global $index = $ref_select.ref_db
         #else if $ref_select.ref_source == "meta"
