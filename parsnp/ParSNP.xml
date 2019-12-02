@@ -12,7 +12,7 @@
     <requirements>
         <requirement type="package" version="1.2">parsnp</requirement>
     </requirements>
-    <version_command>parsnp -V</version_command>
+    <version_command><![CDATA[parsnp -V |& tail -n1]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
