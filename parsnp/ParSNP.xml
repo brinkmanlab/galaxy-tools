@@ -16,19 +16,19 @@
     <command detect_errors="aggressive"><![CDATA[
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
-        && ln -sf $genome 
+        && ln -sf '$genome'
         #if $adv.use_ids
-            \$GENOME_DIR/$genome.element_identifier
+            \$GENOME_DIR/'$genome.element_identifier'
         #else
-            \$GENOME_DIR/\$(basename $genome)
+            \$GENOME_DIR/\$(basename '$genome')
         #end if
     #end for
-    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d \$GENOME_DIR
+    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d "\$GENOME_DIR"
     #if $ref_or_gbk.ref_type == "fasta"
         #if $ref_or_gbk.ref_genome.random_ref
             -r '!'
         #else
-            -r $ref_or_gbk.ref_genome.reference
+            -r '$ref_or_gbk.ref_genome.reference'
         #end if
     #else
         -g '
@@ -41,29 +41,29 @@
     #end if
     $adv.MUMi_or_curated.curated $adv.extend_lcb $adv.output_unaligned
     #if $adv.query_genome
-        -q $adv.query_genome
+        -q '$adv.query_genome'
     #end if
     #unless $adv.MUMi_or_curated.curated
         $adv.MUMi_or_curated.MUMi.MUMi_only
         #unless $adv.MUMi_or_curated.MUMi.max_mumi_distribution.max_distribution_default
-            -U $adv.MUMi_or_curated.MUMi.max_mumi_distribution.max_distribution
+            -U '$adv.MUMi_or_curated.MUMi.max_mumi_distribution.max_distribution'
         #end unless
         #unless $adv.MUMi_or_curated.MUMi.max_mumi_distance.max_distance_default
-            -i $adv.MUMi_or_curated.MUMi.max_mumi_distance.max_distance
+            -i '$adv.MUMi_or_curated.MUMi.max_mumi_distance.max_distance'
         #end unless
     #end unless
     #unless $adv.min_anchor_len.anchor_default
-        -a $adv.min_anchor_len.anchor
+        -a '$adv.min_anchor_len.anchor'
     #end unless
-    -C $adv.d_value
-    -z $adv.lcb_size
+    -C '$adv.d_value'
+    -z '$adv.lcb_size'
     #if $adv.max_diag_diff.diag_diff_unit
-        -D $adv.max_diag_diff.diag_diff_bp$adv.max_diag_diff.diag_diff_unit
+        -D '$adv.max_diag_diff.diag_diff_bp$adv.max_diag_diff.diag_diff_unit'
     #else
-        -D $adv.max_diag_diff.diag_diff
+        -D '$adv.max_diag_diff.diag_diff'
     #end if
     #unless $adv.aligner == "muscle"
-        -n $adv.aligner
+        -n '$adv.aligner'
     #end unless
 
     ]]></command>
