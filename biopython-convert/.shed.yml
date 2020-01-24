@@ -1,4 +1,4 @@
-name: biopython-convert
+name: biopython_convert
 owner: brinkmanlab
 description: Interconvert between the various sequence file formats that BioPython supports
 homepage_url: https://biopython.org/wiki/SeqIO
