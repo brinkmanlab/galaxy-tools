@@ -3,7 +3,7 @@
   <section id="islandcompare" name="IslandCompare">
 	<tool file="colombo/SigiHMM.xml" />
 	<tool file="feature_merge/feature_merge.xml" />
-	<tool file="islandpath-dimob/IslandPath-DIMOB.xml" />
+	<tool file="islandpath/IslandPath.xml" />
 	<tool file="mash/mash.xml" />
 	<tool file="parsnp/ParSNP.xml" />
 	<tool file="mcl/mcl.xml" />

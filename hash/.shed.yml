@@ -4,5 +4,3 @@ description: Generate or check checksums
 homepage_url: https://www.gnu.org/software/coreutils/manual/html_node/sha2-utilities.html#sha2-utilities
 remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/hash
 type: unrestricted
-categories:
-- Mathematics

@@ -1,4 +1,4 @@
-<tool id="islandpath-dimob" name="IslandPath-DIMOB" version="1.0.4" profile="16.04">
+<tool id="islandpath" name="IslandPath" version="1.0.4" profile="16.04">
     <description>predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes</description>
     <edam_topics>
         <edam_topic>topic_0194</edam_topic>
