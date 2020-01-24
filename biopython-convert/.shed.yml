@@ -6,7 +6,3 @@ remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/b
 type: unrestricted
 categories:
 - Convert Formats
-include:
-- strip_components: 1
-  source:
-  - BioPython-Convert/test-data/has_plasmids.gbff
