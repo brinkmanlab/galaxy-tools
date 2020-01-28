@@ -1,0 +1,7 @@
+name: cheetah
+owner: brinkmanlab
+description: Generate reports using Galaxies built in Cheetah template engine and include information about datasets
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/cheetah
+type: unrestricted
+categories:
+- Text Manipulation

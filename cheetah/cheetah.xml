@@ -1,0 +1,47 @@
+<tool id="cheetah" name="Cheetah" version="1.0" profile="16.04">
+    <description>Generate reports using Galaxies built in Cheetah template engine and include information about datasets</description>
+    <command><![CDATA[
+        mv $body $outfile
+    ]]></command>
+    <configfiles>
+        <configfile name="body"><![CDATA[
+            #set $template_path = '/'.join([$__tool_data_path__, "cheetah", $template])
+            #import os
+            #if '..' not in $template and $os.path.isfile($template_path)
+                #include $template_path
+            #else
+                <html>
+                    <body>
+                        $data.name is now complete.
+                        #if $hasattr(__app__.config, "public_url")
+                        You can view it <a href="${__app__.config.public_url}/datasets/${data.dataset.id}/display">here</a>.
+                        #end if
+                    </body>
+                </html>
+            #end if
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="data" type="data" format="data" multiple="true" label="Data" />
+        <repeat name="extras" title="Extras">
+            <param name="extra" type="text" label="Extra data to make available in the template body" />
+        </repeat>
+        <param name="template" type="text" value="template.html" label="Template" help="Relative path of template to use in tool-data/cheetah/" />
+    </inputs>
+    <outputs>
+        <data name="outfile" format="txt" />
+    </outputs>
+    <help><![CDATA[
+        Generate reports using Galaxies built in Cheetah template engine and include information about datasets
+        
+        Templates are parsed using Galaxies Cheeta Template Engine. The variables available are everything that is available to a tool including:
+        - $data     Dataset instance passed to the tool input
+        - $extras[].extra   List of extras specified in the tool parameters
+        - $template Relative path to the current template
+        
+        See this tools xml for an example template.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3364789</citation>
+    </citations>
+</tool>
