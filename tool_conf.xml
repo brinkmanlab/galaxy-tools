@@ -14,6 +14,7 @@
 	<tool file="make_unique_id/make_unique_id.xml" />
 	<tool file="sendmail/sendmail.xml" />
 	<tool file="hash/sha256sum.xml" />
+	<tool file="base64/base64.xml" />
 	<tool file="awkscript/awkscript.xml" />
 	<!-- tool file="inspect/inspect.xml" / -->
   </section>

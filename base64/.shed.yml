@@ -1,0 +1,6 @@
+name: base64
+owner: brinkmanlab
+description: Base64 encode/decode data
+homepage_url: https://www.gnu.org/software/coreutils/manual/html_node/base64-invocation.html#base64-invocation
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/base64
+type: unrestricted

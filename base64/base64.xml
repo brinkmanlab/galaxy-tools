@@ -1,0 +1,76 @@
+<tool id="base64" name="Coreutils base64 encode/decode" version="1.0" profile="16.04">
+    <description>Base64 encode/decode data</description>
+    <edam_topics>
+        <edam_topic>topic_3315</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3434</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package">coreutils</requirement>
+    </requirements>
+    <version_command><![CDATA[ base64 --version | head -n1 | sed -r 's/.* ([^ ]+)$/\1/' ]]></version_command>
+    <command detect_errors="aggressive"><![CDATA[
+        base64 $mode_select.mode
+        #if $mode_select.mode == ''
+            --wrap=$mode_select.wrap
+        #else
+            $mode_select.ignore
+        #end if
+        '$input'
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="data" label="Input" />
+        <conditional name="mode_select">
+            <param name="mode" type="select" label="Mode" help="Change the mode of operation, from the default of encoding data, to decoding data. Input is expected to be base64 encoded data, and the output will be the original data.">
+                <option value="" selected="true">Encode</option>
+                <option value="--decode">Decode</option>
+            </param>
+            <when value="">
+                <param name="wrap" type="integer" minvalue="0" value="76" label="Line wrap" help="During encoding, wrap lines after cols characters. Use the value 0 to disable line wrapping altogether." />
+            </when>
+            <when value="--decode">
+                <param name="ignore" type="boolean" truevalue="--ignore-garbage" falsevalue="" checked="true" label="Ignore unrecognized bytes" help="When decoding, newlines are always accepted. During decoding, ignore unrecognized bytes, to permit distorted data to be decoded."/>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="output" format="txt">
+            <change_format>
+                <when input="mode_select|mode" value="" format="txt" />
+                <when input="mode_select|mode" value="--decode" format="data" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input" value="test-data/test.txt" ftype="data" />
+            <output name="output" ftype="txt" >
+                <assert_contents>
+                    <has_text text="c29tZSB0ZXN0IGRhdGEK" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input" value="test-data/test.b64" ftype="txt" />
+            <conditional name="mode_select">
+	        <param name="mode" value="--decode" />
+	    </conditional>
+            <output name="output" ftype="data" >
+                <assert_contents>
+                    <has_text text="some test data" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+        GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
+
+	base64 transforms data into (or from) base64 encoded form. The base64 encoded form uses printable ASCII characters to represent binary data.
+
+	The base64 encoding expands data to roughly 133% of the original. The format conforms to RFC 4648.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3364789</citation>
+    </citations>
+</tool>

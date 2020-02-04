@@ -28,7 +28,7 @@ Name                                     Desc                                   
 =======================================  =========================================================================================================================  =========================  ====
 SigiHMM                                  Score-based prediction of genomic islands in prokaryotic genomes using hidden Markov models                                sigihmm                    colombo/SigiHMM.xml
 GFF/GTF Feature Merge                    Merge GFF features based on a variety of criteria                                                                          feature-merge              feature_merge/feature_merge.xml
-IslandPath-DIMOB                         predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes  islandpath-dimob           islandpath-dimob/IslandPath-DIMOB.xml
+IslandPath                               predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes  islandpath                 islandpath/IslandPath.xml
 MASH                                     Fast genome and metagenome distance estimation using MinHash                                                               mash                       mash/mash.xml
 ParSNP                                   Efficient microbial core genome alignment and SNP detection                                                                parsnp                     parsnp/ParSNP.xml
 MCL                                      The Markov Cluster Algorithm, a cluster algorithm for graphs                                                               mcl                        mcl/mcl.xml
@@ -39,6 +39,7 @@ Mauve Contig Mover - Stitch              Concatenate multiple contigs, complemen
 BioPython Make Unique ID                 Makes all record ids unique across all input data                                                                          make-unique-id             make_unique_id/make_unique_id.xml
 Send Email                               Send mail using templates and include information about datasets                                                           sendmail                   sendmail/sendmail.xml
 Coreutils sha256sum                      Generate or check SHA256 (256-bit) checksums                                                                               sha256sum                  hash/sha256sum.xml
+Coreutils base64 encode/decode           Base64 encode/decode data                                                                                                  base64                     base64/base64.xml
 AWK Script                               Transform, modify, or generate data                                                                                        awkscript                  awkscript/awkscript.xml
 Inspect                                  Dump Cheetah tool template environment. Useful for writing advanced tools. DO NOT INSTALL ON A PUBLIC SERVER               inspect                    inspect/inspect.xml
 =======================================  =========================================================================================================================  =========================  ====
