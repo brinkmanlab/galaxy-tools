@@ -14,6 +14,8 @@
     </requirements>
     <version_command><![CDATA[parsnp -V |& tail -n1]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
+    export MEMORY_LIMIT=`expr ${GALAXY_MEMORY_MB:-0} \* 1000`;
+    [[ $MEMORY_LIMIT -eq 0 ]] && export MEMORY_LIMIT=;
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
         && ln -sf '$genome'
@@ -23,7 +25,7 @@
             \$GENOME_DIR/\$(basename '$genome')
         #end if
     #end for
-    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${GALAXY_MEMORY_MB:-15000000} -d "\$GENOME_DIR"
+    && parsnp -v -o `pwd` -p \${GALAXY_SLOTS:-1} -P \${MEMORY_LIMIT:-15000000} -d "\$GENOME_DIR"
     #if $ref_or_gbk.ref_type == "fasta"
         #if $ref_or_gbk.ref_genome.random_ref
             -r '!'
