@@ -14,8 +14,8 @@
     </requirements>
     <version_command><![CDATA[parsnp -V |& tail -n1]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
-    export MEMORY_LIMIT=`expr ${GALAXY_MEMORY_MB:-0} \* 1000`;
-    [[ $MEMORY_LIMIT -eq 0 ]] && export MEMORY_LIMIT=;
+    export MEMORY_LIMIT=`expr \${GALAXY_MEMORY_MB:-0} \\* 1000`;
+    [[ \$MEMORY_LIMIT -eq 0 ]] && export MEMORY_LIMIT=;
     export GENOME_DIR=\$(mktemp -d -p `pwd`)
     #for $genome in $genomes
         && ln -sf '$genome'
