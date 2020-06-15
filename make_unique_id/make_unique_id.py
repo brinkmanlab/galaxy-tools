@@ -29,14 +29,14 @@ if __name__ == '__main__':
     ids = defaultdict(int)
     
     def makeUnique(seq):
-        newid = seq.id[:28] # Genbank has a max length for the id and sequence length number, truncate the sequence id if too long
+        newid = seq.id[:16]  # Genbank has a max length for the id and sequence length number, truncate the sequence id if too long
         count = ids[newid]
         ids[newid] += 1
         if count:
             suffix = "_" + str(count)
             seqlenlen = len(str(len(seq)))
-            if len(newid) + len(suffix) + 1 + seqlenlen > 28:
-               newid = newid[:27 - seqlenlen - len(suffix)]
+            if len(newid) + len(suffix) + 1 + seqlenlen > 16:
+               newid = newid[:16 - seqlenlen - len(suffix)]
 
             newid += suffix
             seq.name += suffix
@@ -47,7 +47,6 @@ if __name__ == '__main__':
         seq.id = newid
         return seq
 
-
     paths = iter(sys.argv[2:])
 
     for input, output in zip(paths, paths):
@@ -56,5 +55,4 @@ if __name__ == '__main__':
             output,
             format
         )
-
 
