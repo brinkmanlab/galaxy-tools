@@ -10,7 +10,7 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="1.73">biopython</requirement>
+        <requirement type="package" version="1.76">biopython</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         python -c \$'from Bio import Phylo\nfor clade in Phylo.read("$input", "newick").get_terminals(order="preorder"): print(clade.name)' > '$output'
