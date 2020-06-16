@@ -29,22 +29,15 @@ if __name__ == '__main__':
     ids = defaultdict(int)
     
     def makeUnique(seq):
-        seqlenlen = len(str(len(seq)))
-        newid = seq.id[:26 - seqlenlen]  # Genbank has a max length for the id and sequence length number, truncate the sequence id if too long
-        count = ids[newid]
-        ids[newid] += 1
+        count = ids[seq.id]
+        ids[seq.id] += 1
         if count:
+            oldid = seq.id
             suffix = "_" + str(count)
-            if len(newid) + len(suffix) + 1 + seqlenlen > 26:
-               newid = newid[:25 - seqlenlen - len(suffix)]
-
-            newid += suffix
+            seq.id += suffix
             seq.name += suffix
+            print(f"{oldid}\t{seq.id}")
 
-        if seq.id != newid:
-            print(f"{seq.id}\t{newid}")
-
-        seq.id = newid
         return seq
 
 

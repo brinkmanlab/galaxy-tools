@@ -10,7 +10,7 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="1.73">biopython</requirement>
+        <requirement type="package" version="1.76">biopython</requirement>
     </requirements>
     <version_command><![CDATA[ python $__tool_directory__/make_unique_id.py -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
