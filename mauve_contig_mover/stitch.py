@@ -128,10 +128,5 @@ if __name__ == '__main__':
         result.id = seqid
         result.description = ""
 
-    seqlenlen = len(str(len(result)))
-    if len(result.id) + 1 + seqlenlen > 28:
-        # Genbank has a max length for the id and sequence length number, truncate the sequence id ov too long
-        result.id = result.id[:27 - seqlenlen]
-
     result.seq.alphabet = Alphabet.generic_dna # TODO Investigate why this is required for some datasets
     SeqIO.write(result, sys.stdout, draft_format)
