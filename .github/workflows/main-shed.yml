@@ -24,8 +24,7 @@ jobs:
           ${{ runner.os }}-pip-
           ${{ runner.os }}-
     - name: Install dependencies
-      # Currently install planemo from repo as pip package is borked
-      run: python -m pip install --upgrade pip setuptools wheel 'galaxy-tool-util==19.9.1' 'git+git://github.com/galaxyproject/planemo.git@4e52478d93cf2f4bf37c87ec1ce2de7290c8e795'
+      run: python -m pip install --upgrade pip setuptools wheel planemo
     - name: planemo shed_update
       env: 
         SHED_KEY: ${{ secrets.SHED_KEY }}
