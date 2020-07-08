@@ -15,11 +15,11 @@
     <version_command>awk --version | head -n 1</version_command>
     <command><![CDATA[
         #set $tool_input = 0
-        env -i PATH=$PATH
+        env -i
         #for env in $envs
             '$env.name'='$env.val'
         #end for
-        awk
+        $(which awk)
             --sandbox
             -v FS='	'
             -v OFS='	'
