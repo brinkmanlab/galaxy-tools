@@ -15,7 +15,7 @@
     <version_command>awk --version | head -n 1</version_command>
     <command><![CDATA[
         #set $tool_input = 0
-        env -i
+        env -i PATH=$PATH
         #for env in $envs
             '$env.name'='$env.val'
         #end for
