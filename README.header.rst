@@ -13,6 +13,10 @@ See CONTRIBUTING.rst_ for information on contributing to this repo.
 
 .. _CONTRIBUTING.rst: CONTRIBUTING.rst
 
+All tools are automatically containerised by the `planemo-monitor project`_.
+
+.. _`planemo-monitor project`: https://github.com/galaxyproject/planemo-monitor/pull/31
+
 Manual installation
 -------------------
 - Clone this repo into the Galaxy server
