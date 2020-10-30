@@ -1,0 +1,20 @@
+name: microbedb
+owner: brinkmanlab
+description: a locally maintainable database of microbial genomic sequences
+homepage_url: https://doi.org/10.1093/bioinformatics/bts273
+long_description: |
+    Analysis of microbial genomes often requires the general organization and comparison of tens to thousands of genomes
+    both from public repositories and unpublished sources. MicrobeDB provides a foundation for such projects by the
+    automation of downloading published, completed bacterial and archaeal genomes from key sources, parsing annotations
+    of all genomes (both public and private) into a local database, and allowing interaction with the database through
+    an easy to use programming interface. MicrobeDB creates a simple to use, easy to maintain, centralized local
+    resource for various large-scale comparative genomic analyses and a back-end for future microbial application design.
+
+    MicrobeDB must first be manually loaded onto the Galaxy filesystem. The easiest way of doing that is mounting it
+    using the [CVMFS client](https://cvmfs.readthedocs.io/en/stable/cpt-quickstart.html).
+    The MicrobeDB CVMFS repository is located at microbedb.brinkmanlab.ca.
+remote_repository_url: https://github.com/brinkmanlab/galaxy-tools/tree/master/microbedb
+type: unrestricted
+categories:
+    - Data Managers
+    - Data Source

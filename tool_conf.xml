@@ -16,6 +16,7 @@
 	<tool file="hash/sha256sum.xml" />
 	<tool file="base64/base64.xml" />
 	<tool file="awkscript/awkscript.xml" />
+	<tool file="microbedb/all_fasta.xml" />
 	<!-- tool file="inspect/inspect.xml" / -->
   </section>
 </toolbox>
