@@ -19,7 +19,7 @@
         #for env in $envs
             '$env.name'='$env.val'
         #end for
-        awk
+        \$(which awk)
             --sandbox
             -v FS='	'
             -v OFS='	'

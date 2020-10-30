@@ -1,9 +1,7 @@
-<tool id="feature-merge" name="GFF/GTF Feature Merge" version="1.0" profile="16.04">
+<tool id="feature-merge" name="GFF/GTF Feature Merge" version="1.2" profile="16.04">
     <description>Merge GFF features based on a variety of criteria</description>
     <requirements>
-        <!--requirement type="package" version="1.0.0">feature_merge</requirement-->
-        <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="1.1">feature_merge</requirement>
+        <requirement type="package" version="1.2">feature_merge</requirement>
     </requirements>
     <version_command><![CDATA[ feature_merge -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
