@@ -1,4 +1,4 @@
-<tool id="awkscript" name="AWK Script" version="1.0">
+<tool id="awkscript" name="AWK Script" version="1.0" profile="16.04">
     <description>Transform, modify, or generate data</description>
     <edam_topics>
         <edam_topic>topic_0769</edam_topic>

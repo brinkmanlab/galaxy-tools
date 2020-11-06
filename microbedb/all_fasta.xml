@@ -1,4 +1,4 @@
-<tool id="microbedb_all_fasta" name="MicrobeDB All FASTA" version="1.0" tool_type="manage_data">
+<tool id="microbedb_all_fasta" name="MicrobeDB All FASTA" version="1.0" tool_type="manage_data" profile="18.09">
     <description>Load all fasta files from MicrobeDB into the all_fasta data table</description>
     <edam_topics>
         <edam_topic>topic_3301</edam_topic>
