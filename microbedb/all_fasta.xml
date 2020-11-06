@@ -14,9 +14,9 @@
     <version_command>sqlite3 --version</version_command>
     <command><![CDATA[
         #import os.path
-        sqlite3 -readonly $db '.param set :basepath ${os.path.dirname(str($db))}' '.read $__tool_directory__/all_fasta.sql' > '$output';
+        sqlite3 -readonly $db '.param set :basepath ${os.path.dirname(str($db))}' '.read $__tool_directory__/all_fasta.sql' > '$output'
         #if $builds
-        sqlite3 -readonly $db < '$builds_sql'
+        && sqlite3 -readonly $db < '$builds_sql'
         #end if
     ]]></command>
     <configfiles>
