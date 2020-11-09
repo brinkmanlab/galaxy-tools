@@ -13,20 +13,33 @@
     </requirements>
     <version_command>sqlite3 --version</version_command>
     <command><![CDATA[
-        #import os.path
-        sqlite3 -readonly $db '.param set :basepath ${os.path.dirname(str($db))}' '.read $__tool_directory__/all_fasta.sql' > '$output'
-        #if $builds
-        && touch $__app__.config.builds_file_path && sqlite3 -readonly $db < '$builds_sql'
-        #end if
+        sqlite3 -readonly '$db' < '$sql' > '$output'
     ]]></command>
     <configfiles>
-        <configfile name="builds_sql"><![CDATA[
-            #include $__tool_directory__+"/builds.sql"
+        <configfile name="sql"><![CDATA[
+            #import os.path
+            SELECT json_object('data_tables',
+                json_object('all_fasta', json_group_array(json_object('value', unique_build_id, 'dbkey', dbkey, 'name', label, 'path', file_path))),
+            #if $builds
+                json_object('__dbkeys__', json_group_array(json_object('value', dbkey, 'name', label, 'len_path', ''))),
+            #end if
+            ) FROM (
+             SELECT (r.rep_accnum || '.' || r.rep_version) AS unique_build_id,
+                    (r.rep_accnum || '_' || r.rep_version) AS dbkey,
+                    (REPLACE(r.definition, ', complete genome.', '') || ' [' || r.rep_accnum || '.' || r.rep_version || ']') AS label,
+                    ('${os.path.dirname(str($db))}/' || genomeproject.gpv_directory || '/' || genomeproject.filename || '_genomic.fna') AS file_path
+             FROM genomeproject
+                      JOIN replicon r ON genomeproject.gpv_id = r.gpv_id AND r.rep_type = 'chromosome'
+             WHERE genomeproject.version_id = (SELECT version_id FROM version WHERE is_current == 1)
+               AND genomeproject.file_types IS NOT NULL
+               AND genomeproject.file_types LIKE '%.fna%'
+               AND r.rep_type = 'chromosome'
+            )
         ]]></configfile>
     </configfiles>
     <inputs>
         <param name="db" type="text" value="/cvmfs/microbedb.brinkmanlab.ca/microbedb.sqlite" label="Path" help="Absolute path to microbedb.sqlite on Galaxy host server"/>
-        <param name="builds" type="boolean" label="Append references to builds" help="Append genomes to Galaxies builds.txt, listing them at /api/genomes"/>
+        <param name="builds" type="boolean" label="Add genomes to __dbkeys__" help="Add genomes to __dbkeys__ table, listing them at /api/genomes"/>
     </inputs>
     <outputs>
         <data name="output" format="data_manager_json" />

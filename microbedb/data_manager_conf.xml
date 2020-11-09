@@ -1,15 +1,19 @@
 <?xml version="1.0"?>
 <data_managers>
     <data_manager id="microbedb_all_fasta" tool_file="all_fasta.xml" version="1.0.0">
-        <!-- Defines a Data Table to be modified -->
         <data_table name="all_fasta">
-            <!-- Handle the output of the Data Manager Tool -->
             <output>
-                <!-- Columns that will be specified by the Data Manager Tool -->
                 <column name="value" />
                 <column name="dbkey" />
                 <column name="name" />
                 <column name="path" />
+            </output>
+        </data_table>
+        <data_table name="__dbkeys__">
+            <output>
+                <column name="value" />
+                <column name="name" />
+                <column name="len_path" />
             </output>
         </data_table>
     </data_manager>
