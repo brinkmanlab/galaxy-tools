@@ -1,4 +1,4 @@
-SELECT json_group_array(json_object('value', unique_build_id, 'dbkey', dbkey, 'name', label, 'path', file_path))
+SELECT json_object('data_tables', json_object('all_fasta', json_group_array(json_object('value', unique_build_id, 'dbkey', dbkey, 'name', label, 'path', file_path))))
 FROM (
  SELECT (r.rep_accnum || '.' || r.rep_version)                                           AS unique_build_id,
         (r.rep_accnum || '_' || r.rep_version)                                           AS dbkey,
