@@ -11,7 +11,7 @@
         <edam_operation>operation_3695</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="1.0">biopython.convert</requirement>
+        <requirement type="package" version="1.0.4">biopython.convert</requirement>
     </requirements>
     <version_command><![CDATA[ biopython.convert -v ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
