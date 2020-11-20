@@ -44,7 +44,7 @@
             #set $draft_path = str($draft)
         #end if
         
-        MauveCM -output output -ref $ref -draft $draft_path && $__tool_directory__/mcm_final.sh
+        test -r $ref && MauveCM -output output -ref $ref -draft $draft_path && $__tool_directory__/mcm_final.sh
     ]]></command>
     <inputs>
         <param name="draft" type="data" format="genbank,fasta" label="Draft" />
