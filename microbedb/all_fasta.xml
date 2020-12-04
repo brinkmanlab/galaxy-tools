@@ -1,4 +1,4 @@
-<tool id="microbedb_all_fasta" name="MicrobeDB All FASTA" version="1.0" tool_type="manage_data" profile="18.09">
+<tool id="microbedb_all_fasta" name="MicrobeDB All FASTA" version="1.1" tool_type="manage_data" profile="18.09">
     <description>Load all fasta files from MicrobeDB into the all_fasta data table</description>
     <edam_topics>
         <edam_topic>topic_3301</edam_topic>
@@ -28,10 +28,8 @@
                     (r.rep_accnum || '_' || r.rep_version) AS dbkey,
                     (REPLACE(r.definition, ', complete genome.', '') || ' [' || r.rep_accnum || '.' || r.rep_version || ']') AS label,
                     ('${os.path.dirname(str($db))}/' || genomeproject.gpv_directory || '/' || genomeproject.filename || '_genomic.fna') AS file_path
-             FROM genomeproject
-                      JOIN replicon r ON genomeproject.gpv_id = r.gpv_id AND r.rep_type = 'chromosome'
-             WHERE genomeproject.version_id = (SELECT version_id FROM version WHERE is_current == 1)
-               AND genomeproject.file_types IS NOT NULL
+             FROM genomeproject JOIN replicon r ON genomeproject.gpv_id = r.gpv_id AND r.rep_type = 'chromosome'
+             WHERE genomeproject.file_types IS NOT NULL
                AND genomeproject.file_types LIKE '%.fna%'
                AND r.rep_type = 'chromosome'
             )
