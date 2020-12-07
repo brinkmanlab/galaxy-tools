@@ -1,4 +1,4 @@
-<tool id="awkscript" name="AWK Script" version="1.0" profile="16.04">
+<tool id="awkscript" name="AWK Script" version="1.1" profile="16.04">
     <description>Transform, modify, or generate data</description>
     <edam_topics>
         <edam_topic>topic_0769</edam_topic>
@@ -35,8 +35,10 @@
                     #set $inputs = [$group.input_type_selection.infile]
                 #end if
                 #for file in $inputs
+                #if $file
                     tool_input_id='$file.element_identifier'
                     '$file'
+                #end if
                 #end for
             #end for
         > '$outfile'
@@ -49,10 +51,10 @@
             <conditional name="input_type_selection">
                 <param name="multiple" type="boolean" checked="false" label="Accept multiple" />
                 <when value="false">
-                    <param name="infile" format="txt" type="data" label="Single file to process" help="A separate execution will occur for each provided file"/>
+                    <param name="infile" format="txt" type="data" optional="true" label="Single file to process" help="A separate execution will occur for each provided file"/>
                 </when>
                 <when value="true">
-                    <param name="infile" format="txt" type="data" multiple="true" label="File or collection to process" />
+                    <param name="infile" format="txt" type="data" multiple="true" optional="true" label="File or collection to process" />
                 </when>
             </conditional>
         </repeat>
