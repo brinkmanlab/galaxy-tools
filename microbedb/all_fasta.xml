@@ -26,11 +26,11 @@
             )) FROM (
              SELECT (r.rep_accnum || '.' || r.rep_version) AS unique_build_id,
                     (r.rep_accnum || '_' || r.rep_version) AS dbkey,
-                    (REPLACE(r.definition, ', complete genome.', '') || ' [' || r.rep_accnum || '.' || r.rep_version || ']') AS label,
-                    ('${os.path.dirname(str($db))}/' || genomeproject.gpv_directory || '/' || genomeproject.filename || '_genomic.fna') AS file_path
+                    (REPLACE(REPLACE(r.definition, ', complete sequence.', ''), ', complete genome.', '') || ' [' || r.rep_accnum || '.' || r.rep_version || ']') AS label,
+                    ('${os.path.dirname(str($db))}/' || genomeproject.gpv_directory || '/' || r.file_name || '.fna') AS file_path
              FROM genomeproject JOIN replicon r ON genomeproject.gpv_id = r.gpv_id AND r.rep_type = 'chromosome'
-             WHERE genomeproject.file_types IS NOT NULL
-               AND genomeproject.file_types LIKE '%.fna%'
+             WHERE r.file_types IS NOT NULL
+               AND r.file_types LIKE '%.fna%'
                AND r.rep_type = 'chromosome'
             )
         ]]></configfile>
