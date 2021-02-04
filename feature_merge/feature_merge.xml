@@ -9,7 +9,7 @@
         #if $threshold != 0
             -t $threshold
         #end if
-        #for set in $features
+        #for $set in $features
             -f '${str($set.csv).replace(" ", "")}'
         #end for
         #for $input in $inputs
