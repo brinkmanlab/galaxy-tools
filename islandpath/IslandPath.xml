@@ -1,4 +1,4 @@
-<tool id="islandpath" name="IslandPath" version="1.0.5" profile="16.04">
+<tool id="islandpath" name="IslandPath" version="1.0.6" profile="16.04">
     <description>predict genomic islands in bacterial and archaeal genomes based on the presence of dinucleotide biases and mobility genes</description>
     <edam_topics>
         <edam_topic>topic_0194</edam_topic>
@@ -8,9 +8,9 @@
         <edam_operation>operation_0362</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="1.0.5">islandpath</requirement>
+        <requirement type="package" version="1.0.6">islandpath</requirement>
     </requirements>
-    <version_command><![CDATA[ echo "1.0.5" ]]></version_command>
+    <version_command><![CDATA[ echo "1.0.6" ]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
     #import os
     #if $input.is_of_type("embl")
