@@ -6,6 +6,9 @@ Contributions are welcome.
 
 Submit contributions as a pull request on GitHub.
 
+Commits to the master branch of this repository are automatically deployed to the [Galaxy Main Toolshed](https://toolshed.g2.bx.psu.edu/) using the included 
+[GitHub Actions recipe](https://github.com/brinkmanlab/galaxy-tools/blob/master/.github/workflows/main-shed.yml)
+
 Use .shed.template.yml as a template when submitting a new tool to the Galaxy main toolshed.
 
 Standards
