@@ -9,9 +9,9 @@ Central repo for all Brinkman Lab maintained Galaxy Tools
 
 **Do not edit README.rst**, edit README.header.rst and regenerate README.rst using ./generate_readme
 
-See CONTRIBUTING.rst_ for information on contributing to this repo.
+See CONTRIBUTING.md_ for information on contributing to this repo.
 
-.. _CONTRIBUTING.rst: CONTRIBUTING.rst
+.. _CONTRIBUTING.md: CONTRIBUTING.md
 
 Manual installation
 -------------------
