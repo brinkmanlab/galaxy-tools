@@ -69,6 +69,9 @@
     #end unless
 
     ]]></command>
+    <stdio>
+        <regex match="Parsnp requires 2 or more genomes to run, exiting" source="stderr" description="Parsnp requires 2 or more genomes to run"/>
+    </stdio>
     <inputs>
         <!-- Inputs -->
         <param name="genomes" type="data" multiple="true" argument="-d" format="fasta" label="Genomes/Contigs/Scaffolds" />
