@@ -1,4 +1,4 @@
-<tool id="parsnp" name="ParSNP" version="1.2" profile="16.04">
+<tool id="parsnp" name="ParSNP" version="1.7.4" profile="16.04">
     <description>Efficient microbial core genome alignment and SNP detection</description>
     <edam_topics>
         <edam_topic>topic_3293</edam_topic>
@@ -10,7 +10,7 @@
         <edam_operation>operation_0323</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="1.2">parsnp</requirement>
+        <requirement type="package" version="1.7.4">parsnp</requirement>
     </requirements>
     <version_command><![CDATA[parsnp -V |& tail -n1]]></version_command>
     <command detect_errors="aggressive"><![CDATA[
